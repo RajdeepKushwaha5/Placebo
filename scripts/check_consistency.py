@@ -22,6 +22,13 @@ ROOT = Path(__file__).resolve().parents[1]
 
 UPSTREAM_COMMIT = "6adf8765f6e21910f1f0c13151ce84f32f8d431d"
 
+# Line-ending constants, kept as named bytes so the source contains no
+# escape sequences that a rewriting tool could mangle.
+LF = bytes([10])
+CR = bytes([13])
+CRLF = CR + LF
+
+
 checks: list[tuple[bool, str]] = []
 
 
@@ -32,6 +39,21 @@ def check(ok: bool, label: str, detail: str = "") -> None:
 def load(path: Path):
     return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
 
+
+def normalised_digest(path: Path) -> str:
+    """sha256 of file content with line endings normalised to LF.
+
+    Hashing raw bytes would make this depend on the git checkout rather
+    than on the source: the same commit is CRLF on Windows and LF on
+    Linux, so a raw-byte digest recorded on one platform fails on the
+    other and reports tampering that did not happen.
+    See scripts/hash_subjects.py.
+    """
+    raw = path.read_bytes()
+    normalised = (
+        raw.replace(CRLF, LF).replace(CR, LF).rstrip(LF)
+    )
+    return hashlib.sha256(normalised).hexdigest()
 
 def check_bundle(bundle: Path, label: str) -> None:
     manifest = load(bundle / "manifest.json")
@@ -65,10 +87,12 @@ def main() -> int:
     subject_hashes = load(ROOT / "benchmark" / "manifests" / "subject_hashes.json")
     if subject_hashes:
         for relative, expected in subject_hashes.get("files", {}).items():
-            actual = hashlib.sha256(
-                (ROOT / "subject" / relative).read_bytes()
-            ).hexdigest()
-            check(actual == expected, f"subject hash matches: {relative}")
+            path = ROOT / relative
+            if not path.is_file():
+                check(False, f"subject file present: {relative}")
+                continue
+            check(normalised_digest(path) == expected,
+                  f"subject hash matches: {relative}")
 
     # -- 2. census claims --------------------------------------------------
     if census:

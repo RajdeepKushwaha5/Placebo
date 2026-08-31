@@ -1,13 +1,18 @@
 {
-  "algorithm": "sha256",
-  "subject_commit": "6adf8765f6e21910f1f0c13151ce84f32f8d431d",
+  "algorithm": "sha256 over content with line endings normalised to LF",
   "files": {
-    "semver/__about__.py": "819823cb2adf063e88c52739ecb15a8f42eed11717bed3c5781cb601b9280cdc",
-    "semver/__init__.py": "2666268b7c179538dadebabda4d9f27241d2ad269cde2111afdff50a472d93c4",
-    "semver/__main__.py": "b5fb4a63abbcf55b45fe115a804b4a40635194c2baa94dcf75dd013dd6a24439",
-    "semver/_deprecated.py": "bc775ad88e5f04b9f27593ab015aab8d3a60cb973e3e9186025754f18e3ef1e8",
-    "semver/_types.py": "87ad0c91ac7b470f16a75edb1cc91038b6e43ec0ea750f8f68963969ecc89dcf",
-    "semver/cli.py": "93c89b474678c06600bac3c51fcacd6475938dbb6d6a54d5dbee6157d0dbd2b0",
-    "semver/version.py": "d4ee4e513cc5ba845f87f61f147c1898de2f36a1ff710c01cf6a0cb160b098a2"
+    "subject/semver/__about__.py": "cd3b65c2506a7ce637e0b9b505f11a984cb99cc23bcff3de3eec5d01959b5e3e",
+    "subject/semver/__init__.py": "a1a0d80fc2ef1fa84ed011a8172f7e3dbc6ce980945b7613547d5c9e445fbb89",
+    "subject/semver/__main__.py": "fbfe89b3e0678f76e9fcddfc2c12fb9c81c1cb09693f820364d394fec781538d",
+    "subject/semver/_deprecated.py": "7691135dd9fb68e4a72bfe98e76d1c37ad88abd0103039d9c353c7d152e4eb21",
+    "subject/semver/_types.py": "5d538da8626c57845e9b9838a3807bf1d7e8ace0190d4f4582a855858ddc7721",
+    "subject/semver/cli.py": "152f6d28f4e47616d9e0564fa7c71c5744a03d71ab1f9d260dee88f366aa247d",
+    "subject/semver/version.py": "41d8ce0873859ab900372f22c656b8824d5703d0afb91ac610efe9de5ed0df23",
+    "subjects/inflection/inflection/__init__.py": "304ee73c7048cae918e3dfd6dd5fc5c6b80b8f3fca5ef88282f72112451ff593"
+  },
+  "note": "Normalised so the digest does not depend on git checkout conventions. A real source change still alters it.",
+  "subjects": {
+    "subject": "6adf8765f6e21910f1f0c13151ce84f32f8d431d",
+    "subjects/inflection": "b00d4d348b32ef5823221b20ee4cbd1d2d924462"
   }
 }

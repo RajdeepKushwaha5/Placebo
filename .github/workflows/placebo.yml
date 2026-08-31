@@ -45,6 +45,11 @@ jobs:
           python -m pip install -r requirements.lock
           python -m pip install -e .
 
+      - name: Subject integrity
+        # Hashes are computed over LF-normalised content, so this is a real
+        # tamper check rather than a line-ending check.
+        run: python scripts/hash_subjects.py --check
+
       - name: Unit tests
         run: python -m pytest tests -q
 

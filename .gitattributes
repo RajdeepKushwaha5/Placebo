@@ -1,0 +1,15 @@
+# Normalise line endings in the repository.
+#
+# Without this, git converts text files on checkout and the same commit is CRLF
+# on Windows and LF on Linux. Any integrity check over file bytes then reports
+# a mismatch across platforms that is not a real change. Subject hashes are
+# additionally computed over LF-normalised content, so the check is correct
+# even on a checkout that predates this file.
+* text=auto eol=lf
+
+# Binary and generated files must never be converted.
+*.png binary
+*.jpg binary
+*.pdf binary
+*.zip binary
+*.gguf binary
