@@ -1,0 +1,2847 @@
+{
+  "0311cef58a002912": {
+    "detail": "",
+    "duration_s": 2.746,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.5-rc.1-minor-0.3.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.3.1-minor-1.4.0]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_bump-args1-expectation1]"
+    ],
+    "mutant_id": "0311cef58a002912",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "03fe90d993fa6512": {
+    "detail": "",
+    "duration_s": 2.68,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects"
+    ],
+    "mutant_id": "03fe90d993fa6512",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "05cc88d0e0cba70d": {
+    "detail": "",
+    "duration_s": 2.642,
+    "failing_tests": [
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7-<2.4.0-True]",
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7->2.3.5-True]"
+    ],
+    "mutant_id": "05cc88d0e0cba70d",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "0723feea7643f22a": {
+    "detail": "",
+    "duration_s": 2.733,
+    "failing_tests": [
+      "tests\\test_format.py::test_should_finalize_version[1.2.0-1.2.0]",
+      "tests\\test_format.py::test_should_finalize_version[1.2.3+build.2-1.2.3]",
+      "tests\\test_format.py::test_should_finalize_version[1.2.3-1.2.3]",
+      "tests\\test_format.py::test_should_finalize_version[1.2.3-alpha-1.2.3]",
+      "tests\\test_format.py::test_should_finalize_version[1.2.3-rc.1+build.5-1.2.3]",
+      "tests\\test_format.py::test_should_finalize_version[1.2.3-rc.5-1.2.3]"
+    ],
+    "mutant_id": "0723feea7643f22a",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "0732b98b39a10293": {
+    "detail": "",
+    "duration_s": 2.845,
+    "failing_tests": [
+      "tests\\test_match.py::test_should_match_not_equal[2.3.7-!=2.3.8-True]"
+    ],
+    "mutant_id": "0732b98b39a10293",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "07d63d7b984a63d5": {
+    "detail": "",
+    "duration_s": 2.705,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_equal_versions_have_equal_hashes"
+    ],
+    "mutant_id": "07d63d7b984a63d5",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "085c382c12637d90": {
+    "detail": "",
+    "duration_s": 2.601,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects"
+    ],
+    "mutant_id": "085c382c12637d90",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "0a016d6d36518355": {
+    "detail": "",
+    "duration_s": 2.728,
+    "failing_tests": [
+      "tests\\test_replace.py::test_replace_raises_TypeError_for_invalid_keyword_arg"
+    ],
+    "mutant_id": "0a016d6d36518355",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "0d2f9542b32b0260": {
+    "detail": "",
+    "duration_s": 2.632,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_prerelease_and_build_with_numbers",
+      "tests\\test_compare.py::test_should_compare_prerelease_with_numbers_and_letters",
+      "tests\\test_compare.py::test_should_compare_rc_builds[1.0.0-beta.2-1.0.0-beta.11]",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1+build.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects",
+      "tests\\test_compare.py::test_should_compare_versions_with_build_and_release[1.1.9-rc.1-1.1.9+build.1--1]",
+      "tests\\test_compare.py::test_should_follow_specification_comparison",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-1.0.0-rc.1]"
+    ],
+    "mutant_id": "0d2f9542b32b0260",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "100a76852c1a1be8": {
+    "detail": "",
+    "duration_s": 2.609,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects"
+    ],
+    "mutant_id": "100a76852c1a1be8",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "13887cecccbae7a1": {
+    "detail": "",
+    "duration_s": 2.647,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-alpha.beta-1.0.0-alpha.1]"
+    ],
+    "mutant_id": "13887cecccbae7a1",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "14101b6cf83262f0": {
+    "detail": "",
+    "duration_s": 2.662,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_prerelease_and_build_with_numbers",
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects",
+      "tests\\test_compare.py::test_should_compare_version_list[lst0]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst1]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst2]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst3]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst4]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0-pre.2+build.4]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0-pre.2]"
+    ],
+    "mutant_id": "14101b6cf83262f0",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "1486704c2686bc4b": {
+    "detail": "",
+    "duration_s": 2.615,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.0-rc.1-minor-0.2.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-minor-1.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.0-rc.1-major-2.0.0]"
+    ],
+    "mutant_id": "1486704c2686bc4b",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "19ddb11c6e93d1f2": {
+    "detail": "",
+    "duration_s": 2.687,
+    "failing_tests": [
+      "tests\\test_match.py::test_should_match_equal_by_default[2.3.6-2.3.6-True]",
+      "tests\\test_match.py::test_should_match_equal_by_default[2.3.7-2.3.7-True]",
+      "tests\\test_match.py::test_should_match_equal_by_default[2.3.7-4.3.7-False]",
+      "tests\\test_match.py::test_should_raise_value_error_for_invalid_match_expression[1.0.0-!]"
+    ],
+    "mutant_id": "19ddb11c6e93d1f2",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "1ac3986cca492880": {
+    "detail": "",
+    "duration_s": 2.46,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-alpha.beta-1.0.0-alpha.1]",
+      "tests\\test_compare.py::test_should_get_less[1.0.0-alpha.1-1.0.0-alpha.beta]",
+      "tests\\test_max-min.py::test_prerelease_order[1.2.3-1.2.3-1-1.2.3-1]",
+      "tests\\test_max-min.py::test_prerelease_order[1.2.3-2-1.2.3-rc-1.2.3-2]"
+    ],
+    "mutant_id": "1ac3986cca492880",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "1ca242d1ca74bb80": {
+    "detail": "",
+    "duration_s": 2.945,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]"
+    ],
+    "mutant_id": "1ca242d1ca74bb80",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "1d331d5b9501ed06": {
+    "detail": "",
+    "duration_s": 2.663,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-rc.9-None-3.4.5-rc.10]",
+      "tests\\test_bump.py::test_should_ignore_build_on_prerelease_bump",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str"
+    ],
+    "mutant_id": "1d331d5b9501ed06",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "1e8fc52512fae39c": {
+    "detail": "",
+    "duration_s": 2.609,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.5-rc.2-patch-0.1.5]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.0-rc.1-minor-0.2.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.0-rc.1-patch-0.2.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-major-1.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-minor-1.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-patch-1.0.0]"
+    ],
+    "mutant_id": "1e8fc52512fae39c",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "209cda29170fb849": {
+    "detail": "",
+    "duration_s": 3.039,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-major-1.0.0]"
+    ],
+    "mutant_id": "209cda29170fb849",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "21f400f19b4e9293": {
+    "detail": "",
+    "duration_s": 2.669,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-alpha.beta-1.0.0-alpha.1]"
+    ],
+    "mutant_id": "21f400f19b4e9293",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "22b1ac21ec31d1b2": {
+    "detail": "",
+    "duration_s": 2.747,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_major",
+      "tests\\test_bump.py::test_should_bump_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_compare.py::test_should_compare_prerelease_and_build_with_numbers",
+      "tests\\test_compare.py::test_should_compare_rc_builds[1.0.0-beta.2-1.0.0-beta.11]",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1+build.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects"
+    ],
+    "mutant_id": "22b1ac21ec31d1b2",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "22c96c8642ca7220": {
+    "detail": "",
+    "duration_s": 2.7,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-rc.9-None-3.4.5-rc.10]",
+      "tests\\test_bump.py::test_should_ignore_build_on_prerelease_bump",
+      "tests\\test_compare.py::test_should_compare_prerelease_and_build_with_numbers",
+      "tests\\test_compare.py::test_should_compare_prerelease_with_numbers_and_letters"
+    ],
+    "mutant_id": "22c96c8642ca7220",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "23adb6896f5a970f": {
+    "detail": "",
+    "duration_s": 2.673,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_prerelease_with_numbers_and_letters",
+      "tests\\test_compare.py::test_should_compare_rc_builds[1.0.0-beta.2-1.0.0-beta.11]",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1+build.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects",
+      "tests\\test_compare.py::test_should_compare_versions_with_build_and_release[1.1.9-rc.1-1.1.9+build.1--1]",
+      "tests\\test_compare.py::test_should_follow_specification_comparison",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-1.0.0-rc.1]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-alpha.1-1.0.0-alpha]"
+    ],
+    "mutant_id": "23adb6896f5a970f",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "24c4841826ea1ca0": {
+    "detail": "",
+    "duration_s": 2.639,
+    "failing_tests": [
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7-<2.4.0-True]",
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7->2.3.5-True]"
+    ],
+    "mutant_id": "24c4841826ea1ca0",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "2835cdf6ce2e2e99": {
+    "detail": "",
+    "duration_s": 2.771,
+    "failing_tests": [
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7->2.3.5-True]"
+    ],
+    "mutant_id": "2835cdf6ce2e2e99",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "29a0822c365d62fa": {
+    "detail": "",
+    "duration_s": 2.526,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.4-prerelease-0.1.5-rc.1]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.5-rc.1-prerelease-0.1.5-rc.2]"
+    ],
+    "mutant_id": "29a0822c365d62fa",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "2b18cebf0db05431": {
+    "detail": "",
+    "duration_s": 2.62,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects"
+    ],
+    "mutant_id": "2b18cebf0db05431",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "2c5ae7ba0a2b0116": {
+    "detail": "",
+    "duration_s": 2.543,
+    "failing_tests": [
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object14-expected14]"
+    ],
+    "mutant_id": "2c5ae7ba0a2b0116",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "2efccfe40d947649": {
+    "detail": "",
+    "duration_s": 2.667,
+    "failing_tests": [
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.0.2-1-0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-2-3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-2-3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-3-rc.0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-4-build.0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0-0-1]"
+    ],
+    "mutant_id": "2efccfe40d947649",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "3013b4f1e1c9ca9f": {
+    "detail": "",
+    "duration_s": 2.645,
+    "failing_tests": [
+      "tests\\test_format.py::test_repr[version0-Version(major=1,",
+      "tests\\test_format.py::test_repr[version1-Version(major=1,",
+      "tests\\test_format.py::test_repr[version2-Version(major=1,",
+      "tests\\test_format.py::test_repr[version3-Version(major=1,",
+      "tests\\test_format.py::test_repr[version4-Version(major=1,",
+      "tests\\test_format.py::test_repr[version5-Version(major=1,"
+    ],
+    "mutant_id": "3013b4f1e1c9ca9f",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "307ba2005a6970ff": {
+    "detail": "",
+    "duration_s": 2.628,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_major",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.0-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.2.3-major-2.0.0]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_bump-args0-expectation0]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_nextver-args10-expectation10]",
+      "tests\\test_pysemver-cli.py::test_should_process_print"
+    ],
+    "mutant_id": "307ba2005a6970ff",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "3213199332fc9523": {
+    "detail": "",
+    "duration_s": 2.603,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects",
+      "tests\\test_compare.py::test_should_compare_version_list[lst0]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst1]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst2]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst3]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst4]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0-pre.2+build.4]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0-pre.2]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0]"
+    ],
+    "mutant_id": "3213199332fc9523",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "328dc3124db26520": {
+    "detail": "",
+    "duration_s": 2.638,
+    "failing_tests": [
+      "tests\\test_match.py::test_should_raise_value_error_for_invalid_match_expression[1.0.0-]"
+    ],
+    "mutant_id": "328dc3124db26520",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "33797d243637a3c5": {
+    "detail": "",
+    "duration_s": 2.742,
+    "failing_tests": [],
+    "mutant_id": "33797d243637a3c5",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "351dfe7112d2286f": {
+    "detail": "",
+    "duration_s": 2.613,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects"
+    ],
+    "mutant_id": "351dfe7112d2286f",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "360e1f4bbf4eee1a": {
+    "detail": "",
+    "duration_s": 2.799,
+    "failing_tests": [
+      "tests\\test_match.py::test_should_match_not_equal[2.3.7-!=2.3.6-True]"
+    ],
+    "mutant_id": "360e1f4bbf4eee1a",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "38e58572122d16fa": {
+    "detail": "",
+    "duration_s": 2.482,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_prerelease_and_build_with_numbers",
+      "tests\\test_compare.py::test_should_compare_rc_builds[1.0.0-beta.2-1.0.0-beta.11]",
+      "tests\\test_compare.py::test_should_follow_specification_comparison",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-beta.11-1.0.0-beta.2]",
+      "tests\\test_compare.py::test_should_get_less[1.0.0-beta.2-1.0.0-beta.11]",
+      "tests\\test_max-min.py::test_prerelease_order[1.2.3-rc.2.1-1.2.3-rc.2-1.2.3-rc.2]"
+    ],
+    "mutant_id": "38e58572122d16fa",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "3a5e85790a29349b": {
+    "detail": "",
+    "duration_s": 2.667,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-rc.9-None-3.4.5-rc.10]",
+      "tests\\test_bump.py::test_should_ignore_build_on_prerelease_bump",
+      "tests\\test_deprecated_functions.py::test_should_raise_deprecation_warnings[bump_prerelease-args4-kwargs4]",
+      "tests\\test_format.py::test_parse_method_for_version_info"
+    ],
+    "mutant_id": "3a5e85790a29349b",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "3a98aeadd241fbdf": {
+    "detail": "",
+    "duration_s": 2.689,
+    "failing_tests": [
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7-<2.4.0-True]",
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7->2.3.5-True]",
+      "tests\\test_match.py::test_should_raise_value_error_for_invalid_match_expression[1.0.0-!]"
+    ],
+    "mutant_id": "3a98aeadd241fbdf",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "3c4201f7ccf2735a": {
+    "detail": "",
+    "duration_s": 2.725,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_major",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.0-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.2.3-major-2.0.0]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_bump-args0-expectation0]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_nextver-args10-expectation10]",
+      "tests\\test_pysemver-cli.py::test_should_process_print"
+    ],
+    "mutant_id": "3c4201f7ccf2735a",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "3cf6d514b4ab485f": {
+    "detail": "",
+    "duration_s": 2.318,
+    "failing_tests": [
+      "tests\\test_semver.py::test_should_fail_compatible_match[old2-new2]",
+      "tests\\test_semver.py::test_should_fail_compatible_match[old3-new3]",
+      "tests\\test_semver.py::test_should_fail_compatible_match[old5-new5]",
+      "tests\\test_semver.py::test_should_fail_compatible_match[old6-new6]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old0-new0]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old1-new1]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old2-new2]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old3-new3]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old4-new4]",
+      "tests\\test_semver.py::test_should_succeed_with_compatible_subclass_for_is_compatible"
+    ],
+    "mutant_id": "3cf6d514b4ab485f",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "400588ba9c9f77f9": {
+    "detail": "",
+    "duration_s": 2.702,
+    "failing_tests": [],
+    "mutant_id": "400588ba9c9f77f9",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "407d45d80b99066e": {
+    "detail": "",
+    "duration_s": 2.708,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_equal_versions_have_equal_hashes",
+      "tests\\test_parsing.py::test_parse_version_info_str_hash"
+    ],
+    "mutant_id": "407d45d80b99066e",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "41e608558d62e33e": {
+    "detail": "",
+    "duration_s": 2.722,
+    "failing_tests": [
+      "tests\\test_semver.py::test_should_fail_compatible_match[old4-new4]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old4-new4]"
+    ],
+    "mutant_id": "41e608558d62e33e",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "43034f444c05dafd": {
+    "detail": "",
+    "duration_s": 2.637,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_follow_specification_comparison",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-alpha.1-1.0.0-alpha]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-beta.2-1.0.0-beta]",
+      "tests\\test_compare.py::test_should_get_less[1.0.0-alpha-1.0.0-alpha.1]",
+      "tests\\test_compare.py::test_should_get_less[1.0.0-beta-1.0.0-beta.2]",
+      "tests\\test_max-min.py::test_prerelease_order[1.2.3-rc.2.1-1.2.3-rc.2-1.2.3-rc.2]"
+    ],
+    "mutant_id": "43034f444c05dafd",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "4774f8b7b90fdc6b": {
+    "detail": "",
+    "duration_s": 2.605,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.0-rc.1-minor-0.2.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.5-rc.1-minor-0.3.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-minor-1.0.0]"
+    ],
+    "mutant_id": "4774f8b7b90fdc6b",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "47ec1ce8be3443a8": {
+    "detail": "",
+    "duration_s": 2.856,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_major",
+      "tests\\test_bump.py::test_should_bump_minor",
+      "tests\\test_bump.py::test_should_bump_patch",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]"
+    ],
+    "mutant_id": "47ec1ce8be3443a8",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "4a5a80f9a28f35ae": {
+    "detail": "",
+    "duration_s": 2.881,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-rc.9-None-3.4.5-rc.10]",
+      "tests\\test_bump.py::test_should_ignore_build_on_prerelease_bump",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str"
+    ],
+    "mutant_id": "4a5a80f9a28f35ae",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "4aece0d7a9ccbcac": {
+    "detail": "",
+    "duration_s": 2.917,
+    "failing_tests": [
+      "tests\\test_match.py::test_should_match_equal_by_default[2.3.6-2.3.6-True]",
+      "tests\\test_match.py::test_should_match_equal_by_default[2.3.7-2.3.7-True]",
+      "tests\\test_match.py::test_should_match_equal_by_default[2.3.7-4.3.7-False]",
+      "tests\\test_match.py::test_should_match_not_equal[2.3.7-!=2.3.6-True]",
+      "tests\\test_match.py::test_should_match_not_equal[2.3.7-!=2.3.7-False]",
+      "tests\\test_match.py::test_should_match_not_equal[2.3.7-!=2.3.8-True]",
+      "tests\\test_match.py::test_should_match_simple",
+      "tests\\test_match.py::test_should_no_match_simple",
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7-!=2.3.7-False]",
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7-<2.4.0-True]"
+    ],
+    "mutant_id": "4aece0d7a9ccbcac",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "4b7eb13c69957752": {
+    "detail": "",
+    "duration_s": 2.736,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+    ],
+    "mutant_id": "4b7eb13c69957752",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "4bf409e2dc578e78": {
+    "detail": "",
+    "duration_s": 3.008,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_major",
+      "tests\\test_bump.py::test_should_bump_minor",
+      "tests\\test_bump.py::test_should_bump_patch",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]"
+    ],
+    "mutant_id": "4bf409e2dc578e78",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "4d036cc31e90a357": {
+    "detail": "",
+    "duration_s": 2.674,
+    "failing_tests": [
+      "tests\\test_semver.py::test_should_versioninfo_isvalid"
+    ],
+    "mutant_id": "4d036cc31e90a357",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "506fc7e268654415": {
+    "detail": "",
+    "duration_s": 2.722,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+    ],
+    "mutant_id": "506fc7e268654415",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "50faa1ef54e78fbe": {
+    "detail": "",
+    "duration_s": 2.724,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+    ],
+    "mutant_id": "50faa1ef54e78fbe",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "51a68257c397f003": {
+    "detail": "",
+    "duration_s": 2.521,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.5-rc.2-patch-0.1.5]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.0-rc.1-minor-0.2.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.0-rc.1-patch-0.2.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-major-1.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-minor-1.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-patch-1.0.0]"
+    ],
+    "mutant_id": "51a68257c397f003",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "52d0f2279f7370b9": {
+    "detail": "",
+    "duration_s": 2.969,
+    "failing_tests": [],
+    "mutant_id": "52d0f2279f7370b9",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "568f77f9a7df9967": {
+    "detail": "",
+    "duration_s": 2.574,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.5-rc.1-minor-0.3.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.0-rc.1-major-2.0.0]"
+    ],
+    "mutant_id": "568f77f9a7df9967",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "57ab43dc7a27bdf4": {
+    "detail": "",
+    "duration_s": 2.691,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.5-rc.1-minor-0.3.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.0-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.2.3-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.3.1-minor-1.4.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.3.2-patch-1.3.3]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_nextver-args10-expectation10]"
+    ],
+    "mutant_id": "57ab43dc7a27bdf4",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "5860f1e742c714cf": {
+    "detail": "",
+    "duration_s": 2.978,
+    "failing_tests": [
+      "tests\\test_deprecated_functions.py::test_should_raise_deprecation_warnings[replace-args10-kwargs10]",
+      "tests\\test_format.py::test_repr[version0-Version(major=1,",
+      "tests\\test_format.py::test_repr[version1-Version(major=1,",
+      "tests\\test_format.py::test_repr[version2-Version(major=1,",
+      "tests\\test_format.py::test_repr[version3-Version(major=1,",
+      "tests\\test_format.py::test_repr[version4-Version(major=1,",
+      "tests\\test_format.py::test_repr[version5-Version(major=1,",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.5-rc.2-patch-0.1.5]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.0-rc.1-minor-0.2.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.0-rc.1-patch-0.2.0]"
+    ],
+    "mutant_id": "5860f1e742c714cf",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "59ac7b985cd53b55": {
+    "detail": "",
+    "duration_s": 2.801,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_major",
+      "tests\\test_bump.py::test_should_bump_minor",
+      "tests\\test_bump.py::test_should_bump_patch",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]"
+    ],
+    "mutant_id": "59ac7b985cd53b55",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "5a4fbdcaef422f86": {
+    "detail": "",
+    "duration_s": 2.795,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-rc.9-None-3.4.5-rc.10]",
+      "tests\\test_bump.py::test_should_ignore_build_on_prerelease_bump",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple"
+    ],
+    "mutant_id": "5a4fbdcaef422f86",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "5a5d3cc02245e3cb": {
+    "detail": "",
+    "duration_s": 2.796,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+    ],
+    "mutant_id": "5a5d3cc02245e3cb",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "5ae86d67aa1b56be": {
+    "detail": "",
+    "duration_s": 2.617,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects",
+      "tests\\test_compare.py::test_should_compare_version_list[lst0]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst1]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst2]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst3]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst4]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0-pre.2+build.4]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0-pre.2]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0]"
+    ],
+    "mutant_id": "5ae86d67aa1b56be",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "5b2c4be561aa2985": {
+    "detail": "",
+    "duration_s": 2.488,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_get_less[1.0.0-alpha.1-1.0.0-alpha.beta]",
+      "tests\\test_max-min.py::test_prerelease_order[1.2.3-1.2.3-1-1.2.3-1]"
+    ],
+    "mutant_id": "5b2c4be561aa2985",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "5c16baafc5f3ab89": {
+    "detail": "",
+    "duration_s": 2.583,
+    "failing_tests": [
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.0.2-1-0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-2-3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-2-3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-3-rc.0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-4-build.0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0-0-1]"
+    ],
+    "mutant_id": "5c16baafc5f3ab89",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "5c7e1209a4ecd4ba": {
+    "detail": "",
+    "duration_s": 3.049,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_major",
+      "tests\\test_bump.py::test_should_bump_minor",
+      "tests\\test_bump.py::test_should_bump_patch",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]"
+    ],
+    "mutant_id": "5c7e1209a4ecd4ba",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "610c853da1f03201": {
+    "detail": "",
+    "duration_s": 2.774,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.5-rc.1-minor-0.3.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.3.1-minor-1.4.0]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_bump-args1-expectation1]"
+    ],
+    "mutant_id": "610c853da1f03201",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "61e1ea5af3982bee": {
+    "detail": "",
+    "duration_s": 2.751,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_patch",
+      "tests\\test_bump.py::test_should_ignore_extensions_for_bump",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.4-prerelease-0.1.5-rc.1]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.3.2-patch-1.3.3]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_bump-args2-expectation2]"
+    ],
+    "mutant_id": "61e1ea5af3982bee",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "628808e296dab9e6": {
+    "detail": "",
+    "duration_s": 2.733,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.5-rc.2-patch-0.1.5]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.0-rc.1-minor-0.2.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.0-rc.1-patch-0.2.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-major-1.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-minor-1.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-patch-1.0.0]",
+      "tests\\test_replace.py::test_replace_method_replaces_requested_parts[3.4.5+build1-parts9-2.4.5+build1]",
+      "tests\\test_replace.py::test_replace_method_replaces_requested_parts[3.4.5-alpha.1.2-parts7-2.4.5-alpha.1.2]",
+      "tests\\test_replace.py::test_replace_method_replaces_requested_parts[3.4.5-alpha.1.2-parts8-3.4.5-alpha.1.2+x1]",
+      "tests\\test_replace.py::test_replace_method_replaces_requested_parts[3.4.5-parts0-2.4.5]"
+    ],
+    "mutant_id": "628808e296dab9e6",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "6293f04ba4605887": {
+    "detail": "",
+    "duration_s": 2.712,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_deprecated_functions.py::test_should_raise_deprecation_warnings[bump_prerelease-args4-kwargs4]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.4-prerelease-0.1.5-rc.1]"
+    ],
+    "mutant_id": "6293f04ba4605887",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "639bb75eaf7b4a2e": {
+    "detail": "",
+    "duration_s": 3.022,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+    ],
+    "mutant_id": "639bb75eaf7b4a2e",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "6447570376b9097f": {
+    "detail": "",
+    "duration_s": 2.613,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects",
+      "tests\\test_compare.py::test_should_compare_version_list[lst0]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst1]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst2]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst3]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst4]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0-pre.2+build.4]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0-pre.2]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0]"
+    ],
+    "mutant_id": "6447570376b9097f",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "6fc1cc4a70632d71": {
+    "detail": "",
+    "duration_s": 2.677,
+    "failing_tests": [
+      "tests\\test_deprecated_functions.py::test_should_raise_deprecation_warnings[match-args7-kwargs7]",
+      "tests\\test_match.py::test_should_match_not_equal[2.3.7-!=2.3.6-True]",
+      "tests\\test_match.py::test_should_match_not_equal[2.3.7-!=2.3.7-False]",
+      "tests\\test_match.py::test_should_match_not_equal[2.3.7-!=2.3.8-True]",
+      "tests\\test_match.py::test_should_match_simple",
+      "tests\\test_match.py::test_should_no_match_simple",
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7-!=2.3.7-False]",
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7-<=2.3.9-True]",
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7-==2.3.7-True]",
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7->=2.3.5-True]"
+    ],
+    "mutant_id": "6fc1cc4a70632d71",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "6ffd05bed597be78": {
+    "detail": "",
+    "duration_s": 2.579,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_prerelease_and_build_with_numbers",
+      "tests\\test_compare.py::test_should_compare_rc_builds[1.0.0-beta.2-1.0.0-beta.11]",
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects",
+      "tests\\test_compare.py::test_should_compare_version_list[lst0]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst1]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst2]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst3]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst4]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0-pre.2+build.4]"
+    ],
+    "mutant_id": "6ffd05bed597be78",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "708976d614c88ec0": {
+    "detail": "",
+    "duration_s": 2.675,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_deprecated_functions.py::test_should_raise_deprecation_warnings[bump_build-args0-kwargs0]"
+    ],
+    "mutant_id": "708976d614c88ec0",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "7376793e23721312": {
+    "detail": "",
+    "duration_s": 2.683,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-rc.9-None-3.4.5-rc.10]",
+      "tests\\test_bump.py::test_should_ignore_build_on_prerelease_bump",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str"
+    ],
+    "mutant_id": "7376793e23721312",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "751f476dadbe7e47": {
+    "detail": "",
+    "duration_s": 2.652,
+    "failing_tests": [
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object0-expected0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object1-expected1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object12-expected12]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object2-expected2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object3-expected3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0-slice_object5-expected5]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0-slice_object6-expected6]"
+    ],
+    "mutant_id": "751f476dadbe7e47",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "75b1f3960fb51fd2": {
+    "detail": "",
+    "duration_s": 2.686,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_prerelease_and_build_with_numbers",
+      "tests\\test_compare.py::test_should_compare_rc_builds[1.0.0-beta.2-1.0.0-beta.11]",
+      "tests\\test_compare.py::test_should_follow_specification_comparison",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-alpha.1-1.0.0-alpha]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-alpha.beta-1.0.0-alpha.1]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-beta-1.0.0-alpha.beta]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-beta.11-1.0.0-beta.2]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-beta.2-1.0.0-beta]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-rc.1-1.0.0-beta.11]",
+      "tests\\test_compare.py::test_should_get_less[1.0.0-alpha-1.0.0-alpha.1]"
+    ],
+    "mutant_id": "75b1f3960fb51fd2",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "7746778076e89fbd": {
+    "detail": "",
+    "duration_s": 2.702,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_bump-args4-expectation4]"
+    ],
+    "mutant_id": "7746778076e89fbd",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "776199f4ea2a021e": {
+    "detail": "",
+    "duration_s": 2.648,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects"
+    ],
+    "mutant_id": "776199f4ea2a021e",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "78085d2d59d4bb62": {
+    "detail": "",
+    "duration_s": 2.677,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_prerelease_with_numbers_and_letters",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1+build.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_versions_with_build_and_release[1.1.9-rc.1-1.1.9+build.1--1]",
+      "tests\\test_compare.py::test_should_follow_specification_comparison",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-alpha.1-1.0.0-alpha]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-alpha.beta-1.0.0-alpha.1]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-beta-1.0.0-alpha.beta]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-beta.11-1.0.0-beta.2]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-beta.2-1.0.0-beta]"
+    ],
+    "mutant_id": "78085d2d59d4bb62",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "78d9e765cfc8a1f1": {
+    "detail": "",
+    "duration_s": 2.775,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_major",
+      "tests\\test_bump.py::test_should_bump_minor",
+      "tests\\test_bump.py::test_should_bump_patch",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]"
+    ],
+    "mutant_id": "78d9e765cfc8a1f1",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "791ca8e443bcec17": {
+    "detail": "",
+    "duration_s": 2.569,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-major-1.0.0]"
+    ],
+    "mutant_id": "791ca8e443bcec17",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "79e3ca99f130e89d": {
+    "detail": "",
+    "duration_s": 2.671,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_deprecated_functions.py::test_should_raise_deprecation_warnings[bump_build-args0-kwargs0]",
+      "tests\\test_format.py::test_parse_method_for_version_info",
+      "tests\\test_format.py::test_should_correctly_format_version",
+      "tests\\test_parsing.py::test_parse_method_for_version_info",
+      "tests\\test_parsing.py::test_parse_version_info_str_hash",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_bump-args4-expectation4]"
+    ],
+    "mutant_id": "79e3ca99f130e89d",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "7b33eea797430316": {
+    "detail": "",
+    "duration_s": 2.85,
+    "failing_tests": [
+      "tests\\test_match.py::test_should_match_simple",
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7->=2.3.5-True]"
+    ],
+    "mutant_id": "7b33eea797430316",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "7b7d552f1e1f5eef": {
+    "detail": "",
+    "duration_s": 2.749,
+    "failing_tests": [
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old1-new1]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old2-new2]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old3-new3]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old4-new4]"
+    ],
+    "mutant_id": "7b7d552f1e1f5eef",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "7b9992e5e9c2156a": {
+    "detail": "",
+    "duration_s": 2.54,
+    "failing_tests": [
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.0.2-1-0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-2-3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-2-3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-3-rc.0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-4-build.0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0-0-1]"
+    ],
+    "mutant_id": "7b9992e5e9c2156a",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "7c644c64bde4883c": {
+    "detail": "",
+    "duration_s": 2.819,
+    "failing_tests": [],
+    "mutant_id": "7c644c64bde4883c",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "7db99b616d6b963b": {
+    "detail": "",
+    "duration_s": 2.596,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects",
+      "tests\\test_compare.py::test_should_compare_version_list[lst0]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst1]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst2]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst3]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst4]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0-pre.2+build.4]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0-pre.2]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0]"
+    ],
+    "mutant_id": "7db99b616d6b963b",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "8002b843c8631017": {
+    "detail": "",
+    "duration_s": 2.759,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+    ],
+    "mutant_id": "8002b843c8631017",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "80a8d541c41b74b9": {
+    "detail": "",
+    "duration_s": 2.555,
+    "failing_tests": [
+      "tests\\test_format.py::test_repr[version0-Version(major=1,",
+      "tests\\test_format.py::test_repr[version1-Version(major=1,",
+      "tests\\test_format.py::test_repr[version2-Version(major=1,",
+      "tests\\test_format.py::test_repr[version3-Version(major=1,",
+      "tests\\test_format.py::test_repr[version4-Version(major=1,",
+      "tests\\test_format.py::test_repr[version5-Version(major=1,"
+    ],
+    "mutant_id": "80a8d541c41b74b9",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "819ff8f6843737ed": {
+    "detail": "",
+    "duration_s": 2.699,
+    "failing_tests": [
+      "tests\\test_deprecated_functions.py::test_should_raise_deprecation_warnings[cmd_check-args15-kwargs15]",
+      "tests\\test_pysemver-cli.py::test_should_process_check_iscalled_with_valid_version",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_check-args8-expectation8]",
+      "tests\\test_semver.py::test_should_versioninfo_isvalid"
+    ],
+    "mutant_id": "819ff8f6843737ed",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "84db00f73ef1f6cf": {
+    "detail": "",
+    "duration_s": 2.67,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_should_parse_version_with_optional_minor_and_patch[0-0foo.1+build.1-expected4]",
+      "tests\\test_parsing.py::test_should_parse_version_with_optional_minor_and_patch[0-0foo.1-expected3]",
+      "tests\\test_parsing.py::test_should_parse_version_with_optional_minor_and_patch[0.1-0f-expected2]",
+      "tests\\test_parsing.py::test_should_parse_version_with_optional_minor_and_patch[1-alpha-1+build.11.e0f985a-expected1]",
+      "tests\\test_parsing.py::test_should_parse_version_with_optional_minor_and_patch[1.2-alpha.1.2+build.11.e0f985a-expected0]"
+    ],
+    "mutant_id": "84db00f73ef1f6cf",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "85d36312d0d935e0": {
+    "detail": "",
+    "duration_s": 2.663,
+    "failing_tests": [
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object0-expected0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object1-expected1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object12-expected12]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object2-expected2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object3-expected3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0-slice_object5-expected5]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0-slice_object6-expected6]"
+    ],
+    "mutant_id": "85d36312d0d935e0",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "85e50cface3f81ce": {
+    "detail": "",
+    "duration_s": 2.581,
+    "failing_tests": [
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.0.2-1-0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-2-3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-2-3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-3-rc.0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-4-build.0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0-0-1]"
+    ],
+    "mutant_id": "85e50cface3f81ce",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "86db036b5bf7ea83": {
+    "detail": "",
+    "duration_s": 2.736,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+    ],
+    "mutant_id": "86db036b5bf7ea83",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "87081ac9d131ca94": {
+    "detail": "",
+    "duration_s": 2.922,
+    "failing_tests": [
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7-<=2.3.9-True]"
+    ],
+    "mutant_id": "87081ac9d131ca94",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "878198d90b8d278e": {
+    "detail": "",
+    "duration_s": 2.866,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_not_allow_to_compare_invalid_versionstring[1.0]",
+      "tests\\test_compare.py::test_should_not_allow_to_compare_invalid_versionstring[1]",
+      "tests\\test_compare.py::test_should_raise_value_error_for_invalid_value[1.0-1.0.0]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_check-args9-expectation9]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_nextver-args11-expectation11]",
+      "tests\\test_pysemver-cli.py::test_should_process_raise_error"
+    ],
+    "mutant_id": "878198d90b8d278e",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "87f98b0ed0573448": {
+    "detail": "",
+    "duration_s": 2.665,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_prerelease_and_build_with_numbers",
+      "tests\\test_compare.py::test_should_compare_prerelease_with_numbers_and_letters",
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects",
+      "tests\\test_compare.py::test_should_compare_version_list[lst0]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst1]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst2]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst3]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst4]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0-pre.2+build.4]"
+    ],
+    "mutant_id": "87f98b0ed0573448",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "87ff7a0c56e97e06": {
+    "detail": "",
+    "duration_s": 2.666,
+    "failing_tests": [
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.0.2-1-0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-2-3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-2-3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-3-rc.0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-4-build.0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0-0-1]"
+    ],
+    "mutant_id": "87ff7a0c56e97e06",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "881285c79f580a18": {
+    "detail": "",
+    "duration_s": 3.021,
+    "failing_tests": [
+      "tests\\test_semver.py::test_should_fail_compatible_match[old0-new0]",
+      "tests\\test_semver.py::test_should_fail_compatible_match[old1-new1]",
+      "tests\\test_semver.py::test_should_fail_compatible_match[old2-new2]",
+      "tests\\test_semver.py::test_should_fail_compatible_match[old3-new3]",
+      "tests\\test_semver.py::test_should_fail_compatible_match[old5-new5]",
+      "tests\\test_semver.py::test_should_fail_compatible_match[old6-new6]"
+    ],
+    "mutant_id": "881285c79f580a18",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "8df29136ca8db713": {
+    "detail": "",
+    "duration_s": 2.817,
+    "failing_tests": [
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7-<2.4.0-True]"
+    ],
+    "mutant_id": "8df29136ca8db713",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "8f4873cf03fdf29a": {
+    "detail": "",
+    "duration_s": 2.693,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_prerelease_with_numbers_and_letters",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1+build.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_versions_with_build_and_release[1.1.9-rc.1-1.1.9+build.1--1]",
+      "tests\\test_compare.py::test_should_follow_specification_comparison",
+      "tests\\test_compare.py::test_should_get_less[1.0.0-rc.1-1.0.0]",
+      "tests\\test_max-min.py::test_prerelease_order[1.2.3-1.2.3-1-1.2.3-1]"
+    ],
+    "mutant_id": "8f4873cf03fdf29a",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "901636e066a94638": {
+    "detail": "",
+    "duration_s": 3.017,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-rc.9-None-3.4.5-rc.10]",
+      "tests\\test_bump.py::test_should_ignore_build_on_prerelease_bump",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token"
+    ],
+    "mutant_id": "901636e066a94638",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "90b527b173207a32": {
+    "detail": "",
+    "duration_s": 2.584,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.5-rc.2-patch-0.1.5]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.0-rc.1-minor-0.2.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.0-rc.1-patch-0.2.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-minor-1.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-patch-1.0.0]"
+    ],
+    "mutant_id": "90b527b173207a32",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "90e9f9ba3e2c61c5": {
+    "detail": "",
+    "duration_s": 2.624,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+    ],
+    "mutant_id": "90e9f9ba3e2c61c5",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "933d7f3b00482f57": {
+    "detail": "",
+    "duration_s": 2.503,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.5-rc.1-prerelease-0.1.5-rc.2]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.5-rc.1-minor-0.3.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.0-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.3.2-patch-1.3.3]"
+    ],
+    "mutant_id": "933d7f3b00482f57",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "95f32034b4f97f3d": {
+    "detail": "",
+    "duration_s": 2.74,
+    "failing_tests": [],
+    "mutant_id": "95f32034b4f97f3d",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "970b73acbe96077f": {
+    "detail": "",
+    "duration_s": 3.065,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.0-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.4-rc.1-major-2.0.0]"
+    ],
+    "mutant_id": "970b73acbe96077f",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "986406f62596069b": {
+    "detail": "",
+    "duration_s": 2.497,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_prerelease_with_numbers_and_letters",
+      "tests\\test_compare.py::test_should_compare_rc_builds[1.0.0-beta.2-1.0.0-beta.11]",
+      "tests\\test_compare.py::test_should_follow_specification_comparison",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-alpha.1-1.0.0-alpha]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-alpha.beta-1.0.0-alpha.1]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-beta-1.0.0-alpha.beta]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-beta.11-1.0.0-beta.2]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-beta.2-1.0.0-beta]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-rc.1-1.0.0-beta.11]",
+      "tests\\test_compare.py::test_should_get_less[1.0.0-alpha-1.0.0-alpha.1]"
+    ],
+    "mutant_id": "986406f62596069b",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "99ac68844bbdd84d": {
+    "detail": "",
+    "duration_s": 2.592,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-major-1.0.0]"
+    ],
+    "mutant_id": "99ac68844bbdd84d",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "9f41406df7255218": {
+    "detail": "",
+    "duration_s": 3.023,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+    ],
+    "mutant_id": "9f41406df7255218",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "9f4f300e8610b1eb": {
+    "detail": "",
+    "duration_s": 2.775,
+    "failing_tests": [
+      "tests\\test_semver.py::test_should_fail_compatible_match[old4-new4]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old1-new1]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old2-new2]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old3-new3]"
+    ],
+    "mutant_id": "9f4f300e8610b1eb",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "a09a12c877c46bb6": {
+    "detail": "",
+    "duration_s": 2.71,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+    ],
+    "mutant_id": "a09a12c877c46bb6",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "a0c2d57279e639f7": {
+    "detail": "",
+    "duration_s": 2.914,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_not_allow_to_compare_version_with_int",
+      "tests\\test_subclass.py::test_compare_with_subclass"
+    ],
+    "mutant_id": "a0c2d57279e639f7",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "a1173ab1ddbe4abc": {
+    "detail": "",
+    "duration_s": 2.693,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.4-prerelease-0.1.5-rc.1]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.5-rc.1-prerelease-0.1.5-rc.2]"
+    ],
+    "mutant_id": "a1173ab1ddbe4abc",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "a1ccab612fe909cc": {
+    "detail": "",
+    "duration_s": 2.491,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.5-rc.1-prerelease-0.1.5-rc.2]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.5-rc.2-patch-0.1.5]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.0-rc.1-patch-0.2.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.5-rc.1-minor-0.3.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-patch-1.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.0-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.4-rc.1-major-2.0.0]"
+    ],
+    "mutant_id": "a1ccab612fe909cc",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "a2eac6e409052bf8": {
+    "detail": "",
+    "duration_s": 2.559,
+    "failing_tests": [
+      "tests\\test_index.py::test_version_info_should_throw_index_error_when_negative_index[1.2.3--1]",
+      "tests\\test_index.py::test_version_info_should_throw_index_error_when_negative_index[1.2.3-index2]",
+      "tests\\test_index.py::test_version_info_should_throw_index_error_when_negative_index[1.2.3-index3]"
+    ],
+    "mutant_id": "a2eac6e409052bf8",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "a31be685cfeb58a9": {
+    "detail": "",
+    "duration_s": 2.651,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_prerelease_and_build_with_numbers",
+      "tests\\test_compare.py::test_should_compare_prerelease_with_numbers_and_letters",
+      "tests\\test_compare.py::test_should_compare_rc_builds[1.0.0-beta.2-1.0.0-beta.11]",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1+build.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects",
+      "tests\\test_compare.py::test_should_compare_version_list[lst0]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst1]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst2]"
+    ],
+    "mutant_id": "a31be685cfeb58a9",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "a66dc04de6e3d345": {
+    "detail": "",
+    "duration_s": 2.954,
+    "failing_tests": [
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old0-new0]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old1-new1]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old2-new2]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old3-new3]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old4-new4]",
+      "tests\\test_semver.py::test_should_succeed_with_compatible_subclass_for_is_compatible"
+    ],
+    "mutant_id": "a66dc04de6e3d345",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "a6ae90ef47cb6625": {
+    "detail": "",
+    "duration_s": 3.03,
+    "failing_tests": [
+      "tests\\test_semver.py::test_should_fail_compatible_match[old1-new1]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old0-new0]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old1-new1]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old2-new2]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old3-new3]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old4-new4]",
+      "tests\\test_semver.py::test_should_succeed_with_compatible_subclass_for_is_compatible"
+    ],
+    "mutant_id": "a6ae90ef47cb6625",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "a6eb2ad4fd7271ea": {
+    "detail": "",
+    "duration_s": 2.723,
+    "failing_tests": [],
+    "mutant_id": "a6eb2ad4fd7271ea",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "a7125c4f34d87b17": {
+    "detail": "",
+    "duration_s": 2.673,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects",
+      "tests\\test_compare.py::test_should_compare_version_list[lst0]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst1]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst2]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst3]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst4]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0-pre.2+build.4]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0-pre.2]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0]"
+    ],
+    "mutant_id": "a7125c4f34d87b17",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "a831094d45b20b1d": {
+    "detail": "",
+    "duration_s": 2.723,
+    "failing_tests": [
+      "tests\\test_deprecated_functions.py::test_should_raise_deprecation_warnings[cmd_check-args15-kwargs15]",
+      "tests\\test_pysemver-cli.py::test_should_process_check_iscalled_with_valid_version",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_check-args8-expectation8]",
+      "tests\\test_semver.py::test_should_versioninfo_isvalid"
+    ],
+    "mutant_id": "a831094d45b20b1d",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "a8cc4094c21023f6": {
+    "detail": "",
+    "duration_s": 2.742,
+    "failing_tests": [
+      "tests\\test_replace.py::test_replace_raises_TypeError_for_invalid_keyword_arg"
+    ],
+    "mutant_id": "a8cc4094c21023f6",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "a8f90ba5e53b1b17": {
+    "detail": "",
+    "duration_s": 3.065,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-major-1.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.0-rc.1-major-2.0.0]"
+    ],
+    "mutant_id": "a8f90ba5e53b1b17",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "ab079d4f38700765": {
+    "detail": "",
+    "duration_s": 2.762,
+    "failing_tests": [
+      "tests\\test_semver.py::test_should_fail_compatible_match[old4-new4]"
+    ],
+    "mutant_id": "ab079d4f38700765",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "acb0481557600017": {
+    "detail": "",
+    "duration_s": 2.569,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects"
+    ],
+    "mutant_id": "acb0481557600017",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "acd87f3579755834": {
+    "detail": "",
+    "duration_s": 2.657,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+    ],
+    "mutant_id": "acd87f3579755834",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "ae269fd63af30fd5": {
+    "detail": "",
+    "duration_s": 2.783,
+    "failing_tests": [
+      "tests\\test_match.py::test_should_raise_value_error_for_invalid_match_expression[1.0.0-!]",
+      "tests\\test_match.py::test_should_raise_value_error_for_invalid_match_expression[1.0.0-]",
+      "tests\\test_match.py::test_should_raise_value_error_for_unexpected_match_expression[2.3.7-=2.3.7]",
+      "tests\\test_match.py::test_should_raise_value_error_for_unexpected_match_expression[2.3.7-^2.3.7]",
+      "tests\\test_match.py::test_should_raise_value_error_for_unexpected_match_expression[2.3.7-~2.3.7]"
+    ],
+    "mutant_id": "ae269fd63af30fd5",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "af7160541f2bddab": {
+    "detail": "",
+    "duration_s": 2.552,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_prerelease_and_build_with_numbers",
+      "tests\\test_compare.py::test_should_compare_prerelease_with_numbers_and_letters",
+      "tests\\test_compare.py::test_should_compare_rc_builds[1.0.0-beta.2-1.0.0-beta.11]",
+      "tests\\test_compare.py::test_should_follow_specification_comparison",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-alpha.1-1.0.0-alpha]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-alpha.beta-1.0.0-alpha.1]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-beta-1.0.0-alpha.beta]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-beta.11-1.0.0-beta.2]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-beta.2-1.0.0-beta]",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-rc.1-1.0.0-beta.11]"
+    ],
+    "mutant_id": "af7160541f2bddab",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "b6875139b7789d86": {
+    "detail": "",
+    "duration_s": 2.667,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_format.py::test_parse_method_for_version_info",
+      "tests\\test_format.py::test_repr[version3-Version(major=1,",
+      "tests\\test_format.py::test_repr[version4-Version(major=1,",
+      "tests\\test_format.py::test_repr[version5-Version(major=1,",
+      "tests\\test_format.py::test_should_correctly_format_version",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-4-build.0]"
+    ],
+    "mutant_id": "b6875139b7789d86",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "b78e6707b0c56409": {
+    "detail": "",
+    "duration_s": 2.703,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_compare.py::test_should_compare_prerelease_and_build_with_numbers",
+      "tests\\test_compare.py::test_should_compare_prerelease_with_numbers_and_letters",
+      "tests\\test_compare.py::test_should_compare_rc_builds[1.0.0-beta.2-1.0.0-beta.11]",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1+build.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_version_dictionaries"
+    ],
+    "mutant_id": "b78e6707b0c56409",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "b8044c70a87aa3c5": {
+    "detail": "",
+    "duration_s": 2.549,
+    "failing_tests": [
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.0.2-1-0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-2-3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-2-3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-3-rc.0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-4-build.0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0-0-1]"
+    ],
+    "mutant_id": "b8044c70a87aa3c5",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "b8e6b182cecdf22a": {
+    "detail": "",
+    "duration_s": 2.688,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.4-prerelease-0.1.5-rc.1]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.5-rc.1-prerelease-0.1.5-rc.2]"
+    ],
+    "mutant_id": "b8e6b182cecdf22a",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "b9db0706a269ab7b": {
+    "detail": "",
+    "duration_s": 2.774,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+    ],
+    "mutant_id": "b9db0706a269ab7b",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "bad59b17cefa1f72": {
+    "detail": "",
+    "duration_s": 2.89,
+    "failing_tests": [],
+    "mutant_id": "bad59b17cefa1f72",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "c1b98e72b05bc54e": {
+    "detail": "",
+    "duration_s": 2.749,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.5-rc.1-minor-0.3.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.3.1-minor-1.4.0]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_bump-args1-expectation1]"
+    ],
+    "mutant_id": "c1b98e72b05bc54e",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "c4d2c1940809bc68": {
+    "detail": "",
+    "duration_s": 2.683,
+    "failing_tests": [
+      "tests\\test_semver.py::test_should_fail_compatible_match[old0-new0]",
+      "tests\\test_semver.py::test_should_fail_compatible_match[old1-new1]",
+      "tests\\test_semver.py::test_should_fail_compatible_match[old2-new2]",
+      "tests\\test_semver.py::test_should_fail_compatible_match[old3-new3]",
+      "tests\\test_semver.py::test_should_fail_compatible_match[old4-new4]",
+      "tests\\test_semver.py::test_should_fail_compatible_match[old5-new5]",
+      "tests\\test_semver.py::test_should_fail_compatible_match[old6-new6]",
+      "tests\\test_semver.py::test_should_fail_with_incompatible_type_for_compatible_match[wrongtype1]",
+      "tests\\test_semver.py::test_should_fail_with_incompatible_type_for_compatible_match[wrongtype2]",
+      "tests\\test_semver.py::test_should_fail_with_incompatible_type_for_compatible_match[wrongtype]"
+    ],
+    "mutant_id": "c4d2c1940809bc68",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "c55457248c73be4d": {
+    "detail": "",
+    "duration_s": 2.976,
+    "failing_tests": [
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old0-new0]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old1-new1]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old2-new2]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old3-new3]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old4-new4]",
+      "tests\\test_semver.py::test_should_succeed_with_compatible_subclass_for_is_compatible"
+    ],
+    "mutant_id": "c55457248c73be4d",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "c6356b230eb865ab": {
+    "detail": "",
+    "duration_s": 2.646,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_prerelease_with_numbers_and_letters",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1+build.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_versions_with_build_and_release[1.1.9-rc.1-1.1.9+build.1--1]",
+      "tests\\test_compare.py::test_should_follow_specification_comparison",
+      "tests\\test_compare.py::test_should_get_less[1.0.0-rc.1-1.0.0]"
+    ],
+    "mutant_id": "c6356b230eb865ab",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "c68859dc8836dc5a": {
+    "detail": "",
+    "duration_s": 2.707,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_major",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.0-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.2.3-major-2.0.0]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_bump-args0-expectation0]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_nextver-args10-expectation10]",
+      "tests\\test_pysemver-cli.py::test_should_process_print"
+    ],
+    "mutant_id": "c68859dc8836dc5a",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "c769bd6860c8fef2": {
+    "detail": "",
+    "duration_s": 2.646,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects"
+    ],
+    "mutant_id": "c769bd6860c8fef2",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "c878945714590575": {
+    "detail": "",
+    "duration_s": 2.888,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+    ],
+    "mutant_id": "c878945714590575",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "c9ff13e9bffa7e94": {
+    "detail": "",
+    "duration_s": 2.623,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_major",
+      "tests\\test_bump.py::test_should_bump_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.5-rc.1-minor-0.3.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.0-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.2.3-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.3.1-minor-1.4.0]"
+    ],
+    "mutant_id": "c9ff13e9bffa7e94",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "cb4bea637c6cfaa9": {
+    "detail": "",
+    "duration_s": 2.572,
+    "failing_tests": [
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.0-rc.0+build.0-slice_object15-expected15]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object0-expected0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object1-expected1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object11-expected11]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object12-expected12]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object13-expected13]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object14-expected14]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object2-expected2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object3-expected3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object4-expected4]"
+    ],
+    "mutant_id": "cb4bea637c6cfaa9",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "cb75710c86831eef": {
+    "detail": "",
+    "duration_s": 2.653,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects",
+      "tests\\test_compare.py::test_should_compare_version_list[lst0]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst1]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst2]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst3]",
+      "tests\\test_compare.py::test_should_compare_version_list[lst4]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0-pre.2+build.4]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0-pre.2]",
+      "tests\\test_compare.py::test_should_compare_version_string[1.0.0]"
+    ],
+    "mutant_id": "cb75710c86831eef",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "ce0bf4867c414a7f": {
+    "detail": "",
+    "duration_s": 2.927,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_minor",
+      "tests\\test_bump.py::test_should_bump_patch",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-rc.9-None-3.4.5-rc.10]"
+    ],
+    "mutant_id": "ce0bf4867c414a7f",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "ce4a7b2e3feb650e": {
+    "detail": "",
+    "duration_s": 2.695,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-rc.9-None-3.4.5-rc.10]",
+      "tests\\test_bump.py::test_should_ignore_build_on_prerelease_bump",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple"
+    ],
+    "mutant_id": "ce4a7b2e3feb650e",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "cf2e6064fac4a715": {
+    "detail": "",
+    "duration_s": 2.86,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-rc.9-None-3.4.5-rc.10]",
+      "tests\\test_bump.py::test_should_ignore_build_on_prerelease_bump",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple"
+    ],
+    "mutant_id": "cf2e6064fac4a715",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "cfca3b3825cec67c": {
+    "detail": "",
+    "duration_s": 2.761,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_major",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.0-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.2.3-major-2.0.0]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_bump-args0-expectation0]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_nextver-args10-expectation10]",
+      "tests\\test_pysemver-cli.py::test_should_process_print"
+    ],
+    "mutant_id": "cfca3b3825cec67c",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "d27bda47cd9b3fac": {
+    "detail": "",
+    "duration_s": 2.64,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects",
+      "tests\\test_compare.py::test_should_follow_specification_comparison",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-1.0.0-rc.1]",
+      "tests\\test_compare.py::test_should_ignore_builds_on_compare[1.0.0+build.1-1.0.0-alpha.1+build.1-1]",
+      "tests\\test_compare.py::test_should_ignore_builds_on_compare[1.0.0+build.1-1.0.0-alpha.1-1]"
+    ],
+    "mutant_id": "d27bda47cd9b3fac",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "d2d3635730d2998d": {
+    "detail": "",
+    "duration_s": 2.77,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_patch",
+      "tests\\test_bump.py::test_should_ignore_extensions_for_bump",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.4-prerelease-0.1.5-rc.1]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.3.2-patch-1.3.3]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_bump-args2-expectation2]"
+    ],
+    "mutant_id": "d2d3635730d2998d",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "d5f4e87ea9fde860": {
+    "detail": "",
+    "duration_s": 2.66,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+    ],
+    "mutant_id": "d5f4e87ea9fde860",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "d735b5aba061f2db": {
+    "detail": "",
+    "duration_s": 2.571,
+    "failing_tests": [
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object14-expected14]"
+    ],
+    "mutant_id": "d735b5aba061f2db",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "dd9458178edff411": {
+    "detail": "",
+    "duration_s": 2.666,
+    "failing_tests": [
+      "tests\\test_deprecated_functions.py::test_should_raise_deprecation_warnings[cmd_nextver-args16-kwargs16]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.4-prerelease-0.1.5-rc.1]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.5-rc.1-prerelease-0.1.5-rc.2]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.5-rc.2-patch-0.1.5]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.0-rc.1-minor-0.2.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.0-rc.1-patch-0.2.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.5-rc.1-minor-0.3.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-major-1.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-minor-1.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-patch-1.0.0]"
+    ],
+    "mutant_id": "dd9458178edff411",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "ddff010f6c4ada03": {
+    "detail": "",
+    "duration_s": 2.572,
+    "failing_tests": [
+      "tests\\test_format.py::test_repr[version0-Version(major=1,",
+      "tests\\test_format.py::test_repr[version1-Version(major=1,",
+      "tests\\test_format.py::test_repr[version2-Version(major=1,",
+      "tests\\test_format.py::test_repr[version3-Version(major=1,",
+      "tests\\test_format.py::test_repr[version4-Version(major=1,",
+      "tests\\test_format.py::test_repr[version5-Version(major=1,"
+    ],
+    "mutant_id": "ddff010f6c4ada03",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "def63e16097d761f": {
+    "detail": "",
+    "duration_s": 3.026,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.0-rc.1-minor-0.2.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.0-rc.1-minor-1.0.0]"
+    ],
+    "mutant_id": "def63e16097d761f",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "e0494314dcac0ca3": {
+    "detail": "",
+    "duration_s": 2.669,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_none",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.4-prerelease-0.1.5-rc.1]"
+    ],
+    "mutant_id": "e0494314dcac0ca3",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "e1862ffbb62e8e54": {
+    "detail": "",
+    "duration_s": 2.668,
+    "failing_tests": [
+      "tests\\test_semver.py::test_should_fail_compatible_match[old4-new4]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old1-new1]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old2-new2]",
+      "tests\\test_semver.py::test_should_succeed_compatible_match[old3-new3]"
+    ],
+    "mutant_id": "e1862ffbb62e8e54",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "e1d1f13f5fd19cbd": {
+    "detail": "",
+    "duration_s": 2.983,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_deprecated_functions.py::test_should_raise_deprecation_warnings[bump_build-args0-kwargs0]"
+    ],
+    "mutant_id": "e1d1f13f5fd19cbd",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "e33713b10f9fe26a": {
+    "detail": "",
+    "duration_s": 2.669,
+    "failing_tests": [
+      "tests\\test_deprecated_functions.py::test_should_raise_deprecation_warnings[match-args7-kwargs7]",
+      "tests\\test_match.py::test_should_match_not_equal[2.3.7-!=2.3.6-True]",
+      "tests\\test_match.py::test_should_match_not_equal[2.3.7-!=2.3.7-False]",
+      "tests\\test_match.py::test_should_match_not_equal[2.3.7-!=2.3.8-True]",
+      "tests\\test_match.py::test_should_match_simple",
+      "tests\\test_match.py::test_should_no_match_simple",
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7-!=2.3.7-False]",
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7-<=2.3.9-True]",
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7-==2.3.7-True]",
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7->=2.3.5-True]"
+    ],
+    "mutant_id": "e33713b10f9fe26a",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "e3c978007d022809": {
+    "detail": "",
+    "duration_s": 2.669,
+    "failing_tests": [
+      "tests\\test_deprecated_functions.py::test_should_raise_deprecation_warnings[cmd_nextver-args16-kwargs16]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.2.5-rc.1-minor-0.3.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.0.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.0-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.1.4-rc.1-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.2.3-major-2.0.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.3.1-minor-1.4.0]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.3.2-patch-1.3.3]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_nextver-args10-expectation10]"
+    ],
+    "mutant_id": "e3c978007d022809",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "e3f79d5c1e44909b": {
+    "detail": "",
+    "duration_s": 2.651,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_follow_specification_comparison",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-1.0.0-rc.1]",
+      "tests\\test_compare.py::test_should_ignore_builds_on_compare[1.0.0+build.1-1.0.0-alpha.1+build.1-1]",
+      "tests\\test_compare.py::test_should_ignore_builds_on_compare[1.0.0+build.1-1.0.0-alpha.1-1]"
+    ],
+    "mutant_id": "e3f79d5c1e44909b",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "e672422f97f4beb7": {
+    "detail": "",
+    "duration_s": 2.569,
+    "failing_tests": [
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.0.2-1-0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-2-3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-3-rc.0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0-2-3]"
+    ],
+    "mutant_id": "e672422f97f4beb7",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "e6f96745cf3ab688": {
+    "detail": "",
+    "duration_s": 2.652,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-rc.9-None-3.4.5-rc.10]",
+      "tests\\test_bump.py::test_should_ignore_build_on_prerelease_bump",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str"
+    ],
+    "mutant_id": "e6f96745cf3ab688",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "e75129e730263719": {
+    "detail": "",
+    "duration_s": 2.795,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_patch",
+      "tests\\test_bump.py::test_should_ignore_extensions_for_bump",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.4-prerelease-0.1.5-rc.1]",
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[1.3.2-patch-1.3.3]",
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_bump-args2-expectation2]"
+    ],
+    "mutant_id": "e75129e730263719",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "e764161b7fb69895": {
+    "detail": "",
+    "duration_s": 3.006,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+    ],
+    "mutant_id": "e764161b7fb69895",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "e8bc140a7584e16c": {
+    "detail": "",
+    "duration_s": 2.709,
+    "failing_tests": [
+      "tests\\test_pysemver-cli.py::test_should_process_parsed_cli_arguments[cmd_check-args9-expectation9]",
+      "tests\\test_semver.py::test_should_versioninfo_isvalid"
+    ],
+    "mutant_id": "e8bc140a7584e16c",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "e9d0040520fd9042": {
+    "detail": "",
+    "duration_s": 2.592,
+    "failing_tests": [
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.0-rc.0+build.0-slice_object15-expected15]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object0-expected0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object1-expected1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object11-expected11]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object12-expected12]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object13-expected13]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object14-expected14]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object2-expected2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object3-expected3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_slice_object[1.2.3-rc.0+build.0-slice_object4-expected4]"
+    ],
+    "mutant_id": "e9d0040520fd9042",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "ea5e8659755aaaf2": {
+    "detail": "",
+    "duration_s": 2.608,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_get_less[1.0.0-alpha.1-1.0.0-alpha.beta]"
+    ],
+    "mutant_id": "ea5e8659755aaaf2",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "ed903478315b3d3b": {
+    "detail": "",
+    "duration_s": 2.718,
+    "failing_tests": [
+      "tests\\test_semver.py::test_should_fail_compatible_match[old4-new4]"
+    ],
+    "mutant_id": "ed903478315b3d3b",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "f137bbfa40888ac0": {
+    "detail": "",
+    "duration_s": 2.761,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_major",
+      "tests\\test_bump.py::test_should_bump_minor",
+      "tests\\test_bump.py::test_should_bump_patch",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]"
+    ],
+    "mutant_id": "f137bbfa40888ac0",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "f247f1a9413ac57c": {
+    "detail": "",
+    "duration_s": 2.63,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_major",
+      "tests\\test_bump.py::test_should_bump_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_compare.py::test_should_compare_prerelease_and_build_with_numbers",
+      "tests\\test_compare.py::test_should_compare_rc_builds[1.0.0-beta.2-1.0.0-beta.11]",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1+build.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects"
+    ],
+    "mutant_id": "f247f1a9413ac57c",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "f3907c744e791b5e": {
+    "detail": "",
+    "duration_s": 2.756,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_major",
+      "tests\\test_bump.py::test_should_bump_minor",
+      "tests\\test_bump.py::test_should_bump_patch",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]"
+    ],
+    "mutant_id": "f3907c744e791b5e",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "f39ef6fdb27d4c8c": {
+    "detail": "",
+    "duration_s": 2.679,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_empty_str",
+      "tests\\test_bump.py::test_should_versioninfo_bump_build_with_none",
+      "tests\\test_bump.py::test_should_versioninfo_bump_major_and_minor",
+      "tests\\test_bump.py::test_should_versioninfo_bump_minor_and_patch",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease",
+      "tests\\test_bump.py::test_should_versioninfo_bump_patch_and_prerelease_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_and_build_with_token",
+      "tests\\test_bump.py::test_should_versioninfo_bump_prerelease_with_empty_str"
+    ],
+    "mutant_id": "f39ef6fdb27d4c8c",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "f41e358b973f8726": {
+    "detail": "",
+    "duration_s": 2.747,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-rc.9-None-3.4.5-rc.10]",
+      "tests\\test_bump.py::test_should_ignore_build_on_prerelease_bump",
+      "tests\\test_bump.py::test_should_versioninfo_bump_multiple"
+    ],
+    "mutant_id": "f41e358b973f8726",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "f56ef8602edf31cc": {
+    "detail": "",
+    "duration_s": 2.791,
+    "failing_tests": [
+      "tests\\test_match.py::test_should_match_equal_by_default[2.3.6-2.3.6-True]",
+      "tests\\test_match.py::test_should_match_equal_by_default[2.3.7-2.3.7-True]",
+      "tests\\test_match.py::test_should_not_raise_value_error_for_expected_match_expression[2.3.7-==2.3.7-True]"
+    ],
+    "mutant_id": "f56ef8602edf31cc",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "f9cc1a936f009aa4": {
+    "detail": "",
+    "duration_s": 2.544,
+    "failing_tests": [
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.0.2-1-0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-2-3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-2-3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-3-rc.0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-4-build.0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0-0-1]"
+    ],
+    "mutant_id": "f9cc1a936f009aa4",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "fb26da079c8a27af": {
+    "detail": "",
+    "duration_s": 2.809,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_should_parse_version_with_optional_minor_and_patch[0-0foo.1+build.1-expected4]",
+      "tests\\test_parsing.py::test_should_parse_version_with_optional_minor_and_patch[0-0foo.1-expected3]",
+      "tests\\test_parsing.py::test_should_parse_version_with_optional_minor_and_patch[1-alpha-1+build.11.e0f985a-expected1]"
+    ],
+    "mutant_id": "fb26da079c8a27af",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "fb6c9de246fb83ba": {
+    "detail": "",
+    "duration_s": 2.669,
+    "failing_tests": [
+      "tests\\test_match.py::test_should_match_equal_by_default[2.3.6-2.3.6-True]",
+      "tests\\test_match.py::test_should_match_equal_by_default[2.3.7-2.3.7-True]",
+      "tests\\test_match.py::test_should_match_equal_by_default[2.3.7-4.3.7-False]",
+      "tests\\test_match.py::test_should_raise_value_error_for_invalid_match_expression[1.0.0-!]",
+      "tests\\test_match.py::test_should_raise_value_error_for_invalid_match_expression[1.0.0-]",
+      "tests\\test_match.py::test_should_raise_value_error_for_unexpected_match_expression[2.3.7-=2.3.7]",
+      "tests\\test_match.py::test_should_raise_value_error_for_unexpected_match_expression[2.3.7-^2.3.7]",
+      "tests\\test_match.py::test_should_raise_value_error_for_unexpected_match_expression[2.3.7-~2.3.7]"
+    ],
+    "mutant_id": "fb6c9de246fb83ba",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "fc50bf9a902274ce": {
+    "detail": "",
+    "duration_s": 2.592,
+    "failing_tests": [
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.0.2-1-0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-2-3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-0-1]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-1-2]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-2-3]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-3-rc.0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0+build.0-4-build.0]",
+      "tests\\test_index.py::test_version_info_should_be_accessed_with_index[1.2.3-rc.0-0-1]"
+    ],
+    "mutant_id": "fc50bf9a902274ce",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "fc968abc705cb817": {
+    "detail": "",
+    "duration_s": 2.675,
+    "failing_tests": [
+      "tests\\test_compare.py::test_should_compare_prerelease_and_build_with_numbers",
+      "tests\\test_compare.py::test_should_compare_prerelease_with_numbers_and_letters",
+      "tests\\test_compare.py::test_should_compare_rc_builds[1.0.0-beta.2-1.0.0-beta.11]",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1+build.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_release_candidate_with_release[1.0.0-rc.1-1.0.0]",
+      "tests\\test_compare.py::test_should_compare_version_dictionaries",
+      "tests\\test_compare.py::test_should_compare_version_info_objects",
+      "tests\\test_compare.py::test_should_compare_versions_with_build_and_release[1.1.9-rc.1-1.1.9+build.1--1]",
+      "tests\\test_compare.py::test_should_follow_specification_comparison",
+      "tests\\test_compare.py::test_should_get_greater[1.0.0-1.0.0-rc.1]"
+    ],
+    "mutant_id": "fc968abc705cb817",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "fda6c1bf652e55fa": {
+    "detail": "",
+    "duration_s": 2.636,
+    "failing_tests": [
+      "tests\\test_parsing.py::test_next_version_with_versioninfo[0.1.4-prerelease-0.1.5-rc.1]"
+    ],
+    "mutant_id": "fda6c1bf652e55fa",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "fdf720b062657eb0": {
+    "detail": "",
+    "duration_s": 2.831,
+    "failing_tests": [
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-3.4.5+build.1]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+0009.dev-3.4.5-rc.1+0010.dev]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1+build.9-3.4.5-rc.1+build.10]",
+      "tests\\test_bump.py::test_should_bump_build[3.4.5-rc.1-3.4.5-rc.1+build.1]",
+      "tests\\test_bump.py::test_should_bump_patch",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5--3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-None-3.4.5-rc.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-dev-3.4.5-dev.1]",
+      "tests\\test_bump.py::test_should_bump_prerelease[3.4.5-rc.9-None-3.4.5-rc.10]",
+      "tests\\test_bump.py::test_should_ignore_build_on_prerelease_bump"
+    ],
+    "mutant_id": "fdf720b062657eb0",
+    "returncode": 1,
+    "status": "killed"
+  }
+}

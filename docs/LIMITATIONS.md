@@ -23,9 +23,14 @@ Concretely, what this means here:
   scored faults) but does not remove it, because held-out faults are drawn from
   the same seven operator families.
 
-**Not done, and it should be:** validating the final suites against a corpus of
-real historical bugs (BugsInPy or similar). That was scoped out for time and is
-the single most valuable next experiment.
+**Partly addressed since.** `scripts/run_historical_bugs.py` evaluates four
+defects that genuinely shipped in semver 3.0.4 and were fixed upstream
+afterwards, using the maintainers' own diffs and issue numbers as ground truth.
+Deterministic search found a distinguishing witness for **3 of the 3
+behavior-changing bugs**, and correctly found none for the one
+behavior-preserving refactor. That is four real bugs, not four hundred: it
+removes the "only synthetic faults" objection for a small sample without
+substituting for a BugsInPy-scale study, which remains the right next step.
 
 ## 2. Equivalent mutants
 
@@ -52,8 +57,13 @@ The primary held-out set is 80 faults across 12 functions of one module of one
 library. Differences between conditions are a handful of mutants. Treat the
 ordering of the middle conditions as indicative, not established.
 
-No significance testing is claimed. Per-condition, per-fault results are in
-`experiments/results.json` so anyone can compute their own statistics.
+No significance testing is claimed for the between-condition comparison.
+Run-to-run variance *is* now measured, from three stored independent runs of the
+same condition (`experiments/variance.json`): admitted counts were identical in
+all three (95% bootstrap CI [5.0, 5.0]) while retry recoveries ranged 0-2 (CI
+[0.0, 2.0]). Three runs give a very wide interval; it is reported rather than
+smoothed. Per-condition, per-fault results are in `experiments/results.json` so
+anyone can compute their own statistics.
 
 ## 4. Nondeterminism in generation
 
@@ -70,11 +80,13 @@ reporting medians is the obvious next step and was not done for time.
 
 ## 5. One subject, one language
 
-Everything here is Python, pytest, and one module of one library. The subject
-was chosen because it is real, permissively licensed, fast to run, and held to
-100% coverage — which makes it a fair rather than flattering target. It is still
-one data point. Nothing here establishes that the result transfers to other
-languages, larger modules, or codebases with slow test suites.
+Everything here is Python and pytest. There are now **two** subjects, not one:
+`semver` (comparison and boundary logic, 329 tests) and `inflection` (string
+transformation, 455 tests). Their mutation scores differ substantially, which is
+the useful part — the method reports a property of each suite rather than a
+constant. Two Python libraries is still a narrow base. Nothing here establishes
+that the result transfers to other languages, larger modules, or codebases with
+slow test suites.
 
 Placebo's mutation engine also assumes a fast suite: it runs the tests once per
 fault. On a subject with a ten-minute suite, the census alone would take days.
@@ -146,11 +158,18 @@ insufficient for correctness.
 | 3 | metamorphic properties (`parse(str(v)) == v`, `compare(a,b) == -compare(b,a)`) | correctness of relationships, no hardcoded outputs | no |
 | 4 | single-reference execution snapshot | consistency only | **yes** |
 
-Placebo operates at **level 4** and labels it as such rather than presenting a
-snapshot as ground truth. Levels 2 and 3 are the highest-value next work:
-semver has natural metamorphic properties, and a previous stable release would
-serve as an independent second reference. Neither was implemented, and no result
-in this project should be read as a correctness claim.
+Placebo's default oracle is **level 4** and is labelled as such rather than
+presented as ground truth. **Level 3 is now implemented**
+(`src/placebo/search/metamorphic.py`): twelve properties, all verified to hold
+on clean code, asserting relationships rather than recorded outputs.
+
+The measured trade-off is worth stating plainly, because it went against
+expectation: the *stronger* oracle is the *weaker* detector. Snapshot witnesses
+close **6/6** confirmed gaps but pin behavior rather than correctness;
+metamorphic properties close **1/6** but cannot encode an existing bug as
+expected. Neither dominates, and Placebo reports both rather than picking the
+flattering one. Level 2 (independent implementations) remains unimplemented, and
+no result in this project should be read as a correctness claim.
 
 ### Why the measured results still stand
 

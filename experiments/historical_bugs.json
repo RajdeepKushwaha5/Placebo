@@ -1,0 +1,57 @@
+{
+  "behavior_changing_bugs": 3,
+  "behavior_preserving_refactors": 1,
+  "bugs_evaluated": 4,
+  "detected_by_existing_suite": 0,
+  "method": "faulty = released source; clean = upstream fix commit",
+  "model_calls": 0,
+  "refactors_correctly_indistinguishable": 1,
+  "results": [
+    {
+      "commit": "d959aa7",
+      "found": false,
+      "issue": "#463",
+      "probed": 90,
+      "summary": "duplicate dead code in bump_build (behavior-preserving)"
+    },
+    {
+      "commit": "d8813b6",
+      "distinguishing": 20,
+      "fixed_behaviour": "'0.0.0-alpha.0'",
+      "found": true,
+      "function": "bump_prerelease",
+      "issue": "#460",
+      "probed": 90,
+      "shipped_behaviour": "'0.0.0-alpha'",
+      "summary": "bump_prerelease does not always produce a newer version",
+      "witness": "str(semver.Version.parse(\"0.0.0-alpha\").bump_prerelease(\"\"))"
+    },
+    {
+      "commit": "4e09ef0",
+      "distinguishing": 13,
+      "fixed_behaviour": "'1.0.0'",
+      "found": true,
+      "function": "next_version",
+      "issue": "#469",
+      "probed": 72,
+      "shipped_behaviour": "'0.0.0'",
+      "summary": "next_version does not bump build-only versions",
+      "witness": "str(semver.Version.parse(\"0.0.0+0\").next_version(\"major\"))"
+    },
+    {
+      "commit": "fdec4ae",
+      "distinguishing": 19,
+      "fixed_behaviour": "'1.0.0'",
+      "found": true,
+      "function": "next_version",
+      "issue": "#339",
+      "probed": 72,
+      "shipped_behaviour": "'0.0.0'",
+      "summary": "next_version does not reset prerelease when token changes",
+      "witness": "str(semver.Version.parse(\"0.0.0+0\").next_version(\"major\"))"
+    }
+  ],
+  "subject": "semver 3.0.4",
+  "wall_s": 0.9,
+  "witnesses_found": 3
+}

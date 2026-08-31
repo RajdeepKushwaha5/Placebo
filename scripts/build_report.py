@@ -282,6 +282,107 @@ def main() -> int:
                     f"`{entry['clean'][:36]}` | `{entry['faulty'][:36]}` |")
         add("")
 
+    # ---- generalization: second repository --------------------------------
+    multirepo = ROOT / "experiments" / "multirepo_census.json"
+    if multirepo.exists():
+        repos = json.loads(multirepo.read_text(encoding="utf-8"))
+        if len(repos) > 1:
+            add("## Generalization: a second repository\n")
+            add("semver is comparison- and boundary-heavy, exactly the shape "
+                "these mutation operators target. `inflection` is string "
+                "transformation logic with a different fault surface. The "
+                "identical pipeline runs on both.\n")
+            add("| subject | domain | existing tests | faults | undetected | mutation score |")
+            add("|---|---|---:|---:|---:|---:|")
+            for name, s in sorted(repos.items()):
+                add(f"| `{name}` | {s['domain']} | {s['existing_tests']} | "
+                    f"{s['scorable']} | {s['survived']} | "
+                    f"**{s['mutation_score'] * 100:.1f}%** |")
+            add("")
+            add("The scores differ substantially, which is the useful part: the "
+                "method reports a property of each suite rather than a constant.\n")
+
+    # ---- real historical bugs ---------------------------------------------
+    historical = ROOT / "experiments" / "historical_bugs.json"
+    if historical.exists():
+        hb = json.loads(historical.read_text(encoding="utf-8"))
+        add("## Real historical bugs (not injected faults)\n")
+        add("Mutation score is a proxy. These are defects that actually shipped "
+            "in semver 3.0.4 and were fixed upstream afterwards, so the ground "
+            "truth is the maintainers' own diff and issue number. `faulty` is "
+            "the released source; `clean` is the upstream fix.\n")
+        add(f"- behavior-changing bugs with a witness found: "
+            f"**{hb['witnesses_found']}/{hb['behavior_changing_bugs']}**")
+        add(f"- detected by semver's own 329-test suite: "
+            f"**0/{hb['behavior_changing_bugs']}** (all shipped at 100% coverage)")
+        add(f"- behavior-preserving refactors correctly reported as "
+            f"indistinguishable: **{hb['refactors_correctly_indistinguishable']}/"
+            f"{hb['behavior_preserving_refactors']}**")
+        add(f"- model calls: **{hb['model_calls']}**\n")
+        add("| upstream issue | defect | witness input |")
+        add("|---|---|---|")
+        for r in hb["results"]:
+            if r.get("found"):
+                add(f"| `{r['issue']}` | {r['summary']} | `{r['witness']}` |")
+        add("")
+        add("Issue `#463` removes dead code, so finding **no** witness is the "
+            "correct answer there. It independently confirms the equivalent-"
+            "mutant verdict reached from the other direction in "
+            "`artifacts/survivor_triage.json`.\n")
+
+    # ---- metamorphic oracle ------------------------------------------------
+    meta_path = ROOT / "experiments" / "metamorphic.json"
+    if meta_path.exists():
+        mm = json.loads(meta_path.read_text(encoding="utf-8"))
+        add("## Oracle strength versus detection power\n")
+        add("The default oracle records what the reference implementation "
+            "returned - a level-4 snapshot, which cannot tell correct from "
+            "*currently does this*. Metamorphic properties assert relationships "
+            "between executions instead, hardcode no expected value, and so "
+            "cannot inherit a pre-existing bug.\n")
+        add("| oracle | hardcodes expected values | confirmed gaps detected |")
+        add("|---|:--:|---:|")
+        search_path = ROOT / "experiments" / "gap_search.json"
+        if search_path.exists():
+            gs = json.loads(search_path.read_text(encoding="utf-8"))
+            add(f"| level 4 - execution snapshot | yes | "
+                f"**{gs['gaps_closed']}/{gs['confirmed_gaps']}** |")
+        add(f"| level 3 - metamorphic properties | **no** | "
+            f"{mm['gaps_detected']}/{mm['confirmed_gaps']} |")
+        add("")
+        add(f"All {mm['properties_defined']} properties hold on clean code "
+            f"(`all_properties_sound_on_clean`: "
+            f"{str(mm['all_properties_sound_on_clean']).lower()}).\n")
+        add("> This is a genuine trade-off, reported rather than resolved. The "
+            "stronger oracle is the weaker detector. Snapshot witnesses close "
+            "every gap but pin behavior rather than correctness; metamorphic "
+            "properties close far fewer but cannot encode an existing bug as "
+            "expected.\n")
+
+    # ---- run-to-run variance ----------------------------------------------
+    variance = ROOT / "experiments" / "variance.json"
+    if variance.exists():
+        var = json.loads(variance.read_text(encoding="utf-8"))
+        add("## Run-to-run variance\n")
+        add("Headline conditions are single runs. These are repeated runs of "
+            "the same condition, so the spread is measured rather than assumed.\n")
+        add("| condition | runs | admitted (median, range) | 95% CI | retry recoveries |")
+        add("|---|---:|---|---|---|")
+        for name, c in var["conditions"].items():
+            rec = (f"{c['recovery_median']:.0f} "
+                   f"({c['recovery_min']:.0f}-{c['recovery_max']:.0f})"
+                   if "recovery_median" in c else "-")
+            add(f"| `{name}` | {c['runs']} | {c['admitted_median']:.0f} "
+                f"({c['admitted_min']:.0f}-{c['admitted_max']:.0f}) | "
+                f"{c['admitted_ci95']} | {rec} |")
+        add("")
+        add("The asymmetry is the finding: **the outcome is stable, the "
+            "mechanism credited for it is not.** Admitted counts do not move "
+            "across runs; retry recoveries range from 0 to 2 under nominally "
+            "identical settings. That is why no strong claim is made for the "
+            "retry loop. Deterministic components - census, splits, search, "
+            "admission - have no variance at all.\n")
+
     report = "\n".join(lines)
     out = ROOT / "artifacts" / "report.md"
     out.parent.mkdir(parents=True, exist_ok=True)

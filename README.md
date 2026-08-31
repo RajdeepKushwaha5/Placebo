@@ -162,6 +162,36 @@ observed message distinguishes them. It is not automatically a good product
 requirement—exception text can be brittle—so Placebo presents it for human
 review instead of treating admission as permission to merge.
 
+### Evidence beyond injected faults
+
+Mutation score is a proxy, so the project does not rest on it alone. Four
+independent checks, none of which uses a language model:
+
+| check | what it tests | result |
+|---|---|---|
+| **Real historical bugs** | defects that actually shipped in semver 3.0.4 and were fixed upstream later; ground truth is the maintainers' own diff and issue number | witness found for **3/3** behavior-changing bugs; **0/3** detected by semver's own suite |
+| **Second repository** | the identical pipeline on `inflection` (string transformation, 455 tests) rather than version comparison | mutation scores differ substantially between subjects |
+| **Metamorphic oracle** | properties asserting relationships, hardcoding no expected value | 12/12 sound on clean code; detects 1/6 gaps |
+| **Run-to-run variance** | three stored independent runs of one condition | admitted 5/5/5 (CI [5.0, 5.0]); retry recoveries 1/0/2 (CI [0.0, 2.0]) |
+
+Two of these deserve emphasis because they cut *against* convenient claims.
+
+**The oracle trade-off went against expectation.** Metamorphic properties are
+the stronger oracle — they cannot encode a pre-existing bug as expected — and
+they are the *weaker* detector: 1/6 gaps versus 6/6 for snapshot witnesses.
+Neither dominates. Both are reported.
+
+**Variance shows the outcome is stable and the mechanism is not.** Admitted
+counts were identical across three runs; retry recoveries swung from 0 to 2
+under nominally identical settings. That asymmetry is exactly why the retry loop
+is reported as unproven rather than as a contribution.
+
+**One external validation worth noting.** Placebo's equivalent-mutant triage
+concluded that a mutant in `bump_build` sits in dead code and cannot be killed.
+Upstream reached the same conclusion independently: issue **#463**, fixed in
+January 2025, removes that duplicated block. The historical-bug harness confirms
+it from the other direction by finding no behavioral witness for that commit.
+
 ### Two evaluations, kept deliberately separate
 
 The controlled **authoring benchmark** uses 12 known-detectable faults, paired

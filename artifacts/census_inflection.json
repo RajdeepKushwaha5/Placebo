@@ -1,0 +1,1160 @@
+{
+  "014c240a7d58fa23": {
+    "detail": "",
+    "duration_s": 2.928,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_singular[cow-kine]"
+    ],
+    "mutant_id": "014c240a7d58fa23",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "02be23ddae9f25e8": {
+    "detail": "",
+    "duration_s": 10.37,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_ordinal[-112--112th]",
+      "tests\\test_inflection.py::test_ordinal[-12--12th]",
+      "tests\\test_inflection.py::test_ordinal[112-112th]",
+      "tests\\test_inflection.py::test_ordinal[12-12th]",
+      "tests\\test_inflection.py::test_ordinalize[-112--112th]",
+      "tests\\test_inflection.py::test_ordinalize[-12--12th]",
+      "tests\\test_inflection.py::test_ordinalize[112-112th]",
+      "tests\\test_inflection.py::test_ordinalize[12-12th]"
+    ],
+    "mutant_id": "02be23ddae9f25e8",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "05ebf2077b0d9493": {
+    "detail": "",
+    "duration_s": 0.007,
+    "failing_tests": [],
+    "mutant_id": "05ebf2077b0d9493",
+    "returncode": 3221225773,
+    "status": "error"
+  },
+  "069d795e22b6f295": {
+    "detail": "",
+    "duration_s": 3.371,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_camelize_with_lower_downcases_the_first_letter"
+    ],
+    "mutant_id": "069d795e22b6f295",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "1010f753e0d715ff": {
+    "detail": "ws\\census-inflection\\w0\\inflection\\__init__.py\", line 168 in camelize\n  File \"D:\\micro1-hack\\placebo\\.placebo-ws\\census-inflection\\w0\\inflection\\__init__.py\", line 168 in camelize\n  File \"D:\\micro1-hack\\placebo\\.placebo-ws\\census-inflection\\w0\\inflection\\__init__.py\", line 168 in camelize\n  File \"D:\\micro1-hack\\placebo\\.placebo-ws\\census-inflection\\w0\\inflection\\__init__.py\", line 168 in camelize\n",
+    "duration_s": 69.186,
+    "failing_tests": [],
+    "mutant_id": "1010f753e0d715ff",
+    "returncode": 3221225725,
+    "status": "error"
+  },
+  "13958d678b394e0d": {
+    "detail": "",
+    "duration_s": 2.571,
+    "failing_tests": [],
+    "mutant_id": "13958d678b394e0d",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "13971b6c712c2b71": {
+    "detail": "",
+    "duration_s": 2.632,
+    "failing_tests": [],
+    "mutant_id": "13971b6c712c2b71",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "14a254bbf24b5b31": {
+    "detail": "",
+    "duration_s": 7.971,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_parameterize[!@#Leading",
+      "tests\\test_inflection.py::test_parameterize[Allow_Under_Scores-allow_under_scores]",
+      "tests\\test_inflection.py::test_parameterize[Donald",
+      "tests\\test_inflection.py::test_parameterize[Random",
+      "tests\\test_inflection.py::test_parameterize[Squeeze",
+      "tests\\test_inflection.py::test_parameterize[Test",
+      "tests\\test_inflection.py::test_parameterize[Trailing",
+      "tests\\test_inflection.py::test_parameterize_and_normalize[A\\xdflar-alar]",
+      "tests\\test_inflection.py::test_parameterize_and_normalize[Gar\\xe7ons-garcons]",
+      "tests\\test_inflection.py::test_parameterize_and_normalize[Japanese:"
+    ],
+    "mutant_id": "14a254bbf24b5b31",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "204e6ef2d1ecfbf1": {
+    "detail": "",
+    "duration_s": 3.344,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_camelize_with_lower_downcases_the_first_letter"
+    ],
+    "mutant_id": "204e6ef2d1ecfbf1",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "21570e65e611ea63": {
+    "detail": "",
+    "duration_s": 2.222,
+    "failing_tests": [
+      "tests\\test_inflection.py"
+    ],
+    "mutant_id": "21570e65e611ea63",
+    "returncode": 2,
+    "status": "invalid"
+  },
+  "26371e572d902693": {
+    "detail": "",
+    "duration_s": 2.48,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_singularize_plural[cow-kine]"
+    ],
+    "mutant_id": "26371e572d902693",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "273061e8ef4c6b33": {
+    "detail": "",
+    "duration_s": 3.201,
+    "failing_tests": [],
+    "mutant_id": "273061e8ef4c6b33",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "289f9da7b34265a2": {
+    "detail": "",
+    "duration_s": 5.636,
+    "failing_tests": [
+      "tests\\test_inflection.py"
+    ],
+    "mutant_id": "289f9da7b34265a2",
+    "returncode": 2,
+    "status": "invalid"
+  },
+  "2ec183d06da2d24d": {
+    "detail": "",
+    "duration_s": 0.007,
+    "failing_tests": [],
+    "mutant_id": "2ec183d06da2d24d",
+    "returncode": 3221225773,
+    "status": "error"
+  },
+  "2edf2308395ad11a": {
+    "detail": "",
+    "duration_s": 2.516,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_singularize_plural[cow-kine]"
+    ],
+    "mutant_id": "2edf2308395ad11a",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "3081949f3290f2cd": {
+    "detail": "",
+    "duration_s": 8.291,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_ordinal[-1--1st]",
+      "tests\\test_inflection.py::test_ordinal[-1001--1001st]",
+      "tests\\test_inflection.py::test_ordinal[-101--101st]",
+      "tests\\test_inflection.py::test_ordinal[-102--102nd]",
+      "tests\\test_inflection.py::test_ordinal[-103--103rd]",
+      "tests\\test_inflection.py::test_ordinal[-2--2nd]",
+      "tests\\test_inflection.py::test_ordinal[-21--21st]",
+      "tests\\test_inflection.py::test_ordinal[-22--22nd]",
+      "tests\\test_inflection.py::test_ordinal[-23--23rd]",
+      "tests\\test_inflection.py::test_ordinal[-3--3rd]"
+    ],
+    "mutant_id": "3081949f3290f2cd",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "35b114e9354a73f3": {
+    "detail": "",
+    "duration_s": 7.968,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_parameterize[!@#Leading",
+      "tests\\test_inflection.py::test_parameterize[Allow_Under_Scores-allow_under_scores]",
+      "tests\\test_inflection.py::test_parameterize[Donald",
+      "tests\\test_inflection.py::test_parameterize[Random",
+      "tests\\test_inflection.py::test_parameterize[Squeeze",
+      "tests\\test_inflection.py::test_parameterize[Test",
+      "tests\\test_inflection.py::test_parameterize[Trailing",
+      "tests\\test_inflection.py::test_parameterize_and_normalize[A\\xdflar-alar]",
+      "tests\\test_inflection.py::test_parameterize_and_normalize[Gar\\xe7ons-garcons]",
+      "tests\\test_inflection.py::test_parameterize_and_normalize[Japanese:"
+    ],
+    "mutant_id": "35b114e9354a73f3",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "373bd2249a6bee1d": {
+    "detail": "",
+    "duration_s": 2.608,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_singularize_plural[child-children]",
+      "tests\\test_inflection.py::test_singularize_plural[man-men]",
+      "tests\\test_inflection.py::test_singularize_plural[move-moves]",
+      "tests\\test_inflection.py::test_singularize_plural[node_child-node_children]",
+      "tests\\test_inflection.py::test_singularize_plural[person-people]",
+      "tests\\test_inflection.py::test_singularize_plural[salesperson-salespeople]",
+      "tests\\test_inflection.py::test_singularize_plural[spokesman-spokesmen]",
+      "tests\\test_inflection.py::test_singularize_plural[woman-women]"
+    ],
+    "mutant_id": "373bd2249a6bee1d",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "3ca2fc98faf451f9": {
+    "detail": "",
+    "duration_s": 8.291,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_ordinal[-100--100th]",
+      "tests\\test_inflection.py::test_ordinal[-1001--1001st]",
+      "tests\\test_inflection.py::test_ordinal[-101--101st]",
+      "tests\\test_inflection.py::test_ordinal[-102--102nd]",
+      "tests\\test_inflection.py::test_ordinal[-103--103rd]",
+      "tests\\test_inflection.py::test_ordinal[-14--14th]",
+      "tests\\test_inflection.py::test_ordinal[-21--21st]",
+      "tests\\test_inflection.py::test_ordinal[-22--22nd]",
+      "tests\\test_inflection.py::test_ordinal[-23--23rd]",
+      "tests\\test_inflection.py::test_ordinal[-24--24th]"
+    ],
+    "mutant_id": "3ca2fc98faf451f9",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "3f079a945c8f5de7": {
+    "detail": "",
+    "duration_s": 0.007,
+    "failing_tests": [],
+    "mutant_id": "3f079a945c8f5de7",
+    "returncode": 3221225773,
+    "status": "error"
+  },
+  "3fcdb48aa219e73b": {
+    "detail": "",
+    "duration_s": 2.511,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_singular[cow-kine]"
+    ],
+    "mutant_id": "3fcdb48aa219e73b",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "4470193d9cbecf06": {
+    "detail": "",
+    "duration_s": 2.268,
+    "failing_tests": [
+      "tests\\test_inflection.py"
+    ],
+    "mutant_id": "4470193d9cbecf06",
+    "returncode": 2,
+    "status": "invalid"
+  },
+  "4a2ec1685426c7f6": {
+    "detail": "",
+    "duration_s": 0.012,
+    "failing_tests": [],
+    "mutant_id": "4a2ec1685426c7f6",
+    "returncode": 3221225773,
+    "status": "error"
+  },
+  "4c61964d8e95b939": {
+    "detail": "",
+    "duration_s": 2.779,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_plural[cow-kine]"
+    ],
+    "mutant_id": "4c61964d8e95b939",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "4ed09d037f622ea0": {
+    "detail": "",
+    "duration_s": 2.482,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_singularize_plural[cow-kine]"
+    ],
+    "mutant_id": "4ed09d037f622ea0",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "525fb02cc7158d3f": {
+    "detail": "",
+    "duration_s": 9.061,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_ordinal[-113--113th]",
+      "tests\\test_inflection.py::test_ordinal[-13--13th]",
+      "tests\\test_inflection.py::test_ordinal[113-113th]",
+      "tests\\test_inflection.py::test_ordinal[13-13th]",
+      "tests\\test_inflection.py::test_ordinalize[-113--113th]",
+      "tests\\test_inflection.py::test_ordinalize[-13--13th]",
+      "tests\\test_inflection.py::test_ordinalize[113-113th]",
+      "tests\\test_inflection.py::test_ordinalize[13-13th]"
+    ],
+    "mutant_id": "525fb02cc7158d3f",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "565c31c03b43e91d": {
+    "detail": "",
+    "duration_s": 2.249,
+    "failing_tests": [
+      "tests\\test_inflection.py"
+    ],
+    "mutant_id": "565c31c03b43e91d",
+    "returncode": 2,
+    "status": "invalid"
+  },
+  "578a163d9be0d0e5": {
+    "detail": "",
+    "duration_s": 3.313,
+    "failing_tests": [],
+    "mutant_id": "578a163d9be0d0e5",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "5926158648a4eb9c": {
+    "detail": "",
+    "duration_s": 2.574,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_plural[cow-kine]"
+    ],
+    "mutant_id": "5926158648a4eb9c",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "5b3d7da8f1cae850": {
+    "detail": "",
+    "duration_s": 2.507,
+    "failing_tests": [],
+    "mutant_id": "5b3d7da8f1cae850",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "5d7154b1692e9dc9": {
+    "detail": "",
+    "duration_s": 10.249,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_ordinal[-102--102nd]",
+      "tests\\test_inflection.py::test_ordinal[-2--2nd]",
+      "tests\\test_inflection.py::test_ordinal[-22--22nd]",
+      "tests\\test_inflection.py::test_ordinal[102-102nd]",
+      "tests\\test_inflection.py::test_ordinal[2-2nd]",
+      "tests\\test_inflection.py::test_ordinal[22-22nd]",
+      "tests\\test_inflection.py::test_ordinalize[-102--102nd]",
+      "tests\\test_inflection.py::test_ordinalize[-2--2nd]",
+      "tests\\test_inflection.py::test_ordinalize[-22--22nd]",
+      "tests\\test_inflection.py::test_ordinalize[102-102nd]"
+    ],
+    "mutant_id": "5d7154b1692e9dc9",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "6211093218c512a6": {
+    "detail": "",
+    "duration_s": 2.74,
+    "failing_tests": [],
+    "mutant_id": "6211093218c512a6",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "623a06b6b306d6f6": {
+    "detail": "",
+    "duration_s": 2.61,
+    "failing_tests": [],
+    "mutant_id": "623a06b6b306d6f6",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "62f29d70f740c679": {
+    "detail": "",
+    "duration_s": 2.513,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_plural[cow-kine]"
+    ],
+    "mutant_id": "62f29d70f740c679",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "687ba2c93875b982": {
+    "detail": "",
+    "duration_s": 2.504,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_singularize_plural[cow-kine]"
+    ],
+    "mutant_id": "687ba2c93875b982",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "6e3f5d02b66a007a": {
+    "detail": "",
+    "duration_s": 2.623,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_plural[child-children]",
+      "tests\\test_inflection.py::test_pluralize_plural[human-humans]",
+      "tests\\test_inflection.py::test_pluralize_plural[man-men]",
+      "tests\\test_inflection.py::test_pluralize_plural[move-moves]",
+      "tests\\test_inflection.py::test_pluralize_plural[node_child-node_children]",
+      "tests\\test_inflection.py::test_pluralize_plural[person-people]",
+      "tests\\test_inflection.py::test_pluralize_plural[salesperson-salespeople]",
+      "tests\\test_inflection.py::test_pluralize_plural[spokesman-spokesmen]",
+      "tests\\test_inflection.py::test_pluralize_plural[woman-women]"
+    ],
+    "mutant_id": "6e3f5d02b66a007a",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "6fc03eafb81a41dc": {
+    "detail": "",
+    "duration_s": 2.588,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_singular[cow-kine]"
+    ],
+    "mutant_id": "6fc03eafb81a41dc",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "71e747343a6f3790": {
+    "detail": "",
+    "duration_s": 2.424,
+    "failing_tests": [],
+    "mutant_id": "71e747343a6f3790",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "7797b5f3de97ae25": {
+    "detail": "",
+    "duration_s": 2.427,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_plural[cow-kine]"
+    ],
+    "mutant_id": "7797b5f3de97ae25",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "788b6ec26d97cc2e": {
+    "detail": "",
+    "duration_s": 2.227,
+    "failing_tests": [
+      "tests\\test_inflection.py"
+    ],
+    "mutant_id": "788b6ec26d97cc2e",
+    "returncode": 2,
+    "status": "invalid"
+  },
+  "79662146edbb2433": {
+    "detail": "",
+    "duration_s": 3.405,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_singular[cow-kine]",
+      "tests\\test_inflection.py::test_singularize_plural[cow-kine]"
+    ],
+    "mutant_id": "79662146edbb2433",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "7a690fb7338093e2": {
+    "detail": "",
+    "duration_s": 4.376,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_ordinal[-11--11th]",
+      "tests\\test_inflection.py::test_ordinal[-111--111th]",
+      "tests\\test_inflection.py::test_ordinal[-112--112th]",
+      "tests\\test_inflection.py::test_ordinal[-113--113th]",
+      "tests\\test_inflection.py::test_ordinal[-12--12th]",
+      "tests\\test_inflection.py::test_ordinal[-13--13th]",
+      "tests\\test_inflection.py::test_ordinal[11-11th]",
+      "tests\\test_inflection.py::test_ordinal[111-111th]",
+      "tests\\test_inflection.py::test_ordinal[112-112th]",
+      "tests\\test_inflection.py::test_ordinal[113-113th]"
+    ],
+    "mutant_id": "7a690fb7338093e2",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "7d3336212d8f5738": {
+    "detail": "",
+    "duration_s": 2.296,
+    "failing_tests": [
+      "tests\\test_inflection.py"
+    ],
+    "mutant_id": "7d3336212d8f5738",
+    "returncode": 2,
+    "status": "invalid"
+  },
+  "7d6c971849ca2ca6": {
+    "detail": "",
+    "duration_s": 10.247,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_ordinal[-1--1st]",
+      "tests\\test_inflection.py::test_ordinal[-1001--1001st]",
+      "tests\\test_inflection.py::test_ordinal[-101--101st]",
+      "tests\\test_inflection.py::test_ordinal[-21--21st]",
+      "tests\\test_inflection.py::test_ordinal[1-1st]",
+      "tests\\test_inflection.py::test_ordinal[1001-1001st]",
+      "tests\\test_inflection.py::test_ordinal[101-101st]",
+      "tests\\test_inflection.py::test_ordinal[21-21st]",
+      "tests\\test_inflection.py::test_ordinalize[-1--1st]",
+      "tests\\test_inflection.py::test_ordinalize[-1001--1001st]"
+    ],
+    "mutant_id": "7d6c971849ca2ca6",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "7dac5d062294930b": {
+    "detail": "",
+    "duration_s": 2.485,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_plural[child-children]",
+      "tests\\test_inflection.py::test_pluralize_plural[man-men]",
+      "tests\\test_inflection.py::test_pluralize_plural[node_child-node_children]",
+      "tests\\test_inflection.py::test_pluralize_plural[person-people]",
+      "tests\\test_inflection.py::test_pluralize_plural[salesperson-salespeople]",
+      "tests\\test_inflection.py::test_pluralize_plural[spokesman-spokesmen]",
+      "tests\\test_inflection.py::test_pluralize_plural[woman-women]"
+    ],
+    "mutant_id": "7dac5d062294930b",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "7dacb45257b8230c": {
+    "detail": "",
+    "duration_s": 2.464,
+    "failing_tests": [],
+    "mutant_id": "7dacb45257b8230c",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "7f049abd33813ea7": {
+    "detail": "",
+    "duration_s": 2.526,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_singular[cow-kine]"
+    ],
+    "mutant_id": "7f049abd33813ea7",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "827678206efa198f": {
+    "detail": "",
+    "duration_s": 8.413,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_ordinal[-11--11th]",
+      "tests\\test_inflection.py::test_ordinal[-111--111th]",
+      "tests\\test_inflection.py::test_ordinal[-112--112th]",
+      "tests\\test_inflection.py::test_ordinal[-113--113th]",
+      "tests\\test_inflection.py::test_ordinal[-12--12th]",
+      "tests\\test_inflection.py::test_ordinal[-13--13th]",
+      "tests\\test_inflection.py::test_ordinal[11-11th]",
+      "tests\\test_inflection.py::test_ordinal[111-111th]",
+      "tests\\test_inflection.py::test_ordinal[112-112th]",
+      "tests\\test_inflection.py::test_ordinal[113-113th]"
+    ],
+    "mutant_id": "827678206efa198f",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "831af64708efd0c9": {
+    "detail": "",
+    "duration_s": 2.491,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_singularize_plural[cow-kine]"
+    ],
+    "mutant_id": "831af64708efd0c9",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "836c34dc54110c44": {
+    "detail": "",
+    "duration_s": 2.57,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_plural[cow-kine]"
+    ],
+    "mutant_id": "836c34dc54110c44",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "85092385dc95bb0d": {
+    "detail": "",
+    "duration_s": 2.282,
+    "failing_tests": [
+      "tests\\test_inflection.py"
+    ],
+    "mutant_id": "85092385dc95bb0d",
+    "returncode": 2,
+    "status": "invalid"
+  },
+  "89efb5d8d19b4842": {
+    "detail": "",
+    "duration_s": 2.899,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_camelize_with_lower_downcases_the_first_letter"
+    ],
+    "mutant_id": "89efb5d8d19b4842",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "8c048b7fe68c60ad": {
+    "detail": "",
+    "duration_s": 2.525,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_singularize_plural[cow-kine]"
+    ],
+    "mutant_id": "8c048b7fe68c60ad",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "8f3e7d69abec6a06": {
+    "detail": "",
+    "duration_s": 2.628,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_singularize_plural[child-children]",
+      "tests\\test_inflection.py::test_singularize_plural[man-men]",
+      "tests\\test_inflection.py::test_singularize_plural[move-moves]",
+      "tests\\test_inflection.py::test_singularize_plural[node_child-node_children]",
+      "tests\\test_inflection.py::test_singularize_plural[person-people]",
+      "tests\\test_inflection.py::test_singularize_plural[salesperson-salespeople]",
+      "tests\\test_inflection.py::test_singularize_plural[spokesman-spokesmen]",
+      "tests\\test_inflection.py::test_singularize_plural[woman-women]"
+    ],
+    "mutant_id": "8f3e7d69abec6a06",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "914eba28a92aee30": {
+    "detail": "",
+    "duration_s": 2.603,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_singular[child-children]",
+      "tests\\test_inflection.py::test_pluralize_singular[man-men]",
+      "tests\\test_inflection.py::test_pluralize_singular[node_child-node_children]",
+      "tests\\test_inflection.py::test_pluralize_singular[person-people]",
+      "tests\\test_inflection.py::test_pluralize_singular[salesperson-salespeople]",
+      "tests\\test_inflection.py::test_pluralize_singular[spokesman-spokesmen]",
+      "tests\\test_inflection.py::test_pluralize_singular[woman-women]",
+      "tests\\test_inflection.py::test_tableize[person-people]"
+    ],
+    "mutant_id": "914eba28a92aee30",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "92eae340029fa76d": {
+    "detail": "",
+    "duration_s": 2.643,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_singular[cow-kine]"
+    ],
+    "mutant_id": "92eae340029fa76d",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "9b0665d86cf03ca9": {
+    "detail": "",
+    "duration_s": 3.598,
+    "failing_tests": [],
+    "mutant_id": "9b0665d86cf03ca9",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "9d3edc67041810d2": {
+    "detail": "",
+    "duration_s": 3.592,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_humanize[employee_id-Employee]",
+      "tests\\test_inflection.py::test_humanize[employee_salary-Employee",
+      "tests\\test_inflection.py::test_humanize[underground-Underground]",
+      "tests\\test_inflection.py::test_titleize[Action",
+      "tests\\test_inflection.py::test_titleize[Actionwebservice-Actionwebservice]",
+      "tests\\test_inflection.py::test_titleize[ActiveRecord-Active",
+      "tests\\test_inflection.py::test_titleize[Ana",
+      "tests\\test_inflection.py::test_titleize[David's",
+      "tests\\test_inflection.py::test_titleize[action",
+      "tests\\test_inflection.py::test_titleize[actionwebservice-Actionwebservice]"
+    ],
+    "mutant_id": "9d3edc67041810d2",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "9d535e3511f57cb3": {
+    "detail": "",
+    "duration_s": 2.643,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_camelize[ApplicationController-application_controller]",
+      "tests\\test_inflection.py::test_camelize[Area51Controller-area51_controller]",
+      "tests\\test_inflection.py::test_camelize[Product-product]",
+      "tests\\test_inflection.py::test_camelize[SpecialGuest-special_guest]",
+      "tests\\test_inflection.py::test_camelize_with_lower_downcases_the_first_letter",
+      "tests\\test_inflection.py::test_camelize_with_underscores"
+    ],
+    "mutant_id": "9d535e3511f57cb3",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "9d6324a6a6e4bfa9": {
+    "detail": "",
+    "duration_s": 0.011,
+    "failing_tests": [],
+    "mutant_id": "9d6324a6a6e4bfa9",
+    "returncode": 3221225773,
+    "status": "error"
+  },
+  "9dd44b2992352856": {
+    "detail": "",
+    "duration_s": 2.45,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_singularize_plural[cow-kine]"
+    ],
+    "mutant_id": "9dd44b2992352856",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "9de3bc341d2059ca": {
+    "detail": "",
+    "duration_s": 2.47,
+    "failing_tests": [
+      "tests\\test_inflection.py"
+    ],
+    "mutant_id": "9de3bc341d2059ca",
+    "returncode": 2,
+    "status": "invalid"
+  },
+  "9f41e3b3efee99ba": {
+    "detail": "",
+    "duration_s": 2.557,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_singular[child-children]",
+      "tests\\test_inflection.py::test_pluralize_singular[human-humans]",
+      "tests\\test_inflection.py::test_pluralize_singular[man-men]",
+      "tests\\test_inflection.py::test_pluralize_singular[move-moves]",
+      "tests\\test_inflection.py::test_pluralize_singular[node_child-node_children]",
+      "tests\\test_inflection.py::test_pluralize_singular[person-people]",
+      "tests\\test_inflection.py::test_pluralize_singular[salesperson-salespeople]",
+      "tests\\test_inflection.py::test_pluralize_singular[spokesman-spokesmen]",
+      "tests\\test_inflection.py::test_pluralize_singular[woman-women]",
+      "tests\\test_inflection.py::test_tableize[person-people]"
+    ],
+    "mutant_id": "9f41e3b3efee99ba",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "a2eb540bdd405eba": {
+    "detail": "",
+    "duration_s": 3.816,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_humanize[employee_id-Employee]",
+      "tests\\test_inflection.py::test_humanize[employee_salary-Employee",
+      "tests\\test_inflection.py::test_humanize[underground-Underground]",
+      "tests\\test_inflection.py::test_titleize[Action",
+      "tests\\test_inflection.py::test_titleize[Actionwebservice-Actionwebservice]",
+      "tests\\test_inflection.py::test_titleize[ActiveRecord-Active",
+      "tests\\test_inflection.py::test_titleize[Ana",
+      "tests\\test_inflection.py::test_titleize[David's",
+      "tests\\test_inflection.py::test_titleize[action",
+      "tests\\test_inflection.py::test_titleize[actionwebservice-Actionwebservice]"
+    ],
+    "mutant_id": "a2eb540bdd405eba",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "a3715e639d6d2c17": {
+    "detail": "",
+    "duration_s": 2.576,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_plural[cow-kine]"
+    ],
+    "mutant_id": "a3715e639d6d2c17",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "a97753bf084b9558": {
+    "detail": "",
+    "duration_s": 4.643,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_ordinal[-11--11th]",
+      "tests\\test_inflection.py::test_ordinal[-111--111th]",
+      "tests\\test_inflection.py::test_ordinal[11-11th]",
+      "tests\\test_inflection.py::test_ordinal[111-111th]",
+      "tests\\test_inflection.py::test_ordinalize[-11--11th]",
+      "tests\\test_inflection.py::test_ordinalize[-111--111th]",
+      "tests\\test_inflection.py::test_ordinalize[11-11th]",
+      "tests\\test_inflection.py::test_ordinalize[111-111th]"
+    ],
+    "mutant_id": "a97753bf084b9558",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "afe9124c2e2cf1b7": {
+    "detail": "",
+    "duration_s": 2.649,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_singular[child-children]",
+      "tests\\test_inflection.py::test_pluralize_singular[man-men]",
+      "tests\\test_inflection.py::test_pluralize_singular[node_child-node_children]",
+      "tests\\test_inflection.py::test_pluralize_singular[person-people]",
+      "tests\\test_inflection.py::test_pluralize_singular[salesperson-salespeople]",
+      "tests\\test_inflection.py::test_pluralize_singular[spokesman-spokesmen]",
+      "tests\\test_inflection.py::test_pluralize_singular[woman-women]",
+      "tests\\test_inflection.py::test_tableize[person-people]"
+    ],
+    "mutant_id": "afe9124c2e2cf1b7",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "b0c715e0b2f1d6b7": {
+    "detail": "",
+    "duration_s": 3.236,
+    "failing_tests": [],
+    "mutant_id": "b0c715e0b2f1d6b7",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "b33fabe0e05a2785": {
+    "detail": "",
+    "duration_s": 3.638,
+    "failing_tests": [],
+    "mutant_id": "b33fabe0e05a2785",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "b6461e3e39277999": {
+    "detail": "",
+    "duration_s": 0.014,
+    "failing_tests": [],
+    "mutant_id": "b6461e3e39277999",
+    "returncode": 3221225773,
+    "status": "error"
+  },
+  "b9017ab768b9050f": {
+    "detail": "",
+    "duration_s": 2.615,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_singular[cow-kine]"
+    ],
+    "mutant_id": "b9017ab768b9050f",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "b96b1d00988ee391": {
+    "detail": "",
+    "duration_s": 2.42,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_singularize_plural[cow-kine]"
+    ],
+    "mutant_id": "b96b1d00988ee391",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "bb60c6098ba247e5": {
+    "detail": "",
+    "duration_s": 5.908,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_plural[cow-kine]",
+      "tests\\test_inflection.py::test_pluralize_singular[cow-kine]",
+      "tests\\test_inflection.py::test_singularize_plural[cow-kine]"
+    ],
+    "mutant_id": "bb60c6098ba247e5",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "bd7e72ed0b6202d3": {
+    "detail": "",
+    "duration_s": 2.509,
+    "failing_tests": [],
+    "mutant_id": "bd7e72ed0b6202d3",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "bf0a2b88d2944914": {
+    "detail": "",
+    "duration_s": 0.007,
+    "failing_tests": [],
+    "mutant_id": "bf0a2b88d2944914",
+    "returncode": 3221225773,
+    "status": "error"
+  },
+  "c13b5aa0b7db5b36": {
+    "detail": "",
+    "duration_s": 7.967,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_ordinalize[-1--1st]",
+      "tests\\test_inflection.py::test_ordinalize[-10--10th]",
+      "tests\\test_inflection.py::test_ordinalize[-100--100th]",
+      "tests\\test_inflection.py::test_ordinalize[-1000--1000th]",
+      "tests\\test_inflection.py::test_ordinalize[-1001--1001st]",
+      "tests\\test_inflection.py::test_ordinalize[-101--101st]",
+      "tests\\test_inflection.py::test_ordinalize[-102--102nd]",
+      "tests\\test_inflection.py::test_ordinalize[-103--103rd]",
+      "tests\\test_inflection.py::test_ordinalize[-104--104th]",
+      "tests\\test_inflection.py::test_ordinalize[-11--11th]"
+    ],
+    "mutant_id": "c13b5aa0b7db5b36",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "c189b81fd1c1dc32": {
+    "detail": "",
+    "duration_s": 0.015,
+    "failing_tests": [],
+    "mutant_id": "c189b81fd1c1dc32",
+    "returncode": 3221225773,
+    "status": "error"
+  },
+  "c1a4199e0cd2a447": {
+    "detail": "",
+    "duration_s": 3.967,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_humanize[employee_id-Employee]",
+      "tests\\test_inflection.py::test_humanize[employee_salary-Employee",
+      "tests\\test_inflection.py::test_humanize[underground-Underground]",
+      "tests\\test_inflection.py::test_titleize[Action",
+      "tests\\test_inflection.py::test_titleize[Actionwebservice-Actionwebservice]",
+      "tests\\test_inflection.py::test_titleize[ActiveRecord-Active",
+      "tests\\test_inflection.py::test_titleize[Ana",
+      "tests\\test_inflection.py::test_titleize[David's",
+      "tests\\test_inflection.py::test_titleize[action",
+      "tests\\test_inflection.py::test_titleize[actionwebservice-Actionwebservice]"
+    ],
+    "mutant_id": "c1a4199e0cd2a447",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "c42024e3747b8ea6": {
+    "detail": "",
+    "duration_s": 2.744,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_camelize_with_lower_downcases_the_first_letter"
+    ],
+    "mutant_id": "c42024e3747b8ea6",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "c50e4c022024ef5e": {
+    "detail": "",
+    "duration_s": 8.292,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_ordinal[-103--103rd]",
+      "tests\\test_inflection.py::test_ordinal[-104--104th]",
+      "tests\\test_inflection.py::test_ordinal[-14--14th]",
+      "tests\\test_inflection.py::test_ordinal[-23--23rd]",
+      "tests\\test_inflection.py::test_ordinal[-24--24th]",
+      "tests\\test_inflection.py::test_ordinal[-3--3rd]",
+      "tests\\test_inflection.py::test_ordinal[-4--4th]",
+      "tests\\test_inflection.py::test_ordinal[103-103rd]",
+      "tests\\test_inflection.py::test_ordinal[104-104th]",
+      "tests\\test_inflection.py::test_ordinal[14-14th]"
+    ],
+    "mutant_id": "c50e4c022024ef5e",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "c7bdb3c194cbe561": {
+    "detail": "",
+    "duration_s": 2.512,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_plural[child-children]",
+      "tests\\test_inflection.py::test_pluralize_plural[man-men]",
+      "tests\\test_inflection.py::test_pluralize_plural[node_child-node_children]",
+      "tests\\test_inflection.py::test_pluralize_plural[person-people]",
+      "tests\\test_inflection.py::test_pluralize_plural[salesperson-salespeople]",
+      "tests\\test_inflection.py::test_pluralize_plural[spokesman-spokesmen]",
+      "tests\\test_inflection.py::test_pluralize_plural[woman-women]"
+    ],
+    "mutant_id": "c7bdb3c194cbe561",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "cb42ea9bcd7a56d4": {
+    "detail": "",
+    "duration_s": 1.16,
+    "failing_tests": [],
+    "mutant_id": "cb42ea9bcd7a56d4",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "cebef6d311dc5805": {
+    "detail": "",
+    "duration_s": 2.542,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_camelize[ApplicationController-application_controller]",
+      "tests\\test_inflection.py::test_camelize[Area51Controller-area51_controller]",
+      "tests\\test_inflection.py::test_camelize[Product-product]",
+      "tests\\test_inflection.py::test_camelize[SpecialGuest-special_guest]",
+      "tests\\test_inflection.py::test_camelize_with_lower_downcases_the_first_letter",
+      "tests\\test_inflection.py::test_camelize_with_underscores"
+    ],
+    "mutant_id": "cebef6d311dc5805",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "d6cc81f9561d47e2": {
+    "detail": "",
+    "duration_s": 10.248,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_ordinal[-1--1st]",
+      "tests\\test_inflection.py::test_ordinal[-10--10th]",
+      "tests\\test_inflection.py::test_ordinal[-100--100th]",
+      "tests\\test_inflection.py::test_ordinal[-1000--1000th]",
+      "tests\\test_inflection.py::test_ordinal[-1001--1001st]",
+      "tests\\test_inflection.py::test_ordinal[-101--101st]",
+      "tests\\test_inflection.py::test_ordinal[-102--102nd]",
+      "tests\\test_inflection.py::test_ordinal[-103--103rd]",
+      "tests\\test_inflection.py::test_ordinal[-104--104th]",
+      "tests\\test_inflection.py::test_ordinal[-110--110th]"
+    ],
+    "mutant_id": "d6cc81f9561d47e2",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "d7082ed50df8fcd2": {
+    "detail": "",
+    "duration_s": 5.569,
+    "failing_tests": [
+      "tests\\test_inflection.py"
+    ],
+    "mutant_id": "d7082ed50df8fcd2",
+    "returncode": 2,
+    "status": "invalid"
+  },
+  "da5f10416e976857": {
+    "detail": "",
+    "duration_s": 2.568,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_plural[cow-kine]"
+    ],
+    "mutant_id": "da5f10416e976857",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "db924a32be170551": {
+    "detail": "",
+    "duration_s": 2.493,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_singular[cow-kine]"
+    ],
+    "mutant_id": "db924a32be170551",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "ddf05e9d2fa1c9df": {
+    "detail": "",
+    "duration_s": 2.51,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_plural[cow-kine]"
+    ],
+    "mutant_id": "ddf05e9d2fa1c9df",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "ed362728b4f40d92": {
+    "detail": "",
+    "duration_s": 2.248,
+    "failing_tests": [
+      "tests\\test_inflection.py"
+    ],
+    "mutant_id": "ed362728b4f40d92",
+    "returncode": 2,
+    "status": "invalid"
+  },
+  "ee5065255cc40ba8": {
+    "detail": "",
+    "duration_s": 3.276,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_dasherize[person_street_address-person-street-address]",
+      "tests\\test_inflection.py::test_dasherize[street-street]",
+      "tests\\test_inflection.py::test_dasherize[street_address-street-address]"
+    ],
+    "mutant_id": "ee5065255cc40ba8",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "efc6d96616ad9a5e": {
+    "detail": "",
+    "duration_s": 2.513,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_pluralize_singular[cow-kine]"
+    ],
+    "mutant_id": "efc6d96616ad9a5e",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "f314b70a93d2d5a5": {
+    "detail": "",
+    "duration_s": 2.211,
+    "failing_tests": [
+      "tests\\test_inflection.py"
+    ],
+    "mutant_id": "f314b70a93d2d5a5",
+    "returncode": 2,
+    "status": "invalid"
+  },
+  "f3e8014261755e5b": {
+    "detail": "",
+    "duration_s": 4.089,
+    "failing_tests": [],
+    "mutant_id": "f3e8014261755e5b",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "f60768fd2162d5ab": {
+    "detail": "",
+    "duration_s": 5.593,
+    "failing_tests": [
+      "tests\\test_inflection.py"
+    ],
+    "mutant_id": "f60768fd2162d5ab",
+    "returncode": 2,
+    "status": "invalid"
+  },
+  "f98b3704743a8731": {
+    "detail": "",
+    "duration_s": 2.532,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_singularize_plural[child-children]",
+      "tests\\test_inflection.py::test_singularize_plural[human-humans]",
+      "tests\\test_inflection.py::test_singularize_plural[man-men]",
+      "tests\\test_inflection.py::test_singularize_plural[move-moves]",
+      "tests\\test_inflection.py::test_singularize_plural[node_child-node_children]",
+      "tests\\test_inflection.py::test_singularize_plural[person-people]",
+      "tests\\test_inflection.py::test_singularize_plural[salesperson-salespeople]",
+      "tests\\test_inflection.py::test_singularize_plural[spokesman-spokesmen]",
+      "tests\\test_inflection.py::test_singularize_plural[woman-women]"
+    ],
+    "mutant_id": "f98b3704743a8731",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "fadd75c9bc384adb": {
+    "detail": "",
+    "duration_s": 3.712,
+    "failing_tests": [],
+    "mutant_id": "fadd75c9bc384adb",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "fb0c01a737739065": {
+    "detail": "",
+    "duration_s": 0.011,
+    "failing_tests": [],
+    "mutant_id": "fb0c01a737739065",
+    "returncode": 3221225773,
+    "status": "error"
+  },
+  "fc56f0c964a955db": {
+    "detail": "",
+    "duration_s": 4.294,
+    "failing_tests": [
+      "tests\\test_inflection.py::test_ordinal[-111--111th]",
+      "tests\\test_inflection.py::test_ordinal[111-111th]",
+      "tests\\test_inflection.py::test_ordinalize[-111--111th]",
+      "tests\\test_inflection.py::test_ordinalize[111-111th]"
+    ],
+    "mutant_id": "fc56f0c964a955db",
+    "returncode": 1,
+    "status": "killed"
+  }
+}

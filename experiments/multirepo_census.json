@@ -1,0 +1,51 @@
+{
+  "inflection": {
+    "domain": "string transformation logic",
+    "existing_tests": 455,
+    "killed": 65,
+    "mutation_score": 0.8553,
+    "note": "rebuilt from stored per-subject census; no re-execution",
+    "operator_families": {
+      "arithmetic": 17,
+      "boolean_logic": 1,
+      "constant": 59,
+      "equality": 1,
+      "negation": 1,
+      "return_value": 19
+    },
+    "scorable": 76,
+    "status_counts": {
+      "error": 10,
+      "invalid": 12,
+      "killed": 65,
+      "survived": 11
+    },
+    "subject": "inflection",
+    "survived": 11,
+    "total_mutants": 98
+  },
+  "semver": {
+    "domain": "version comparison and boundary logic",
+    "existing_tests": 329,
+    "killed": 178,
+    "mutation_score": 0.9622,
+    "note": "rebuilt from stored per-subject census; no re-execution",
+    "operator_families": {
+      "arithmetic": 22,
+      "boolean_logic": 16,
+      "comparison_boundary": 10,
+      "constant": 58,
+      "equality": 18,
+      "negation": 11,
+      "return_value": 50
+    },
+    "scorable": 185,
+    "status_counts": {
+      "killed": 178,
+      "survived": 7
+    },
+    "subject": "semver",
+    "survived": 7,
+    "total_mutants": 185
+  }
+}

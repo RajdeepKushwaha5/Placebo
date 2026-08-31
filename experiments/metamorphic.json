@@ -1,0 +1,629 @@
+{
+  "all_properties_sound_on_clean": true,
+  "confirmed_gaps": 6,
+  "gaps_detected": 1,
+  "model_calls": 0,
+  "properties_defined": 12,
+  "results": [
+    {
+      "detected": false,
+      "mutant_id": "33797d243637a3c5",
+      "properties": [
+        {
+          "description": "parsing the string form of a version returns the same version",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "round_trip",
+          "violated_by_fault": false
+        },
+        {
+          "description": "compare(a, b) is the negation of compare(b, a)",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "compare_antisymmetry",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a version compares equal to itself",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "compare_self_is_zero",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a < b holds exactly when b > a",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "lt_gt_duality",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a <= b holds exactly when a < b or a == b",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "le_is_lt_or_eq",
+          "violated_by_fault": false
+        },
+        {
+          "description": "finalizing an already-final version changes nothing",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "finalize_idempotent",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a finalized version has no prerelease part",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "finalize_clears_prerelease",
+          "violated_by_fault": false
+        },
+        {
+          "description": "bumping the minor part increases it by exactly one and zeroes patch",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_minor_steps_by_one",
+          "violated_by_fault": false
+        },
+        {
+          "description": "bumping the major part increases it by exactly one and zeroes the rest",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_major_steps_by_one",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a bumped version is strictly greater than the original",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_produces_greater",
+          "violated_by_fault": false
+        },
+        {
+          "description": "match(\"==x\") agrees with ==",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "match_eq_agrees_with_equality",
+          "violated_by_fault": false
+        },
+        {
+          "description": "match(\">=x\") holds exactly when > or ==",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "match_ge_is_gt_or_eq",
+          "violated_by_fault": false
+        }
+      ]
+    },
+    {
+      "detected": false,
+      "mutant_id": "400588ba9c9f77f9",
+      "properties": [
+        {
+          "description": "parsing the string form of a version returns the same version",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "round_trip",
+          "violated_by_fault": false
+        },
+        {
+          "description": "compare(a, b) is the negation of compare(b, a)",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "compare_antisymmetry",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a version compares equal to itself",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "compare_self_is_zero",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a < b holds exactly when b > a",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "lt_gt_duality",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a <= b holds exactly when a < b or a == b",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "le_is_lt_or_eq",
+          "violated_by_fault": false
+        },
+        {
+          "description": "finalizing an already-final version changes nothing",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "finalize_idempotent",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a finalized version has no prerelease part",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "finalize_clears_prerelease",
+          "violated_by_fault": false
+        },
+        {
+          "description": "bumping the minor part increases it by exactly one and zeroes patch",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_minor_steps_by_one",
+          "violated_by_fault": false
+        },
+        {
+          "description": "bumping the major part increases it by exactly one and zeroes the rest",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_major_steps_by_one",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a bumped version is strictly greater than the original",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_produces_greater",
+          "violated_by_fault": false
+        },
+        {
+          "description": "match(\"==x\") agrees with ==",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "match_eq_agrees_with_equality",
+          "violated_by_fault": false
+        },
+        {
+          "description": "match(\">=x\") holds exactly when > or ==",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "match_ge_is_gt_or_eq",
+          "violated_by_fault": false
+        }
+      ]
+    },
+    {
+      "admitted": true,
+      "detected": true,
+      "detecting_properties": [
+        "match_ge_is_gt_or_eq"
+      ],
+      "example": "semver.Version.parse(\"1.2.3\").match(\">=\" + \"1.2.3\") == (semver.Version.parse(\"1.2.3\") >= semver.Version.parse(\"1.2.3\"))",
+      "mutant_id": "7c644c64bde4883c",
+      "properties": [
+        {
+          "description": "parsing the string form of a version returns the same version",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "round_trip",
+          "violated_by_fault": false
+        },
+        {
+          "description": "compare(a, b) is the negation of compare(b, a)",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "compare_antisymmetry",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a version compares equal to itself",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "compare_self_is_zero",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a < b holds exactly when b > a",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "lt_gt_duality",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a <= b holds exactly when a < b or a == b",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "le_is_lt_or_eq",
+          "violated_by_fault": false
+        },
+        {
+          "description": "finalizing an already-final version changes nothing",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "finalize_idempotent",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a finalized version has no prerelease part",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "finalize_clears_prerelease",
+          "violated_by_fault": false
+        },
+        {
+          "description": "bumping the minor part increases it by exactly one and zeroes patch",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_minor_steps_by_one",
+          "violated_by_fault": false
+        },
+        {
+          "description": "bumping the major part increases it by exactly one and zeroes the rest",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_major_steps_by_one",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a bumped version is strictly greater than the original",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_produces_greater",
+          "violated_by_fault": false
+        },
+        {
+          "description": "match(\"==x\") agrees with ==",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "match_eq_agrees_with_equality",
+          "violated_by_fault": false
+        },
+        {
+          "description": "match(\">=x\") holds exactly when > or ==",
+          "detects": true,
+          "example": "semver.Version.parse(\"1.2.3\").match(\">=\" + \"1.2.3\") == (semver.Version.parse(\"1.2.3\") >= semver.Version.parse(\"1.2.3\"))",
+          "holds_on_clean": true,
+          "property": "match_ge_is_gt_or_eq",
+          "violated_by_fault": true
+        }
+      ]
+    },
+    {
+      "detected": false,
+      "mutant_id": "95f32034b4f97f3d",
+      "properties": [
+        {
+          "description": "parsing the string form of a version returns the same version",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "round_trip",
+          "violated_by_fault": false
+        },
+        {
+          "description": "compare(a, b) is the negation of compare(b, a)",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "compare_antisymmetry",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a version compares equal to itself",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "compare_self_is_zero",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a < b holds exactly when b > a",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "lt_gt_duality",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a <= b holds exactly when a < b or a == b",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "le_is_lt_or_eq",
+          "violated_by_fault": false
+        },
+        {
+          "description": "finalizing an already-final version changes nothing",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "finalize_idempotent",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a finalized version has no prerelease part",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "finalize_clears_prerelease",
+          "violated_by_fault": false
+        },
+        {
+          "description": "bumping the minor part increases it by exactly one and zeroes patch",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_minor_steps_by_one",
+          "violated_by_fault": false
+        },
+        {
+          "description": "bumping the major part increases it by exactly one and zeroes the rest",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_major_steps_by_one",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a bumped version is strictly greater than the original",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_produces_greater",
+          "violated_by_fault": false
+        },
+        {
+          "description": "match(\"==x\") agrees with ==",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "match_eq_agrees_with_equality",
+          "violated_by_fault": false
+        },
+        {
+          "description": "match(\">=x\") holds exactly when > or ==",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "match_ge_is_gt_or_eq",
+          "violated_by_fault": false
+        }
+      ]
+    },
+    {
+      "detected": false,
+      "mutant_id": "a6eb2ad4fd7271ea",
+      "properties": [
+        {
+          "description": "parsing the string form of a version returns the same version",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "round_trip",
+          "violated_by_fault": false
+        },
+        {
+          "description": "compare(a, b) is the negation of compare(b, a)",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "compare_antisymmetry",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a version compares equal to itself",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "compare_self_is_zero",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a < b holds exactly when b > a",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "lt_gt_duality",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a <= b holds exactly when a < b or a == b",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "le_is_lt_or_eq",
+          "violated_by_fault": false
+        },
+        {
+          "description": "finalizing an already-final version changes nothing",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "finalize_idempotent",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a finalized version has no prerelease part",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "finalize_clears_prerelease",
+          "violated_by_fault": false
+        },
+        {
+          "description": "bumping the minor part increases it by exactly one and zeroes patch",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_minor_steps_by_one",
+          "violated_by_fault": false
+        },
+        {
+          "description": "bumping the major part increases it by exactly one and zeroes the rest",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_major_steps_by_one",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a bumped version is strictly greater than the original",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_produces_greater",
+          "violated_by_fault": false
+        },
+        {
+          "description": "match(\"==x\") agrees with ==",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "match_eq_agrees_with_equality",
+          "violated_by_fault": false
+        },
+        {
+          "description": "match(\">=x\") holds exactly when > or ==",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "match_ge_is_gt_or_eq",
+          "violated_by_fault": false
+        }
+      ]
+    },
+    {
+      "detected": false,
+      "mutant_id": "bad59b17cefa1f72",
+      "properties": [
+        {
+          "description": "parsing the string form of a version returns the same version",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "round_trip",
+          "violated_by_fault": false
+        },
+        {
+          "description": "compare(a, b) is the negation of compare(b, a)",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "compare_antisymmetry",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a version compares equal to itself",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "compare_self_is_zero",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a < b holds exactly when b > a",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "lt_gt_duality",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a <= b holds exactly when a < b or a == b",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "le_is_lt_or_eq",
+          "violated_by_fault": false
+        },
+        {
+          "description": "finalizing an already-final version changes nothing",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "finalize_idempotent",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a finalized version has no prerelease part",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "finalize_clears_prerelease",
+          "violated_by_fault": false
+        },
+        {
+          "description": "bumping the minor part increases it by exactly one and zeroes patch",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_minor_steps_by_one",
+          "violated_by_fault": false
+        },
+        {
+          "description": "bumping the major part increases it by exactly one and zeroes the rest",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_major_steps_by_one",
+          "violated_by_fault": false
+        },
+        {
+          "description": "a bumped version is strictly greater than the original",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "bump_produces_greater",
+          "violated_by_fault": false
+        },
+        {
+          "description": "match(\"==x\") agrees with ==",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "match_eq_agrees_with_equality",
+          "violated_by_fault": false
+        },
+        {
+          "description": "match(\">=x\") holds exactly when > or ==",
+          "detects": false,
+          "example": "",
+          "holds_on_clean": true,
+          "property": "match_ge_is_gt_or_eq",
+          "violated_by_fault": false
+        }
+      ]
+    }
+  ],
+  "tests_admitted": 1,
+  "unsound_properties": [],
+  "wall_s": 7.1
+}

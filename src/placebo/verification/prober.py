@@ -31,11 +31,22 @@ import json, sys
 sys.path.insert(0, {workspace!r})
 import semver  # noqa: F401
 
+# A minimal builtins whitelist. Passing an empty __builtins__ removes
+# str/repr/len, which silently turned every `str(...)` probe into a
+# NameError on BOTH sides - so it never distinguished anything and the
+# search quietly lost most of its reach. Constructors and inspection
+# only: no import, open, eval, exec, getattr or compile.
+_SAFE = {{
+    "str": str, "repr": repr, "len": len, "int": int, "float": float,
+    "bool": bool, "tuple": tuple, "list": list, "dict": dict, "set": set,
+    "sorted": sorted, "type": type, "abs": abs, "min": min, "max": max,
+}}
+
 expressions = json.loads({payload!r})
 out = []
 for expr in expressions:
     try:
-        value = eval(expr, {{"semver": semver, "__builtins__": {{}}}})
+        value = eval(expr, {{"semver": semver, "__builtins__": _SAFE}})
         out.append({{"expr": expr, "ok": True, "repr": repr(value)}})
     except Exception as exc:
         out.append({{"expr": expr, "ok": False,

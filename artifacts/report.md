@@ -115,7 +115,7 @@ After oracle grounding removed wrong expected values, the remaining failure was 
 | approach | real gaps closed | model calls | wall time |
 |---|---:|---:|---:|
 | agent with oracle grounding | 3/6 | 13 | 512 s |
-| **+ counterexample search** | **6/6** | **0** | **96 s** |
+| **+ counterexample search** | **6/6** | **0** | **36 s** |
 
 Existing 329-test suite plus the generated patch stays green: **True**. The search is deterministic — a fixed, cost-ordered candidate pool with no sampling and no seed — so the same witnesses are found on every run.
 
@@ -129,3 +129,54 @@ Minimal witnesses found by search:
 | `95f32034b4f9` | `semver.Version.parse("0.0.0").is_compatible(semver.Version.parse("0.0.0-alpha"))` | `False` | `None` |
 | `a6eb2ad4fd72` | `semver.Version.parse("0.0.0").is_compatible(semver.Version.parse("0.0.0+0"))` | `True` | `False` |
 | `bad59b17cefa` | `semver.Version.parse("0.0.0").match("<=0.0.0")` | `True` | `False` |
+
+## Generalization: a second repository
+
+semver is comparison- and boundary-heavy, exactly the shape these mutation operators target. `inflection` is string transformation logic with a different fault surface. The identical pipeline runs on both.
+
+| subject | domain | existing tests | faults | undetected | mutation score |
+|---|---|---:|---:|---:|---:|
+| `inflection` | string transformation logic | 455 | 76 | 11 | **85.5%** |
+| `semver` | version comparison and boundary logic | 329 | 185 | 7 | **96.2%** |
+
+The scores differ substantially, which is the useful part: the method reports a property of each suite rather than a constant.
+
+## Real historical bugs (not injected faults)
+
+Mutation score is a proxy. These are defects that actually shipped in semver 3.0.4 and were fixed upstream afterwards, so the ground truth is the maintainers' own diff and issue number. `faulty` is the released source; `clean` is the upstream fix.
+
+- behavior-changing bugs with a witness found: **3/3**
+- detected by semver's own 329-test suite: **0/3** (all shipped at 100% coverage)
+- behavior-preserving refactors correctly reported as indistinguishable: **1/1**
+- model calls: **0**
+
+| upstream issue | defect | witness input |
+|---|---|---|
+| `#460` | bump_prerelease does not always produce a newer version | `str(semver.Version.parse("0.0.0-alpha").bump_prerelease(""))` |
+| `#469` | next_version does not bump build-only versions | `str(semver.Version.parse("0.0.0+0").next_version("major"))` |
+| `#339` | next_version does not reset prerelease when token changes | `str(semver.Version.parse("0.0.0+0").next_version("major"))` |
+
+Issue `#463` removes dead code, so finding **no** witness is the correct answer there. It independently confirms the equivalent-mutant verdict reached from the other direction in `artifacts/survivor_triage.json`.
+
+## Oracle strength versus detection power
+
+The default oracle records what the reference implementation returned - a level-4 snapshot, which cannot tell correct from *currently does this*. Metamorphic properties assert relationships between executions instead, hardcode no expected value, and so cannot inherit a pre-existing bug.
+
+| oracle | hardcodes expected values | confirmed gaps detected |
+|---|:--:|---:|
+| level 4 - execution snapshot | yes | **6/6** |
+| level 3 - metamorphic properties | **no** | 1/6 |
+
+All 12 properties hold on clean code (`all_properties_sound_on_clean`: true).
+
+> This is a genuine trade-off, reported rather than resolved. The stronger oracle is the weaker detector. Snapshot witnesses close every gap but pin behavior rather than correctness; metamorphic properties close far fewer but cannot encode an existing bug as expected.
+
+## Run-to-run variance
+
+Headline conditions are single runs. These are repeated runs of the same condition, so the spread is measured rather than assumed.
+
+| condition | runs | admitted (median, range) | 95% CI | retry recoveries |
+|---|---:|---|---|---|
+| `placebo_B` | 3 | 5 (5-5) | [5.0, 5.0] | 1 (0-2) |
+
+The asymmetry is the finding: **the outcome is stable, the mechanism credited for it is not.** Admitted counts do not move across runs; retry recoveries range from 0 to 2 under nominally identical settings. That is why no strong claim is made for the retry loop. Deterministic components - census, splits, search, admission - have no variance at all.

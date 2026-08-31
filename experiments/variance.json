@@ -1,0 +1,35 @@
+{
+  "bootstrap_samples": 10000,
+  "conditions": {
+    "placebo_B": {
+      "admitted_ci95": [
+        5.0,
+        5.0
+      ],
+      "admitted_max": 5.0,
+      "admitted_median": 5.0,
+      "admitted_min": 5.0,
+      "admitted_values": [
+        5,
+        5,
+        5
+      ],
+      "recovery_ci95": [
+        0.0,
+        2.0
+      ],
+      "recovery_max": 2.0,
+      "recovery_median": 1.0,
+      "recovery_min": 0.0,
+      "recovery_values": [
+        1,
+        0,
+        2
+      ],
+      "runs": 3
+    }
+  },
+  "method": "percentile bootstrap over stored independent runs",
+  "note": "Ollama with partial GPU offload is not bitwise deterministic at temperature=0; these are repeated runs, not distinct seeds.",
+  "seed": 1729
+}

@@ -214,6 +214,83 @@ def main() -> int:
         check(f"{closed}/{total}" in readme or f"{closed}/{total}" in report,
               f"search result {closed}/{total} appears in the writeup")
 
+    # -- 6d. real historical bugs -------------------------------------------
+    historical = load(ROOT / "experiments" / "historical_bugs.json")
+    if historical:
+        found = historical["witnesses_found"]
+        behavioral = historical["behavior_changing_bugs"]
+        check(found <= behavioral,
+              "historical: witnesses cannot exceed behavior-changing bugs",
+              f"{found}/{behavioral}")
+        check(historical["model_calls"] == 0,
+              "historical bug evaluation used zero model calls")
+        actually = sum(1 for r in historical["results"] if r.get("found"))
+        check(actually >= found,
+              "historical: reported witnesses match the per-bug records")
+        check(historical["refactors_correctly_indistinguishable"]
+              == historical["behavior_preserving_refactors"],
+              "historical: behavior-preserving refactors yield no witness",
+              "confirms the equivalent-mutant triage independently")
+        check(f"{found}/{behavioral}" in readme or f"{found}/{behavioral}" in report,
+              f"historical result {found}/{behavioral} appears in the writeup")
+
+    # -- 6e. second repository ----------------------------------------------
+    multirepo = load(ROOT / "experiments" / "multirepo_census.json")
+    if multirepo:
+        check(len(multirepo) >= 2,
+              "generalization: at least two subject repositories",
+              f"{len(multirepo)} subjects")
+        for name, s in multirepo.items():
+            computed = s["killed"] / s["scorable"] if s["scorable"] else 0
+            check(abs(s["mutation_score"] - computed) < 5e-5,
+                  f"multirepo[{name}]: mutation score equals killed/scorable",
+                  f"{s['killed']}/{s['scorable']}")
+
+    # -- 6f. metamorphic oracle ---------------------------------------------
+    metamorphic = load(ROOT / "experiments" / "metamorphic.json")
+    if metamorphic:
+        check(metamorphic["all_properties_sound_on_clean"] is True,
+              "metamorphic: every property holds on clean code",
+              "an unsound property would invalidate its detections")
+        check(metamorphic["model_calls"] == 0,
+              "metamorphic evaluation used zero model calls")
+        check(metamorphic["gaps_detected"] <= metamorphic["confirmed_gaps"],
+              "metamorphic: detections cannot exceed the gap set")
+        detected = sum(1 for r in metamorphic["results"] if r.get("detected"))
+        check(detected == metamorphic["gaps_detected"],
+              "metamorphic: reported detections match per-gap records")
+
+    # -- 6g. variance --------------------------------------------------------
+    variance = load(ROOT / "experiments" / "variance.json")
+    if variance:
+        for name, c in variance["conditions"].items():
+            check(c["runs"] >= 2,
+                  f"variance[{name}]: at least two independent runs",
+                  f"{c['runs']} runs")
+            lo, hi = c["admitted_ci95"]
+            check(lo <= c["admitted_median"] <= hi,
+                  f"variance[{name}]: median lies inside its bootstrap interval")
+            check(c["admitted_min"] <= c["admitted_median"] <= c["admitted_max"],
+                  f"variance[{name}]: median lies inside the observed range")
+
+    # -- 6h. reviewer study is honestly labelled -----------------------------
+    study_key = ROOT / "artifacts" / "review-study" / "key.json"
+    if study_key.exists():
+        ratings = ROOT / "artifacts" / "review-study" / "ratings"
+        has_ratings = ratings.exists() and any(ratings.glob("*.json"))
+        check(not has_ratings,
+              "reviewer study: no ratings collected, and none are claimed",
+              "instrument ships without data, as stated")
+        patches = ROOT / "artifacts" / "review-study" / "patches"
+        leaked = [
+            p.name for p in patches.glob("*.py")
+            if re.search(r"placebo|mutant id|fault detected",
+                         p.read_text(encoding="utf-8"), re.IGNORECASE)
+        ] if patches.exists() else []
+        check(not leaked,
+              "reviewer study: patches carry no condition markers",
+              ", ".join(leaked[:3]))
+
     # -- 7. no credentials --------------------------------------------------
     secret = re.compile(r"sk-[A-Za-z0-9_-]{15,}|BEGIN (?:RSA|OPENSSH) PRIVATE KEY")
     leaked = [

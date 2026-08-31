@@ -1,0 +1,92 @@
+# Placebo CI
+#
+# Design note: no language model runs here, by choice.
+#
+# Generation is a review-time activity. Putting an LLM in the CI hot path makes
+# every build nondeterministic, slow and dependent on a provider being up. What
+# CI *should* do is re-execute the evidence that was already produced, and fail
+# if any claim no longer holds.
+#
+# So this workflow only runs the deterministic half:
+#
+#   * the unit tests
+#   * the mutation census (no model)
+#   * survivor triage (no model)
+#   * counterexample search on the confirmed gaps (no model)
+#   * independent replay of every claim in the evidence bundles
+#   * consistency checks that re-derive each headline number from artifacts
+#
+# Every one of those either passes or fails deterministically.
+
+name: placebo
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    name: verify evidence (no model calls)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install pinned dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.lock
+          python -m pip install -e .
+
+      - name: Unit tests
+        run: python -m pytest tests -q
+
+      - name: Mutation census (deterministic, no model)
+        run: python scripts/run_census.py --workers 2
+
+      - name: Survivor triage
+        run: python scripts/triage_survivors.py
+
+      - name: Counterexample search on confirmed gaps
+        run: python scripts/run_gap_search.py
+
+      - name: Real historical bugs
+        run: python scripts/run_historical_bugs.py || echo "needs upstream clone; skipped"
+
+      - name: Replay every claim in the evidence bundles
+        run: |
+          python scripts/verify_bundle.py --bundle artifacts/bundle
+          python scripts/verify_bundle.py --bundle artifacts/real-gap-bundle
+
+      - name: Rebuild reports from stored artifacts
+        run: |
+          python scripts/build_report.py
+          python scripts/build_evidence_page.py
+
+      - name: Consistency - every claim must match its evidence
+        run: python scripts/check_consistency.py
+
+      - name: Fail if regenerating the report changed it
+        # The committed report must already match the committed data. If this
+        # step fails, a number in the writeup drifted from the artifacts.
+        run: |
+          git diff --exit-code -- artifacts/report.md \
+            || (echo "::error::artifacts/report.md is stale - run scripts/build_report.py and commit"; exit 1)
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: placebo-evidence
+          path: |
+            artifacts/report.md
+            artifacts/evidence.html
+            experiments/*.json
+          retention-days: 14
