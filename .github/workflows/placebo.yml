@@ -78,12 +78,12 @@ jobs:
       - name: Consistency - every claim must match its evidence
         run: python scripts/check_consistency.py
 
-      - name: Fail if regenerating the report changed it
-        # The committed report must already match the committed data. If this
-        # step fails, a number in the writeup drifted from the artifacts.
-        run: |
-          git diff --exit-code -- artifacts/report.md \
-            || (echo "::error::artifacts/report.md is stale - run scripts/build_report.py and commit"; exit 1)
+      - name: Fail if the report drifted from the data
+        # Compares the regenerated report against the committed one, masking
+        # wall-clock timings. Those are properties of the runner, not claims
+        # about the method, so a strict byte comparison would fail on a number
+        # that was never meant to reproduce across machines.
+        run: python scripts/check_report_drift.py
 
       - name: Upload evidence
         if: always()

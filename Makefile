@@ -1,6 +1,6 @@
 PY ?= python
 
-.PHONY: hashes historical multirepo metamorphic variance seeds equal-budget review-study package evidence-page gap-search audit setup census pipeline real-gaps rescore test report bundle real-gap-bundle verify verify-real-gaps trajectories check reproduce
+.PHONY: drift hashes historical multirepo metamorphic variance seeds equal-budget review-study package evidence-page gap-search audit setup census pipeline real-gaps rescore test report bundle real-gap-bundle verify verify-real-gaps trajectories check reproduce
 
 setup:                ## install pinned dependencies
 	$(PY) -m pip install -r requirements.lock
@@ -74,6 +74,9 @@ evidence-page:        ## render the self-contained HTML evidence page
 
 hashes:               ## re-record subject integrity hashes (line-ending independent)
 	$(PY) scripts/hash_subjects.py
+
+drift:                ## fail if the committed report no longer matches the data
+	$(PY) scripts/check_report_drift.py
 
 check:                ## cross-check every headline claim against its evidence
 	$(PY) scripts/check_consistency.py
