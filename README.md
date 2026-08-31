@@ -142,7 +142,7 @@ against clean and faulty code, shrinking to the simplest distinguishing input.
 | approach | real gaps closed | model calls | wall time |
 |---|---:|---:|---:|
 | agent with oracle grounding | 3 / 6 | 13 | 512 s |
-| **+ deterministic counterexample search** | **6 / 6** | **0** | **95 s** |
+| **+ deterministic counterexample search** | **6 / 6** | **0** | **36 s** |
 
 Zero model calls. Every gap closed. The existing 329-test suite stays green, and
 each generated test is admitted only after execution shows it passes on clean
@@ -279,7 +279,7 @@ what happened next. Two of them are negative results that changed the design.
 | **4** | **Oracle grounding.** Since the dominant failure was *guessing a value that can be computed*, stop asking for it. The model proposes only input expressions; those are executed against clean `HEAD` and against the fault; the assertion is synthesized from what clean `HEAD` actually returned, keeping only expressions that genuinely differ. | 7/12 admitted; **9/29** confirmatory and **25/80** all-eligible; `CLEAN_HEAD_FAILED` eliminated entirely | **Kept.** It wins on both sets and removes an entire failure class by construction rather than prompting. |
 | **5** | **Marginal-value audit.** Generating tests answers the easy question. The reviewer's question is counterfactual: which test detects something nothing else detects? Score every test against the existing suite *and* its siblings. Pytest names which tests failed, giving a whole kill-matrix column per fault launch; total runtime still depends on suite speed. | Audited 33 agent-written tests against 185 faults: **1** sole detector, 3 sibling-redundant, 18 already covered by the repo, 11 red on clean code. Minimized 33 -> 2 tests detecting **the same 3 faults**, verified by re-execution. | **Kept, and it reframed the project.** Placebo audits tests rather than only generating them. |
 | **5b** | **Bug found by the audit's own output.** The first minimizer kept only `VALUABLE` tests. But when several siblings detect one fault, each is "redundant" and dropping all of them loses the fault outright. | Reported 3 gaps closed but a 1-test minimized patch — an arithmetic impossibility that exposed the bug | **Fixed.** Minimization is now a greedy set cover over novel faults, with three regression tests and post-hoc verification by re-execution. |
-| **6** | **Deterministic counterexample search.** The remaining failure was input search, not value prediction. For the semver adapter, enumerate a hand-designed boundary-heavy domain, evaluate every candidate differentially against clean and faulty code, and shrink to the simplest input that separates them. The model is not involved in this run. | Real-gap closure **3/6 -> 6/6**, with **0 model calls** and 95.5 s wall time. Found witnesses the agent never proposed, including an error-message-only fault invisible to `pytest.raises(TypeError)`. | **Kept.** The single largest improvement in the project, and it removed the model from the loop rather than adding to it. |
+| **6** | **Deterministic counterexample search.** The remaining failure was input search, not value prediction. For the semver adapter, enumerate a hand-designed boundary-heavy domain, evaluate every candidate differentially against clean and faulty code, and shrink to the simplest input that separates them. The model is not involved in this run. | Real-gap closure **3/6 -> 6/6**, with **0 model calls** and 36 s wall time. Found witnesses the agent never proposed, including an error-message-only fault invisible to `pytest.raises(TypeError)`. | **Kept.** The single largest improvement in the project, and it removed the model from the loop rather than adding to it. |
 | **Removed** | **Contract-only isolation as the final architecture.** It was intended to stop implementation copying, but hid context the input-search agent needed. | 6/29 beat B on the frozen set, while 14/80 trailed B's 15/80 and D reached 25/80 | **Removed from the final configuration.** D keeps implementation context but removes value prediction from the model. |
 
 ---
@@ -318,7 +318,7 @@ First, it was guessing return values the implementation could simply be executed
 to obtain — 86% of failures, eliminated by construction. Then, with that fixed,
 it was guessing *inputs*: the agent closed 3 of 6 real gaps. A deterministic
 enumerator over the same input space closed **6 of 6, with zero model calls, in
-95 seconds**.
+36 seconds**.
 
 The model is good at knowing which input domain is worth exploring. It is bad at
 exploring it. Those are different jobs, and giving both to the same component is
