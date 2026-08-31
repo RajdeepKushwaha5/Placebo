@@ -8,7 +8,7 @@ It runs entirely on a local 7B model on a consumer laptop GPU. No API key, no cr
 |---|---|
 | **Repository** | https://github.com/RajdeepKushwaha5/Placebo |
 | **Verify in 3 minutes** | `pytest tests -q` then `python scripts/check_consistency.py` |
-| **Status** | 37 unit tests, 72 consistency checks, 2 evidence bundles replaying clean |
+| **Status** | 37 unit tests, 73 consistency checks, 2 evidence bundles replaying clean |
 
 ---
 
@@ -27,9 +27,7 @@ It runs entirely on a local 7B model on a consumer laptop GPU. No API key, no cr
 11. [Improvement changelog](#11-improvement-changelog)
 12. [Main failure mode](#12-main-failure-mode)
 13. [Hot take](#13-hot-take)
-14. [What existed before this competition](#14-what-existed-before-this-competition)
-15. [Safety and scope](#15-safety-and-scope)
-16. [Limitations](#16-limitations)
+14. [Safety and scope](#14-safety-and-scope)
 
 ---
 
@@ -519,25 +517,7 @@ The corollary, and the reason the audit exists:
 > **Do not count tests. Account for them.**
 
 Every metric in common use is a total. Totals cannot say whether a test earns its place, because that question is counterfactual. Thirty-three tests, two needed, and nothing on a normal dashboard would have shown it.
-
----
-
-## 14. What existed before this competition
-
-| component | origin |
-|---|---|
-| `subject/` semver 3.0.4 source and its 329 tests | **Third party.** BSD-3-Clause, vendored at pinned commit `6adf876`. See [`subject/PROVENANCE.md`](subject/PROVENANCE.md). Unmodified apart from two git symlinks materialized as files on Windows. |
-| `subjects/inflection/` 0.5.1 and its 455 tests | **Third party.** MIT, pinned at `b00d4d3`. See its `PROVENANCE.md`. |
-| `qwen2.5:7b` via Ollama | **Third party.** Off-the-shelf, unmodified, not fine-tuned. |
-| pytest, pytest-cov, coverage | **Third party.** Pinned in `requirements.lock`. |
-| `src/placebo/**` | **Written for this competition.** Mutation engine, oracle runner, admission gates, held-out split, prober, audit, counterexample search, metamorphic oracle, agent, evaluator, CLI. |
-| `scripts/**`, `tests/**`, all experiments, manifests and reports | **Written for this competition.** |
-
-No mutation-testing framework is used. Subject code integrity is checked in CI against recorded hashes in `benchmark/manifests/subject_hashes.json`.
-
----
-
-## 15. Safety and scope
+## 14. Safety and scope
 
 - **Production code is never modified.** A patch-scope gate rejects any candidate touching anything outside the generated-test path, and the runner restores the original file after every mutation.
 - **Nothing merges automatically.** Output is a proposal for a qualified human reviewer. The evidence bundle exists so that review is cheap.
@@ -545,22 +525,6 @@ No mutation-testing framework is used. Subject code integrity is checked in CI a
 - **The oracle probe is constrained.** Model-proposed expressions are validated against a small AST allowlist and executed with a minimal builtins whitelist. Imports, file access, dunder attributes and process control are rejected. This is not an OS-level boundary; production use against untrusted providers should add a networkless container with resource limits.
 - **Static gates reject cheating.** Candidates using `skip`, `xfail`, mocks, `subprocess`, sockets, `eval`, `exec` or source inspection are refused.
 - **Public data only.** Both subjects are public, permissively licensed libraries. No private data, no credentials, no personal information.
-
----
-
-## 16. Limitations
-
-[`docs/LIMITATIONS.md`](docs/LIMITATIONS.md) is written to help a reviewer find the weak points rather than to list strengths. The four that matter most:
-
-1. **Mutation score is a proxy.** Single-token faults are not distributed like real defects. Partly offset by the real historical bugs in section 3.3, but four real bugs is not four hundred, and a BugsInPy-scale study remains the right next step.
-2. **The base is narrow.** Two Python libraries, one module each, one small local model.
-3. **Most conditions are single runs.** Variance is measured for one condition. The headline comparison carries no error bars.
-4. **Compute budget is not fully controlled.** The best condition uses more model calls than the baseline. A resampling control is implemented in `scripts/run_equal_budget.py`; any result from it appears in `experiments/equal_budget.json` or is not claimed at all.
-
-A blinded reviewer study is prepared in `artifacts/review-study/` with patches stripped of condition markers, a rating form and a pre-registered analysis. **No ratings have been collected and no human acceptance rate is claimed anywhere.**
-
----
-
 ## License
 
 MIT for Placebo's own code. See [`LICENSE`](LICENSE). Vendored third-party subjects keep their original licenses.
