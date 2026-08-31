@@ -1,0 +1,23 @@
+{
+  "admission_rate": 0.3333,
+  "admitted": 4,
+  "admitted_first_attempt": 4,
+  "condition": "mutant_aware_B1",
+  "context_condition": "B",
+  "max_attempts": 1,
+  "model": "qwen2.5:7b",
+  "model_digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+  "rejections": {
+    "CLEAN_HEAD_FAILED": 7,
+    "TARGET_MUTANT_SURVIVED": 1
+  },
+  "usage": {
+    "calls": 12,
+    "model_seconds": 136.5,
+    "output_tokens": 1041,
+    "prompt_tokens": 5469,
+    "usd_cost": 0.0
+  },
+  "wall_s": 168.8,
+  "working_set_size": 12
+}

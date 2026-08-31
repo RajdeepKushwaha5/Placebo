@@ -1,0 +1,53 @@
+[
+  {
+    "claim": "This test passes against the unmodified implementation and fails when the fault above is injected. Both directions were verified by executing pytest.",
+    "detects_fault": {
+      "diff": "- \">=\": (0, 1),\n+ \">=\": (1, 1),",
+      "file": "semver/version.py",
+      "function": "Version.match",
+      "label": "semver/version.py:598 in Version.match: `0` -> `1` (constant)",
+      "line": 598,
+      "mutant_id": "7c644c64bde4883c"
+    },
+    "proven_by": [
+      "static",
+      "clean_head",
+      "kills_target"
+    ],
+    "test_name": "test_placebo_01_version_match"
+  },
+  {
+    "claim": "This test passes against the unmodified implementation and fails when the fault above is injected. Both directions were verified by executing pytest.",
+    "detects_fault": {
+      "diff": "- return False\n+ return None",
+      "file": "semver/version.py",
+      "function": "Version.is_compatible",
+      "label": "semver/version.py:730 in Version.is_compatible: `False` -> `None` (return_value)",
+      "line": 730,
+      "mutant_id": "95f32034b4f97f3d"
+    },
+    "proven_by": [
+      "static",
+      "clean_head",
+      "kills_target"
+    ],
+    "test_name": "test_placebo_02_version_is_compatible"
+  },
+  {
+    "claim": "This test passes against the unmodified implementation and fails when the fault above is injected. Both directions were verified by executing pytest.",
+    "detects_fault": {
+      "diff": "- \"<=\": (-1, 0),\n+ \"<=\": (-1, 1),",
+      "file": "semver/version.py",
+      "function": "Version.match",
+      "label": "semver/version.py:599 in Version.match: `0` -> `1` (constant)",
+      "line": 599,
+      "mutant_id": "bad59b17cefa1f72"
+    },
+    "proven_by": [
+      "static",
+      "clean_head",
+      "kills_target"
+    ],
+    "test_name": "test_placebo_03_version_match"
+  }
+]

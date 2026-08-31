@@ -1,0 +1,27 @@
+{
+  "baseline_duration_s": 2.96,
+  "killed": 178,
+  "mutation_score": 0.9622,
+  "operator_families": {
+    "arithmetic": 22,
+    "boolean_logic": 16,
+    "comparison_boundary": 10,
+    "constant": 58,
+    "equality": 18,
+    "negation": 11,
+    "return_value": 50
+  },
+  "scorable": 185,
+  "started_at": "2026-08-31T03:20:34",
+  "status_counts": {
+    "killed": 178,
+    "survived": 7
+  },
+  "subject_commit": "6adf8765f6e21910f1f0c13151ce84f32f8d431d",
+  "survived": 7,
+  "target_files": [
+    "semver/version.py"
+  ],
+  "total_mutants": 185,
+  "wall_s": 129.0
+}

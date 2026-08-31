@@ -1,0 +1,362 @@
+{
+  "meta": {
+    "context_condition": "A",
+    "discovery_admitted": 0,
+    "discovery_total": 12,
+    "generation_wall_s": 666.9,
+    "max_attempts": 1,
+    "repair_dropped": [],
+    "score": {
+      "branch_coverage": 0.0,
+      "clean_passes": true,
+      "held_out_total": 29,
+      "invalid": [],
+      "killed": [],
+      "line_coverage": 0.0,
+      "mutation_score": 0.0,
+      "name": "baseline_A",
+      "scorable": 29,
+      "suite_runtime_s": 0.0,
+      "survived": [
+        "2c5ae7ba0a2b0116",
+        "a2eac6e409052bf8",
+        "5c16baafc5f3ab89",
+        "5ae86d67aa1b56be",
+        "3213199332fc9523",
+        "87f98b0ed0573448",
+        "776199f4ea2a021e",
+        "e6f96745cf3ab688",
+        "f41e358b973f8726",
+        "4a5a80f9a28f35ae",
+        "ea5e8659755aaaf2",
+        "23adb6896f5a970f",
+        "38e58572122d16fa",
+        "e1d1f13f5fd19cbd",
+        "708976d614c88ec0",
+        "7746778076e89fbd",
+        "610c853da1f03201",
+        "c1b98e72b05bc54e",
+        "8df29136ca8db713",
+        "6fc1cc4a70632d71",
+        "87081ac9d131ca94",
+        "90b527b173207a32",
+        "a8f90ba5e53b1b17",
+        "def63e16097d761f",
+        "4bf409e2dc578e78",
+        "84db00f73ef1f6cf",
+        "ce0bf4867c414a7f",
+        "a8cc4094c21023f6",
+        "628808e296dab9e6"
+      ],
+      "tests": 0
+    },
+    "tests_after_repair": 0,
+    "usage": {
+      "calls": 12,
+      "model_seconds": 613.1,
+      "output_tokens": 3976,
+      "prompt_tokens": 4151,
+      "usd_cost": 0.0
+    }
+  },
+  "results": [
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 5.01,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    version = semver.VersionInfo.parse(\"1.2.3\")\n    \n    # Test with a non-existent part key\n    try:\n        result = version.replace(unknown_part=\"test\")\n    except TypeError as e:\n        assert str(e) == \"replace() got 1 unexpected keyword argument(s): unknown_part\"\n    else:\n        assert False, \"Expected a TypeError but did not get one\"\n\n    # Test with multiple non-existent part keys\n    try:\n        result = version.replace(unknown_part=\"test\", another_unknown=\"value\")\n    except TypeError as e:\n        assert str(e) == \"replace() got 2 unexpected keyword argument(s): unknown_part, another_unknown\"\n    else:\n        assert False, \"Expected a TypeError but did not get one\"\n\n    # Test with valid part keys\n    result = version.replace(major=2)\n    assert str(result) == \"2.0.0\"\n\n    result = version.replace(minor=4)\n    assert str(result) == \"1.4.0\"\n\n    result = version.replace(patch=5)\n    assert str(result) == \"1.2.5\"\n\n    # Test with a mix of valid and non-existent part keys\n    try:\n        result = version.replace(major=2, unknown_part=\"test\")\n    except TypeError as e:\n        assert str(e) == \"replace() got 1 unexpected keyword argument(s): unknown_part\"\n    else:\n        assert False, \"Expected a TypeError but did not get one\"\n\n    # Test with valid part keys and non-string values\n    result = version.replace(major=2, minor=\"4\")\n    assert str(result) == \"2.4.0\"\n\n    try:\n        result = version.replace(build=\"test\")\n    except TypeError as e:\n        assert str(e) == \"replace() got 1 unexpected keyword argument(s): build\"\n    else:\n        assert False, \"Expected a TypeError but did not get one\"\n\n    # Test with valid part keys and None values\n    result = version.replace(major=None)\n    assert str(result) == \"0.2.3\"\n\n    result = version.replace(minor=None)\n    assert str(result) == \"1.0.3\"\n",
+          "duration_s": 69.64,
+          "output_tokens": 472
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "baseline_A",
+      "mutant_id": "0a016d6d36518355"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 4.88,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    # Test with integer and string inputs where the integer is less than a numeric part of the prerelease tag\n    assert semver.cmp_prerelease_tag(1, \"2\") == -1\n    \n    # Test with integer and string inputs where the integer is greater than a numeric part of the prerelease tag\n    assert semver.cmp_prerelease_tag(3, \"2\") == 1\n    \n    # Test with two strings that are not integers\n    assert semver.cmp_prerelease_tag(\"a\", \"b\") == -1\n    \n    # Test with integer and string inputs where the integer is equal to a numeric part of the prerelease tag\n    assert semver.cmp_prerelease_tag(2, \"2\") == 0\n    \n    # Test with two integers that are not parts of a prerelease tag\n    assert semver.cmp_prerelease_tag(1, 2) == -1\n    \n    # Test with integer and string inputs where the string is less than an integer part of the prerelease tag\n    assert semver.cmp_prerelease_tag(\"1\", \"2\") == -1\n    \n    # Test with integer and string inputs where the string is greater than an integer part of the prerelease tag\n    assert semver.cmp_prerelease_tag(\"3\", \"2\") == 1\n    \n    # Test with two strings that are integers but not parts of a prerelease tag\n    assert semver.cmp_prerelease_tag(\"1\", \"0\") == -1\n",
+          "duration_s": 48.41,
+          "output_tokens": 335
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "baseline_A",
+      "mutant_id": "1ac3986cca492880"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 4.803,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    # Test with edge case where both versions are equal\n    assert not semver.VersionInfo.parse(\"1.0.0\").__lt__(semver.VersionInfo.parse(\"1.0.0\"))\n    \n    # Test with a version that is strictly less than the other\n    assert semver.VersionInfo.parse(\"1.0.0\").__lt__(semver.VersionInfo.parse(\"1.0.1\"))\n    \n    # Test with versions that differ only in pre-release or build metadata\n    assert semver.VersionInfo.parse(\"1.0.0-alpha\").__lt__(semver.VersionInfo.parse(\"1.0.0\"))\n    assert not semver.VersionInfo.parse(\"1.0.0\").__lt__(semver.VersionInfo.parse(\"1.0.0-alpha\"))\n    \n    # Test with versions that differ only in pre-release or build metadata\n    assert semver.VersionInfo.parse(\"1.0.0+build\").__lt__(semver.VersionInfo.parse(\"1.0.0\"))\n    assert not semver.VersionInfo.parse(\"1.0.0\").__lt__(semver.VersionInfo.parse(\"1.0.0+build\"))\n    \n    # Test with versions that differ only in major, minor, and patch\n    assert semver.VersionInfo.parse(\"2.0.0\").__lt__(semver.VersionInfo.parse(\"3.0.0\"))\n    assert not semver.VersionInfo.parse(\"3.0.0\").__lt__(semver.VersionInfo.parse(\"2.0.0\"))\n    \n    # Test with versions that differ only in pre-release or build metadata\n    assert semver.VersionInfo.parse(\"1.0.0-rc.1\").__lt__(semver.VersionInfo.parse(\"1.0.0\"))\n    assert not semver.VersionInfo.parse(\"1.0.0\").__lt__(semver.VersionInfo.parse(\"1.0.0-rc.1\"))\n",
+          "duration_s": 59.3,
+          "output_tokens": 416
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "baseline_A",
+      "mutant_id": "03fe90d993fa6512"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 4.972,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    # Test case: Bumping minor from a version with prerelease and build information\n    ver = semver.VersionInfo.parse(\"3.4.5-alpha+01\")\n    new_ver = ver.bump_minor()\n    assert str(new_ver) == \"3.5.0-alpha+01\"\n    \n    # Test case: Bumping minor from a version with only major and minor parts\n    ver = semver.VersionInfo.parse(\"2.8\")\n    new_ver = ver.bump_minor()\n    assert str(new_ver) == \"2.9\"\n    \n    # Test case: Bumping minor from a version with prerelease but no build information\n    ver = semver.VersionInfo.parse(\"1.0.0-rc1\")\n    new_ver = ver.bump_minor()\n    assert str(new_ver) == \"1.1.0-rc1\"\n    \n    # Test case: Bumping minor from a version with only major part\n    ver = semver.VersionInfo.parse(\"4\")\n    new_ver = ver.bump_minor()\n    assert str(new_ver) == \"4.1\"\n",
+          "duration_s": 36.24,
+          "output_tokens": 245
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "baseline_A",
+      "mutant_id": "0311cef58a002912"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 4.82,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    # Test case: Incrementing a version with a prerelease and patch part\n    version = semver.VersionInfo.parse(\"1.2.3-rc.5\")\n    new_version = version.next_version(\"patch\", \"beta\")\n    assert str(new_version) == \"1.2.4-rc.5\"\n\n    # Test case: Incrementing to a major prerelease from a patch\n    version = semver.VersionInfo.parse(\"0.9.9-rc.3\")\n    new_version = version.next_version(\"major\", \"beta\")\n    assert str(new_version) == \"1.0.0-beta.1\"\n\n    # Test case: Incrementing to a minor prerelease from a patch\n    version = semver.VersionInfo.parse(\"2.3.4-rc.2\")\n    new_version = version.next_version(\"minor\", \"beta\")\n    assert str(new_version) == \"2.4.0-beta.1\"\n\n    # Test case: Incrementing to a major prerelease from a minor\n    version = semver.VersionInfo.parse(\"1.2.3-rc.1\")\n    new_version = version.next_version(\"major\", \"beta\")\n    assert str(new_version) == \"2.0.0-beta.1\"\n\n    # Test case: Incrementing to a major prerelease from a patch\n    version = semver.VersionInfo.parse(\"0.9.9-rc.4\")\n    new_version = version.next_version(\"major\", \"beta\")\n    assert str(new_version) == \"1.0.0-beta.1\"\n\n    # Test case: Incrementing to a minor prerelease from a major\n    version = semver.VersionInfo.parse(\"2.3.4-rc.1\")\n    new_version = version.next_version(\"minor\", \"beta\")\n    assert str(new_version) == \"2.4.0-beta.1\"\n\n    # Test case: Incrementing to a patch prerelease from a major\n    version = semver.VersionInfo.parse(\"1.2.3-rc.1\")\n    new_version = version.next_version(\"patch\", \"beta\")\n    assert str(new_version) == \"1.2.4-beta.1\"\n\n    # Test case: Incrementing to a patch prerelease from a minor\n    version = semver.VersionInfo.parse(\"0.9.9-rc.3\")\n    new_version = version.next_version(\"patch\", \"beta\")\n    assert str(new_version) == \"0.9.10-beta.1\"\n",
+          "duration_s": 82.29,
+          "output_tokens": 538
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "baseline_A",
+      "mutant_id": "1486704c2686bc4b"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 5.048,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    # Test with a version string that has no minor and patch parts\n    assert str(semver.Version.parse('1', optional_minor_and_patch=True)) == 'Version(major=1, minor=0, patch=0)'\n    \n    # Test with a version string that has only the major part\n    assert str(semver.Version.parse('2.3.4-pre.2+build.4', optional_minor_and_patch=True)) == 'Version(major=2, minor=3, patch=4, prerelease=\"pre.2\", build=\"build.4\")'\n    \n    # Test with a version string that has only the major and minor parts\n    assert str(semver.Version.parse('10-rc.5+build.9', optional_minor_and_patch=True)) == 'Version(major=10, minor=0, patch=0, prerelease=\"rc.5\", build=\"build.9\")'\n    \n    # Test with a version string that has only the major and patch parts\n    assert str(semver.Version.parse('2-rc+build', optional_minor_and_patch=True)) == 'Version(major=2, minor=0, patch=0, prerelease=\"rc\", build=\"build\")'\n    \n    # Test with a version string that has no valid semver format but optional parts\n    assert str(semver.Version.parse('alpha.1+beta', optional_minor_and_patch=True)) == 'Version(major=0, minor=0, patch=0, prerelease=\"alpha.1\", build=\"beta\")'\n    \n    # Test with a version string that has only the major part and no optional parts\n    assert str(semver.Version.parse('5', optional_minor_and_patch=False)) == pytest.raises(ValueError, match=\"'5' is not valid SemVer string\")\n",
+          "duration_s": 57.96,
+          "output_tokens": 388
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "baseline_A",
+      "mutant_id": "5c7e1209a4ecd4ba"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 4.909,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    # Test with a version that has both prerelease and build metadata\n    version = semver.Version.parse('1.2.3-rc.5+build.1')\n    assert str(version.finalize_version()) == '1.2.3'\n    \n    # Test with a version that only has a prerelease tag\n    version = semver.Version.parse('1.2.3-rc.5')\n    assert str(version.finalize_version()) == '1.2.3'\n    \n    # Test with a version that only has build metadata\n    version = semver.Version.parse('1.2.3+build.1')\n    assert str(version.finalize_version()) == '1.2.3'\n    \n    # Test with a version that has both prerelease and build metadata, but different order\n    version = semver.Version.parse('+build.1-rc.5')\n    assert str(version.finalize_version()) == '1.0.0'\n    # Note: This test assumes the implementation treats '+build.1' as part of the version string,\n    #       and '-rc.5' as metadata to be removed.\n    \n    # Test with a version that has no prerelease or build metadata\n    version = semver.Version.parse('1.2.3')\n    assert str(version.finalize_version()) == '1.2.3'\n",
+          "duration_s": 44.35,
+          "output_tokens": 299
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "baseline_A",
+      "mutant_id": "0723feea7643f22a"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 4.785,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    # Test case: Incrementing a string with leading zeros\n    assert semver._increment_string(\"version_001\") == \"version_002\"\n    \n    # Test case: Incrementing the last number in the string\n    assert semver._increment_string(\"v1.2.3\") == \"v1.2.4\"\n    \n    # Test case: Incrementing a single digit at the end of the string\n    assert semver._increment_string(\"release-5\") == \"release-6\"\n    \n    # Test case: Incrementing when there are multiple numbers in the string\n    assert semver._increment_string(\"build_12345\") == \"build_12346\"\n    \n    # Test case: Incrementing a string with no digits at all\n    assert semver._increment_string(\"no_numbers_here\") == \"no_numbers_here\"\n    \n    # Test case: Incrementing the last number in a string with trailing characters\n    assert semver._increment_string(\"patch-12a\") == \"patch-13a\"\n    \n    # Test case: Incrementing when there are no numbers to increment\n    assert semver._increment_string(\"no_numbers_here_either\") == \"no_numbers_here_either\"\n    \n    # Test case: Incrementing a string with multiple groups of numbers\n    assert semver._increment_string(\"version_123_456\") == \"version_123_457\"\n",
+          "duration_s": 47.65,
+          "output_tokens": 326
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "baseline_A",
+      "mutant_id": "1d331d5b9501ed06"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 4.892,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    # Test case for when index is at the boundary of slice start and stop\n    version = semver.Version.parse(\"3.4.5\")\n    assert version[0:1] == (3,)\n    assert version[1:2] == (4,)\n    assert version[2:3] == (5,)\n\n    # Test case for when index is out of bounds on the stop\n    with pytest.raises(IndexError):\n        version[3:4]\n\n    # Test case for when index is out of bounds on the start\n    with pytest.raises(IndexError):\n        version[-1:0]\n\n    # Test case for when both start and stop are out of bounds\n    with pytest.raises(IndexError):\n        version[-2:-1]\n",
+          "duration_s": 25.36,
+          "output_tokens": 170
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "baseline_A",
+      "mutant_id": "2efccfe40d947649"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 4.667,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    # Test with edge case where both versions are equal\n    assert not semver.VersionInfo.parse(\"1.0.0\").__gt__(semver.VersionInfo.parse(\"1.0.0\"))\n\n    # Test with a very large version number to check for potential overflow or precision issues\n    assert semver.VersionInfo.parse(\"9999999999.9999999999.9999999999\").__gt__(semver.VersionInfo.parse(\"1.0.0\"))\n\n    # Test with a version that has only major and minor parts\n    assert semver.VersionInfo.parse(\"2.3\").__gt__(semver.VersionInfo.parse(\"1.3\"))\n\n    # Test with a version that has only major part\n    assert semver.VersionInfo.parse(\"4\").__gt__(semver.VersionInfo.parse(\"3\"))\n\n    # Test with a version that has extra padding in the string representation\n    assert semver.VersionInfo.parse(\"5.0.0\").__gt__(semver.VersionInfo.parse(\"4.9.9\"))\n\n    # Test with a version that has pre-release tags\n    assert semver.VersionInfo.parse(\"1.0.0-alpha\").__gt__(semver.VersionInfo.parse(\"0.9.9\"))\n\n    # Test with a version that has build metadata\n    assert semver.VersionInfo.parse(\"2.3.4+build.meta\").__gt__(semver.VersionInfo.parse(\"2.3.3\"))\n",
+          "duration_s": 48.0,
+          "output_tokens": 332
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "baseline_A",
+      "mutant_id": "085c382c12637d90"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 0.0,
+            "code": "SYNTAX_ERROR",
+            "gates_passed": [],
+            "message": "line 13: unterminated string literal (detected at line 13)",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "```python\nimport semver\n\ndef test_placebo_candidate():\n    # Test edge case where version is exactly equal and operator is \"==\"\n    assert semver.Version.parse(\"2.0.0\").match(\"==2.0.0\") == True\n\n    # Test edge case where version is exactly equal and operator is \"!=\"\n    assert semver.Version.parse(\"2.0.0\").match(\"!=2.0.1\") == True\n    assert semver.Version.parse(\"2.0.0\").match(\"!=2.0.0\") == False\n\n    # Test edge case where version is greater than and operator is \">\"\n    assert semver.Version.parse(\"3.0.0\").match(\">2.9.9999999999999999999999999999999\n",
+          "duration_s": 27.56,
+          "output_tokens": 0
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "baseline_A",
+      "mutant_id": "05cc88d0e0cba70d"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 4.822,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    # Test case: Incrementing build number with a non-empty token\n    ver = semver.VersionInfo.parse(\"3.4.5-rc.1+build.9\")\n    new_ver = ver.bump_build(token=\"01\")\n    assert str(new_ver) == \"3.4.5-rc.1+build.10\"\n\n    # Test case: Incrementing build number with an empty token\n    ver = semver.VersionInfo.parse(\"3.4.5-rc.1+build.9\")\n    new_ver = ver.bump_build(token=\"\")\n    assert str(new_ver) == \"3.4.5-rc.1+build.0\"\n\n    # Test case: Incrementing build number with None token\n    ver = semver.VersionInfo.parse(\"3.4.5-rc.1+build.9\")\n    new_ver = ver.bump_build(token=None)\n    assert str(new_ver) == \"3.4.5-rc.1+build.0\"\n\n    # Test case: Incrementing build number with a None token and existing build\n    ver = semver.VersionInfo.parse(\"3.4.5-rc.1+build.9\")\n    new_ver = ver.bump_build(token=None)\n    assert str(new_ver) == \"3.4.5-rc.1+build.0\"\n\n    # Test case: Incrementing build number with a token that results in no change\n    ver = semver.VersionInfo.parse(\"3.4.5-rc.1+build.9\")\n    new_ver = ver.bump_build(token=\"9\")\n    assert str(new_ver) == \"3.4.5-rc.1+build.10\"\n\n    # Test case: Incrementing build number with a token that results in no change and existing build\n    ver = semver.VersionInfo.parse(\"3.4.5-rc.1+build.9\")\n    new_ver = ver.bump_build(token=\"9\")\n    assert str(new_ver) == \"3.4.5-rc.1+build.10\"\n",
+          "duration_s": 66.31,
+          "output_tokens": 455
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "baseline_A",
+      "mutant_id": "1ca242d1ca74bb80"
+    }
+  ]
+}

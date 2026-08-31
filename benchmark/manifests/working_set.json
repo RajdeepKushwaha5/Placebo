@@ -1,0 +1,58 @@
+[
+  {
+    "col": 26,
+    "file": "semver/version.py",
+    "id": "0a016d6d36518355",
+    "label": "semver/version.py:673 in Version.replace: `-` -> `+` (arithmetic)",
+    "lineno": 673,
+    "operator": "arithmetic",
+    "original": "-",
+    "qualname": "Version.replace",
+    "replacement": "+",
+    "span_end": 21825,
+    "span_start": 21824,
+    "subject_commit": "6adf8765f6e21910f1f0c13151ce84f32f8d431d"
+  },
+  {
+    "col": 15,
+    "file": "semver/version.py",
+    "id": "1ac3986cca492880",
+    "label": "semver/version.py:143 in Version._nat_cmp.cmp_prerelease_tag: `and` -> `or` (boolean_logic)",
+    "lineno": 143,
+    "operator": "boolean_logic",
+    "original": "and",
+    "qualname": "Version._nat_cmp.cmp_prerelease_tag",
+    "replacement": "or",
+    "span_end": 4188,
+    "span_start": 4185,
+    "subject_commit": "6adf8765f6e21910f1f0c13151ce84f32f8d431d"
+  },
+  {
+    "col": 15,
+    "file": "semver/version.py",
+    "id": "03fe90d993fa6512",
+    "label": "semver/version.py:475 in Version.__lt__: `<` -> `<=` (comparison_boundary)",
+    "lineno": 475,
+    "operator": "comparison_boundary",
+    "original": "<",
+    "qualname": "Version.__lt__",
+    "replacement": "<=",
+    "span_end": 14897,
+    "span_start": 14896,
+    "subject_commit": "6adf8765f6e21910f1f0c13151ce84f32f8d431d"
+  },
+  {
+    "col": 46,
+    "file": "semver/version.py",
+    "id": "0311cef58a002912",
+    "label": "semver/version.py:292 in Version.bump_minor: `1` -> `2` (constant)",
+    "lineno": 292,
+    "operator": "constant",
+    "original": "1",
+    "qualname": "Version.bump_minor",
+    "replacement": "2",
+    "span_end": 8816,
+    "span_start": 8815,
+    "subject_commit": "6adf8765f6e21910f1f0c13151ce84f32f8d431d"
+  }
+]

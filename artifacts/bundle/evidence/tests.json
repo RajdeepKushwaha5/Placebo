@@ -1,0 +1,121 @@
+[
+  {
+    "claim": "This test passes against the unmodified implementation and fails when the fault above is injected. Both directions were verified by executing pytest.",
+    "detects_fault": {
+      "diff": "- return self.compare(other) < 0\n+ return self.compare(other) <= 0",
+      "file": "semver/version.py",
+      "function": "Version.__lt__",
+      "label": "semver/version.py:475 in Version.__lt__: `<` -> `<=` (comparison_boundary)",
+      "line": 475,
+      "mutant_id": "03fe90d993fa6512"
+    },
+    "proven_by": [
+      "static",
+      "clean_head",
+      "kills_target"
+    ],
+    "test_name": "test_placebo_01_version___lt"
+  },
+  {
+    "claim": "This test passes against the unmodified implementation and fails when the fault above is injected. Both directions were verified by executing pytest.",
+    "detects_fault": {
+      "diff": "- return cls(self._major, self._minor + 1)\n+ return cls(self._major, self._minor + 2)",
+      "file": "semver/version.py",
+      "function": "Version.bump_minor",
+      "label": "semver/version.py:292 in Version.bump_minor: `1` -> `2` (constant)",
+      "line": 292,
+      "mutant_id": "0311cef58a002912"
+    },
+    "proven_by": [
+      "static",
+      "clean_head",
+      "kills_target"
+    ],
+    "test_name": "test_placebo_02_version_bump_minor"
+  },
+  {
+    "claim": "This test passes against the unmodified implementation and fails when the fault above is injected. Both directions were verified by executing pytest.",
+    "detects_fault": {
+      "diff": "- elif not isinstance(version, String.__args__):  # type: ignore\n+ elif isinstance(version, String.__args__):  # type: ignore",
+      "file": "semver/version.py",
+      "function": "Version.parse",
+      "label": "semver/version.py:636 in Version.parse: `not ` -> `` (negation)",
+      "line": 636,
+      "mutant_id": "5c7e1209a4ecd4ba"
+    },
+    "proven_by": [
+      "static",
+      "clean_head",
+      "kills_target"
+    ],
+    "test_name": "test_placebo_03_version_parse"
+  },
+  {
+    "claim": "This test passes against the unmodified implementation and fails when the fault above is injected. Both directions were verified by executing pytest.",
+    "detects_fault": {
+      "diff": "- return cls(self.major, self.minor, self.patch)\n+ return None",
+      "file": "semver/version.py",
+      "function": "Version.finalize_version",
+      "label": "semver/version.py:554 in Version.finalize_version: `cls(self.major, self.minor, self.patch)` -> `None` (return_value)",
+      "line": 554,
+      "mutant_id": "0723feea7643f22a"
+    },
+    "proven_by": [
+      "static",
+      "clean_head",
+      "kills_target"
+    ],
+    "test_name": "test_placebo_04_version_finalize_version"
+  },
+  {
+    "claim": "This test passes against the unmodified implementation and fails when the fault above is injected. Both directions were verified by executing pytest.",
+    "detects_fault": {
+      "diff": "- and (index.start is not None and index.start < 0)\n+ and (index.start is not None or index.start < 0)",
+      "file": "semver/version.py",
+      "function": "Version.__getitem__",
+      "label": "semver/version.py:514 in Version.__getitem__: `and` -> `or` (boolean_logic)",
+      "line": 514,
+      "mutant_id": "2efccfe40d947649"
+    },
+    "proven_by": [
+      "static",
+      "clean_head",
+      "kills_target"
+    ],
+    "test_name": "test_placebo_05_version___getitem"
+  },
+  {
+    "claim": "This test passes against the unmodified implementation and fails when the fault above is injected. Both directions were verified by executing pytest.",
+    "detects_fault": {
+      "diff": "- return self.compare(other) > 0\n+ return self.compare(other) >= 0",
+      "file": "semver/version.py",
+      "function": "Version.__gt__",
+      "label": "semver/version.py:483 in Version.__gt__: `>` -> `>=` (comparison_boundary)",
+      "line": 483,
+      "mutant_id": "085c382c12637d90"
+    },
+    "proven_by": [
+      "static",
+      "clean_head",
+      "kills_target"
+    ],
+    "test_name": "test_placebo_06_version___gt"
+  },
+  {
+    "claim": "This test passes against the unmodified implementation and fails when the fault above is injected. Both directions were verified by executing pytest.",
+    "detects_fault": {
+      "diff": "- prefix = prefix[0]\n+ prefix = prefix[1]",
+      "file": "semver/version.py",
+      "function": "Version.match",
+      "label": "semver/version.py:580 in Version.match: `0` -> `1` (constant)",
+      "line": 580,
+      "mutant_id": "05cc88d0e0cba70d"
+    },
+    "proven_by": [
+      "static",
+      "clean_head",
+      "kills_target"
+    ],
+    "test_name": "test_placebo_07_version_match"
+  }
+]

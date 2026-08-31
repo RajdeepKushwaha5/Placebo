@@ -1,0 +1,16 @@
+{
+  "clean_passes": true,
+  "evaluation": "confirmed repository gaps",
+  "killed": [
+    "7c644c64bde4883c",
+    "95f32034b4f97f3d",
+    "bad59b17cefa1f72"
+  ],
+  "mutation_score": 0.5,
+  "scorable": 6,
+  "survived": [
+    "33797d243637a3c5",
+    "400588ba9c9f77f9",
+    "a6eb2ad4fd7271ea"
+  ]
+}

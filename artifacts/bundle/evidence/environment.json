@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-08-31T13:53:12+00:00",
+  "model": {
+    "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+    "hosted": "local (Ollama)",
+    "name": "qwen2.5:7b",
+    "seed": 7,
+    "temperature": 0.0,
+    "usd_cost": 0.0
+  },
+  "packages": {
+    "coverage": "7.16.0",
+    "pytest": "9.0.2",
+    "pytest-cov": "7.1.0"
+  },
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.0"
+}

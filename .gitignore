@@ -1,0 +1,17 @@
+# Disposable execution workspaces (recreated by SubjectRunner.prepare())
+.placebo-ws/
+.benchmarks/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+.placebo-cov.json
+
+# Keep artifacts/, experiments/ and trajectories/ — they ARE the evidence.
+
+# Presentation material - kept local, not part of the published project
+docs/VIDEO_SCRIPT.md
+docs/DEMO_RUNBOOK.md
+
+# Raw run logs (large, regenerable by rerunning the scripts)
+artifacts/*.log

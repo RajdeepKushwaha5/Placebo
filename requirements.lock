@@ -1,0 +1,9 @@
+# Placebo pinned runtime dependencies.
+# Python 3.13.0 (see docs/REPRODUCTION.md for the exact interpreter used).
+#
+# Placebo's own engine depends only on the standard library (ast, tokenize,
+# subprocess, hashlib). The pins below are what the SUBJECT suite and the
+# coverage secondary metric need.
+pytest==9.0.2
+pytest-cov==7.1.0
+coverage==7.16.0

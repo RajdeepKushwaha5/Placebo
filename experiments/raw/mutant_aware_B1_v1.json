@@ -1,0 +1,336 @@
+{
+  "results": [
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 1.95,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    version = semver.VersionInfo.parse(\"1.2.3\")\n    parts = {\"major\": 4, \"patch\": 5}\n    \n    # Correct behavior: unknownkeys should be {'build'}\n    try:\n        result = version.replace(**parts)\n    except TypeError as e:\n        assert str(e) == \"replace() got 0 unexpected keyword argument(s):\"\n    \n    # Incorrect behavior: unknownkeys should include 'build' and 'patch'\n    parts[\"build\"] = None\n    with pytest.raises(TypeError) as excinfo:\n        version.replace(**parts)\n    assert str(excinfo.value) == \"replace() got 2 unexpected keyword argument(s): build, patch\"\n",
+          "duration_s": 20.08,
+          "output_tokens": 157
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "mutant_aware_B1",
+      "mutant_id": "0a016d6d36518355"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 1.882,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    assert semver.cmp_prerelease_tag(1, \"2\") == -1\n    assert semver.cmp_prerelease_tag(\"2\", 1) == 1\n",
+          "duration_s": 7.17,
+          "output_tokens": 55
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "mutant_aware_B1",
+      "mutant_id": "1ac3986cca492880"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 1.979,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    version1 = semver.VersionInfo.parse(\"1.0.0\")\n    version2 = semver.VersionInfo.parse(\"1.0.1\")\n\n    # The correct implementation returns False, but the changed implementation returns True\n    assert not version1 < version2\n",
+          "duration_s": 8.87,
+          "output_tokens": 71
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "mutant_aware_B1",
+      "mutant_id": "03fe90d993fa6512"
+    },
+    {
+      "admitted": true,
+      "admitted_code": "import semver\n\ndef test_placebo_candidate():\n    ver = semver.Version.parse(\"3.4.5\")\n    expected = semver.Version(major=3, minor=5, patch=0, prerelease=None, build=None)\n    assert ver.bump_minor() == expected\n",
+      "attempts": [
+        {
+          "admission": {
+            "admitted": true,
+            "clean_duration_s": 1.901,
+            "code": null,
+            "gates_passed": [
+              "static",
+              "clean_head",
+              "kills_target"
+            ],
+            "message": "passes clean HEAD and detects the injected fault",
+            "target_status": "killed"
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    ver = semver.Version.parse(\"3.4.5\")\n    expected = semver.Version(major=3, minor=5, patch=0, prerelease=None, build=None)\n    assert ver.bump_minor() == expected\n",
+          "duration_s": 8.18,
+          "output_tokens": 65
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "mutant_aware_B1",
+      "mutant_id": "0311cef58a002912"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 1.9,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    # Define a version where patch is 0 and minor is not 0\n    version = semver.VersionInfo.parse(\"1.2.0\")\n    \n    # Test with part as \"minor\" - should return the same version\n    assert str(version.next_version(\"minor\")) == \"1.3.0-rc.1\"\n    \n    # Test with part as something other than \"minor\", e.g., \"patch\" - should increment patch and add prerelease\n    assert str(version.next_version(\"patch\")) == \"1.2.1-rc.1\"\n",
+          "duration_s": 17.97,
+          "output_tokens": 134
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "mutant_aware_B1",
+      "mutant_id": "1486704c2686bc4b"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 1.937,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    # Input where optional_minor_and_patch is True and version has no minor and patch parts\n    with pytest.raises(ValueError):\n        semver.Version.parse('3.4', optional_minor_and_patch=True)\n    \n    # Input where optional_minor_and_patch is False and version has no minor and patch parts\n    try:\n        semver.Version.parse('3.4', optional_minor_and_patch=False)\n    except ValueError as e:\n        assert str(e) == \"3.4 is not valid SemVer string\"\n",
+          "duration_s": 16.25,
+          "output_tokens": 118
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "mutant_aware_B1",
+      "mutant_id": "5c7e1209a4ecd4ba"
+    },
+    {
+      "admitted": true,
+      "admitted_code": "import semver\n\ndef test_placebo_candidate():\n    version = semver.Version.parse(\"1.2.3-rc.5\")\n    assert str(version.finalize_version()) == '1.2.3'\n",
+      "attempts": [
+        {
+          "admission": {
+            "admitted": true,
+            "clean_duration_s": 1.912,
+            "code": null,
+            "gates_passed": [
+              "static",
+              "clean_head",
+              "kills_target"
+            ],
+            "message": "passes clean HEAD and detects the injected fault",
+            "target_status": "killed"
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    version = semver.Version.parse(\"1.2.3-rc.5\")\n    assert str(version.finalize_version()) == '1.2.3'\n",
+          "duration_s": 6.25,
+          "output_tokens": 49
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "mutant_aware_B1",
+      "mutant_id": "0723feea7643f22a"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 1.902,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    original_string = \"version_123\"\n    expected_result = \"version_124\"\n    actual_result = semver._increment_string(original_string)\n    assert actual_result == expected_result\n",
+          "duration_s": 7.37,
+          "output_tokens": 57
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "mutant_aware_B1",
+      "mutant_id": "1d331d5b9501ed06"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 1.878,
+            "code": "CLEAN_HEAD_FAILED",
+            "gates_passed": [
+              "static"
+            ],
+            "message": "candidate fails against correct code",
+            "target_status": ""
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    ver = semver.Version.parse(\"3.4.5\")\n    \n    # Test with a negative start index\n    assert ver[1:1] == (4,)\n    \n    # Test with an invalid range that triggers the IndexError in the modified code\n    try:\n        ver[-1:2]\n    except IndexError:\n        pass\n    else:\n        assert False, \"Expected IndexError not raised\"\n",
+          "duration_s": 13.01,
+          "output_tokens": 98
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "mutant_aware_B1",
+      "mutant_id": "2efccfe40d947649"
+    },
+    {
+      "admitted": true,
+      "admitted_code": "import semver\n\ndef test_placebo_candidate():\n    version1 = semver.VersionInfo.parse(\"1.0.0\")\n    version2 = semver.VersionInfo.parse(\"1.0.0\")\n\n    # The correct implementation returns False for equality, but the regression\n    # changes it to return True.\n    assert not version1 > version2\n",
+      "attempts": [
+        {
+          "admission": {
+            "admitted": true,
+            "clean_duration_s": 1.922,
+            "code": null,
+            "gates_passed": [
+              "static",
+              "clean_head",
+              "kills_target"
+            ],
+            "message": "passes clean HEAD and detects the injected fault",
+            "target_status": "killed"
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    version1 = semver.VersionInfo.parse(\"1.0.0\")\n    version2 = semver.VersionInfo.parse(\"1.0.0\")\n\n    # The correct implementation returns False for equality, but the regression\n    # changes it to return True.\n    assert not version1 > version2\n",
+          "duration_s": 9.73,
+          "output_tokens": 78
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "mutant_aware_B1",
+      "mutant_id": "085c382c12637d90"
+    },
+    {
+      "admitted": true,
+      "admitted_code": "import semver\n\ndef test_placebo_candidate():\n    version = semver.Version.parse(\"1.0.0\")\n    match_expr = \">1.0.0\"\n    \n    # Correct behavior: should return False\n    assert not version.match(match_expr)\n\n    match_expr = \"<1.0.0\"\n    \n    # Correct behavior: should return False\n    assert not version.match(match_expr)\n",
+      "attempts": [
+        {
+          "admission": {
+            "admitted": true,
+            "clean_duration_s": 1.89,
+            "code": null,
+            "gates_passed": [
+              "static",
+              "clean_head",
+              "kills_target"
+            ],
+            "message": "passes clean HEAD and detects the injected fault",
+            "target_status": "killed"
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    version = semver.Version.parse(\"1.0.0\")\n    match_expr = \">1.0.0\"\n    \n    # Correct behavior: should return False\n    assert not version.match(match_expr)\n\n    match_expr = \"<1.0.0\"\n    \n    # Correct behavior: should return False\n    assert not version.match(match_expr)\n",
+          "duration_s": 12.07,
+          "output_tokens": 87
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "mutant_aware_B1",
+      "mutant_id": "05cc88d0e0cba70d"
+    },
+    {
+      "admitted": false,
+      "admitted_code": null,
+      "attempts": [
+        {
+          "admission": {
+            "admitted": false,
+            "clean_duration_s": 1.962,
+            "code": "TARGET_MUTANT_SURVIVED",
+            "gates_passed": [
+              "static",
+              "clean_head"
+            ],
+            "message": "candidate does not detect the injected fault",
+            "target_status": "survived"
+          },
+          "attempt": 1,
+          "code": "import semver\n\ndef test_placebo_candidate():\n    ver = semver.VersionInfo.parse(\"3.4.5-rc.1+build.9\")\n    new_ver = ver.bump_build(token=\"\")\n    \n    assert str(new_ver) == \"3.4.5-rc.1+build.10\"\n",
+          "duration_s": 9.57,
+          "output_tokens": 72
+        }
+      ],
+      "attempts_used": 1,
+      "condition": "mutant_aware_B1",
+      "mutant_id": "1ca242d1ca74bb80"
+    }
+  ],
+  "summary": {
+    "admission_rate": 0.3333,
+    "admitted": 4,
+    "admitted_first_attempt": 4,
+    "condition": "mutant_aware_B1",
+    "context_condition": "B",
+    "max_attempts": 1,
+    "model": "qwen2.5:7b",
+    "model_digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+    "rejections": {
+      "CLEAN_HEAD_FAILED": 7,
+      "TARGET_MUTANT_SURVIVED": 1
+    },
+    "usage": {
+      "calls": 12,
+      "model_seconds": 136.5,
+      "output_tokens": 1041,
+      "prompt_tokens": 5469,
+      "usd_cost": 0.0
+    },
+    "wall_s": 168.8,
+    "working_set_size": 12
+  }
+}

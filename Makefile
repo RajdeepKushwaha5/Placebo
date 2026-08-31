@@ -1,0 +1,54 @@
+PY ?= python
+
+.PHONY: evidence-page gap-search audit setup census pipeline real-gaps rescore test report bundle real-gap-bundle verify verify-real-gaps trajectories check reproduce
+
+setup:                ## install pinned dependencies
+	$(PY) -m pip install -r requirements.lock
+
+test:                 ## run Placebo's own unit tests
+	$(PY) -m pytest tests -q
+
+census:               ## measure the subject's expert suite against every mutant
+	$(PY) scripts/run_census.py --workers 6
+
+pipeline:             ## full experiment: all conditions, held-out scoring
+	$(PY) scripts/run_pipeline.py --conditions baseline_A mutant_aware_B1 placebo_B placebo_C placebo_D
+
+real-gaps:            ## close confirmed gaps in the subject's actual expert suite
+	$(PY) scripts/run_real_gap_closure.py
+
+rescore:              ## assemble fair suites and score stored runs without model calls
+	$(PY) scripts/rescore.py
+
+report:               ## rebuild the comparison report from stored results
+	$(PY) scripts/build_report.py
+
+bundle:               ## build the proof-carrying evidence bundle
+	$(PY) scripts/build_bundle.py
+
+real-gap-bundle:      ## bundle the merge-ready patch for confirmed repository gaps
+	$(PY) scripts/build_bundle.py --real-gaps --out artifacts/real-gap-bundle
+
+verify:               ## independently re-verify every claim in the bundle
+	$(PY) scripts/verify_bundle.py --bundle artifacts/bundle
+
+verify-real-gaps:     ## independently re-verify the real-gap patch claims
+	$(PY) scripts/verify_bundle.py --bundle artifacts/real-gap-bundle
+
+trajectories:         ## render human-readable agent trajectories
+	$(PY) scripts/export_trajectories.py
+
+gap-search:           ## close confirmed real gaps by deterministic search (no model calls)
+	$(PY) scripts/run_gap_search.py
+
+audit:                ## audit a patch for marginal fault-detection value
+	$(PY) scripts/build_as_generated_patch.py
+	$(PY) scripts/run_audit.py --suite artifacts/suites/as_generated_patch.py
+
+evidence-page:        ## render the self-contained HTML evidence page
+	$(PY) scripts/build_evidence_page.py
+
+check:                ## cross-check every headline claim against its evidence
+	$(PY) scripts/check_consistency.py
+
+reproduce: setup test census pipeline real-gaps rescore report bundle real-gap-bundle verify verify-real-gaps trajectories check  ## end-to-end from a clean clone

@@ -1,0 +1,58 @@
+{
+  "confirmed_real_gaps": 6,
+  "equivalence_adjusted_score": 0.9674,
+  "equivalent_or_contract_only": 1,
+  "findings": [
+    {
+      "id": "33797d243637a3c5",
+      "killing_test": "import pytest, semver\n\ndef test_triage():\n    with pytest.raises(TypeError) as excinfo:\n        semver.Version.parse(3.14)\n    assert \"not expecting type\" in str(excinfo.value)\n",
+      "label": "semver/version.py:637 in Version.parse: `%` -> `*` (arithmetic)",
+      "verdict": "CONFIRMED_REAL_GAP",
+      "why": "`'...%s' % type` becomes `'...%s' * type`. Both raise TypeError, so a bare pytest.raises(TypeError) cannot tell them apart — but the message differs, so asserting it does."
+    },
+    {
+      "id": "400588ba9c9f77f9",
+      "killing_test": "import semver\n\ndef test_triage():\n    a = semver.Version.parse(\"0.1.0+build.1\")\n    b = semver.Version.parse(\"0.1.0+build.2\")\n    assert a.is_compatible(b) is True\n",
+      "label": "semver/version.py:729 in Version.is_compatible: `4` -> `5` (constant)",
+      "verdict": "CONFIRMED_REAL_GAP",
+      "why": "self[:4] -> self[:5] pulls build metadata into the 0.x compatibility check. Semver says build metadata is ignored."
+    },
+    {
+      "id": "52d0f2279f7370b9",
+      "killing_test": "import semver\n\ndef test_triage():\n    assert str(semver.Version.parse(\"1.2.3\").bump_build(token=\"\")) == \"1.2.3+1\"\n    assert str(semver.Version.parse(\"1.2.3\").bump_build(token=\"x\")) == \"1.2.3+x.1\"\n",
+      "label": "semver/version.py:355 in Version.bump_build: `==` -> `!=` (equality)",
+      "verdict": "EQUIVALENT_OR_CONTRACT_ONLY",
+      "why": "EQUIVALENT — the mutated line is in DEAD CODE. In semver 3.0.4, `bump_build` computes `build`, increments it, then recomputes the identical if/elif chain and increments again, discarding the first result entirely. The mutant sits in that discarded first block, so no input can distinguish it. Mutation testing surfaced an upstream redundancy that 100% coverage did not. (The expected value below, '1.2.3+1', was obtained from the oracle rather than guessed — the author's first hand-written guess of '1.2.3+0' was wrong, which is precisely the failure mode Placebo removes from the agent.)"
+    },
+    {
+      "id": "7c644c64bde4883c",
+      "killing_test": "import semver\n\ndef test_triage():\n    assert semver.Version.parse(\"1.0.0\").match(\">=1.0.0\") is True\n",
+      "label": "semver/version.py:598 in Version.match: `0` -> `1` (constant)",
+      "verdict": "CONFIRMED_REAL_GAP",
+      "why": "\">=\": (0, 1) -> (1, 1) drops equality, so \">=x\" stops matching x."
+    },
+    {
+      "id": "95f32034b4f97f3d",
+      "killing_test": "import semver\n\ndef test_triage():\n    a = semver.Version.parse(\"0.1.0\")\n    b = semver.Version.parse(\"0.2.0\")\n    assert a.is_compatible(b) is False\n",
+      "label": "semver/version.py:730 in Version.is_compatible: `False` -> `None` (return_value)",
+      "verdict": "CONFIRMED_REAL_GAP",
+      "why": "`return False` -> `return None`. None is falsy, so every truthiness use is unaffected. Only an identity/equality assertion on the return value can see it."
+    },
+    {
+      "id": "a6eb2ad4fd7271ea",
+      "killing_test": "import semver\n\ndef test_triage():\n    a = semver.Version.parse(\"0.1.0+build.1\")\n    b = semver.Version.parse(\"0.1.0+build.2\")\n    assert a.is_compatible(b) is True\n",
+      "label": "semver/version.py:729 in Version.is_compatible: `4` -> `5` (constant)",
+      "verdict": "CONFIRMED_REAL_GAP",
+      "why": "Same line, other[:4] -> other[:5]; same build-metadata leak."
+    },
+    {
+      "id": "bad59b17cefa1f72",
+      "killing_test": "import semver\n\ndef test_triage():\n    assert semver.Version.parse(\"2.0.0\").match(\"<=1.0.0\") is False\n",
+      "label": "semver/version.py:599 in Version.match: `0` -> `1` (constant)",
+      "verdict": "CONFIRMED_REAL_GAP",
+      "why": "\"<=\": (-1, 0) -> (-1, 1) makes \"<=x\" match versions greater than x."
+    }
+  ],
+  "reported_mutation_score": 0.9622,
+  "survivors": 7
+}

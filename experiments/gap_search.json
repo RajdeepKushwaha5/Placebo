@@ -1,0 +1,203 @@
+{
+  "closure_rate": 1.0,
+  "confirmed_gaps": 6,
+  "gaps_closed": 6,
+  "model_calls": 0,
+  "results": [
+    {
+      "admission": {
+        "admitted": true,
+        "clean_duration_s": 4.846,
+        "code": null,
+        "gates_passed": [
+          "static",
+          "clean_head",
+          "kills_target",
+          "repeat_stable"
+        ],
+        "message": "passes clean HEAD and detects the injected fault",
+        "target_status": "killed"
+      },
+      "clean": "TypeError: not expecting type '<class 'float'>'",
+      "closed": true,
+      "faulty": "TypeError: can't multiply sequence by non-int of type 'type'",
+      "mutant_id": "33797d243637a3c5",
+      "search": {
+        "candidates_tried": 60,
+        "distinguishing_count": 1,
+        "found": true,
+        "mutant_id": "33797d243637a3c5",
+        "witness": {
+          "clean": "TypeError: not expecting type '<class 'float'>'",
+          "distinguishes": true,
+          "expr": "semver.Version.parse(3.14)",
+          "mutant": "TypeError: can't multiply sequence by non-int of type 'type'"
+        }
+      },
+      "witness": "semver.Version.parse(3.14)"
+    },
+    {
+      "admission": {
+        "admitted": true,
+        "clean_duration_s": 4.678,
+        "code": null,
+        "gates_passed": [
+          "static",
+          "clean_head",
+          "kills_target",
+          "repeat_stable"
+        ],
+        "message": "passes clean HEAD and detects the injected fault",
+        "target_status": "killed"
+      },
+      "clean": "True",
+      "closed": true,
+      "faulty": "False",
+      "mutant_id": "400588ba9c9f77f9",
+      "search": {
+        "candidates_tried": 300,
+        "distinguishing_count": 1,
+        "found": true,
+        "mutant_id": "400588ba9c9f77f9",
+        "witness": {
+          "clean": "True",
+          "distinguishes": true,
+          "expr": "semver.Version.parse(\"0.0.0+0\").is_compatible(semver.Version.parse(\"0.0.0\"))",
+          "mutant": "False"
+        }
+      },
+      "witness": "semver.Version.parse(\"0.0.0+0\").is_compatible(semver.Version.parse(\"0.0.0\"))"
+    },
+    {
+      "admission": {
+        "admitted": true,
+        "clean_duration_s": 4.77,
+        "code": null,
+        "gates_passed": [
+          "static",
+          "clean_head",
+          "kills_target",
+          "repeat_stable"
+        ],
+        "message": "passes clean HEAD and detects the injected fault",
+        "target_status": "killed"
+      },
+      "clean": "True",
+      "closed": true,
+      "faulty": "False",
+      "mutant_id": "7c644c64bde4883c",
+      "search": {
+        "candidates_tried": 60,
+        "distinguishing_count": 4,
+        "found": true,
+        "mutant_id": "7c644c64bde4883c",
+        "witness": {
+          "clean": "True",
+          "distinguishes": true,
+          "expr": "semver.Version.parse(\"0.0.0\").match(\">=0.0.0\")",
+          "mutant": "False"
+        }
+      },
+      "witness": "semver.Version.parse(\"0.0.0\").match(\">=0.0.0\")"
+    },
+    {
+      "admission": {
+        "admitted": true,
+        "clean_duration_s": 4.722,
+        "code": null,
+        "gates_passed": [
+          "static",
+          "clean_head",
+          "kills_target",
+          "repeat_stable"
+        ],
+        "message": "passes clean HEAD and detects the injected fault",
+        "target_status": "killed"
+      },
+      "clean": "False",
+      "closed": true,
+      "faulty": "None",
+      "mutant_id": "95f32034b4f97f3d",
+      "search": {
+        "candidates_tried": 480,
+        "distinguishing_count": 2,
+        "found": true,
+        "mutant_id": "95f32034b4f97f3d",
+        "witness": {
+          "clean": "False",
+          "distinguishes": true,
+          "expr": "semver.Version.parse(\"0.0.0\").is_compatible(semver.Version.parse(\"0.0.0-alpha\"))",
+          "mutant": "None"
+        }
+      },
+      "witness": "semver.Version.parse(\"0.0.0\").is_compatible(semver.Version.parse(\"0.0.0-alpha\"))"
+    },
+    {
+      "admission": {
+        "admitted": true,
+        "clean_duration_s": 4.684,
+        "code": null,
+        "gates_passed": [
+          "static",
+          "clean_head",
+          "kills_target",
+          "repeat_stable"
+        ],
+        "message": "passes clean HEAD and detects the injected fault",
+        "target_status": "killed"
+      },
+      "clean": "True",
+      "closed": true,
+      "faulty": "False",
+      "mutant_id": "a6eb2ad4fd7271ea",
+      "search": {
+        "candidates_tried": 300,
+        "distinguishing_count": 1,
+        "found": true,
+        "mutant_id": "a6eb2ad4fd7271ea",
+        "witness": {
+          "clean": "True",
+          "distinguishes": true,
+          "expr": "semver.Version.parse(\"0.0.0\").is_compatible(semver.Version.parse(\"0.0.0+0\"))",
+          "mutant": "False"
+        }
+      },
+      "witness": "semver.Version.parse(\"0.0.0\").is_compatible(semver.Version.parse(\"0.0.0+0\"))"
+    },
+    {
+      "admission": {
+        "admitted": true,
+        "clean_duration_s": 4.836,
+        "code": null,
+        "gates_passed": [
+          "static",
+          "clean_head",
+          "kills_target",
+          "repeat_stable"
+        ],
+        "message": "passes clean HEAD and detects the injected fault",
+        "target_status": "killed"
+      },
+      "clean": "True",
+      "closed": true,
+      "faulty": "False",
+      "mutant_id": "bad59b17cefa1f72",
+      "search": {
+        "candidates_tried": 60,
+        "distinguishing_count": 8,
+        "found": true,
+        "mutant_id": "bad59b17cefa1f72",
+        "witness": {
+          "clean": "True",
+          "distinguishes": true,
+          "expr": "semver.Version.parse(\"0.0.0\").match(\"<=0.0.0\")",
+          "mutant": "False"
+        }
+      },
+      "witness": "semver.Version.parse(\"0.0.0\").match(\"<=0.0.0\")"
+    }
+  ],
+  "union_clean_passes": true,
+  "usd_cost": 0.0,
+  "wall_s": 95.5
+}

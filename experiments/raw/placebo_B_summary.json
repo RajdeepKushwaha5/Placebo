@@ -1,0 +1,24 @@
+{
+  "admission_rate": 0.4167,
+  "admitted": 5,
+  "admitted_first_attempt": 5,
+  "condition": "placebo_B",
+  "context_condition": "B",
+  "max_attempts": 3,
+  "model": "qwen2.5:7b",
+  "model_digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+  "rejections": {
+    "CLEAN_HEAD_FAILED": 18,
+    "COLLECTION_FAILED": 1,
+    "TARGET_MUTANT_SURVIVED": 2
+  },
+  "usage": {
+    "calls": 26,
+    "model_seconds": 310.8,
+    "output_tokens": 2340,
+    "prompt_tokens": 14615,
+    "usd_cost": 0.0
+  },
+  "wall_s": 378.9,
+  "working_set_size": 12
+}

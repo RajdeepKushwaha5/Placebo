@@ -1,0 +1,405 @@
+{
+  "as_generated_patch": {
+    "minimization": {
+      "kept_count": 2,
+      "kept_tests": [
+        "test_ai_c_04",
+        "test_ai_gap_02"
+      ],
+      "no_loss_verified": true,
+      "novel_faults_after": [
+        "7c644c64bde4883c",
+        "95f32034b4f97f3d",
+        "bad59b17cefa1f72"
+      ],
+      "novel_faults_before": [
+        "7c644c64bde4883c",
+        "95f32034b4f97f3d",
+        "bad59b17cefa1f72"
+      ],
+      "original_count": 33
+    },
+    "summary": {
+      "existing_suite_gaps_in_corpus": 7,
+      "fault_corpus": 185,
+      "gaps_closed_by_patch": 3,
+      "review_burden_reduction": 0.6364,
+      "suite": "as_generated_patch",
+      "tests_audited": 33,
+      "verdicts": {
+        "HARMFUL": 11,
+        "REDUNDANT_WITH_EXISTING": 18,
+        "REDUNDANT_WITH_SIBLING": 3,
+        "UNPROVEN": 0,
+        "VALUABLE": 1
+      }
+    },
+    "tests": [
+      {
+        "faults_detected": 14,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 14 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_d_01",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 12,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 12 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_d_02",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 5,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 5 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_d_03",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 10,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 10 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_d_04",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 16,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 16 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_d_05",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 11,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 11 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_d_06",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 12,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 12 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_d_07",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 26,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 26 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_c_01",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 10,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 10 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_c_02",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 14,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 14 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_c_03",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 28,
+        "faults_missed_by_existing_suite": 2,
+        "green_on_clean": true,
+        "note": "detects gaps in the existing suite, but a sibling test in this patch detects the same ones",
+        "stable": true,
+        "test": "test_ai_c_04",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_SIBLING"
+      },
+      {
+        "faults_detected": 26,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 26 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_b_01",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 13,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 13 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_b_02",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 15,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 15 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_b_03",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 16,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 16 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_b_04",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 16,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 16 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_b_05",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 26,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 26 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_b1_01",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 22,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 22 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_b1_02",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 14,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": true,
+        "note": "only re-detects 14 fault(s) the existing suite already catches",
+        "stable": true,
+        "test": "test_ai_b1_03",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_EXISTING"
+      },
+      {
+        "faults_detected": 7,
+        "faults_missed_by_existing_suite": 1,
+        "green_on_clean": true,
+        "note": "detects gaps in the existing suite, but a sibling test in this patch detects the same ones",
+        "stable": true,
+        "test": "test_ai_gap_01",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_SIBLING"
+      },
+      {
+        "faults_detected": 14,
+        "faults_missed_by_existing_suite": 1,
+        "green_on_clean": true,
+        "note": "sole detector of 1 fault(s) the existing suite misses",
+        "stable": true,
+        "test": "test_ai_gap_02",
+        "unique_fault_ids": [
+          "95f32034b4f97f3d"
+        ],
+        "uniquely_detected": 1,
+        "verdict": "VALUABLE"
+      },
+      {
+        "faults_detected": 12,
+        "faults_missed_by_existing_suite": 1,
+        "green_on_clean": true,
+        "note": "detects gaps in the existing suite, but a sibling test in this patch detects the same ones",
+        "stable": true,
+        "test": "test_ai_gap_03",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "REDUNDANT_WITH_SIBLING"
+      },
+      {
+        "faults_detected": 0,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": false,
+        "note": "fails against correct code",
+        "stable": true,
+        "test": "test_ai_raw_01",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "HARMFUL"
+      },
+      {
+        "faults_detected": 0,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": false,
+        "note": "fails against correct code",
+        "stable": true,
+        "test": "test_ai_raw_02",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "HARMFUL"
+      },
+      {
+        "faults_detected": 0,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": false,
+        "note": "fails against correct code",
+        "stable": true,
+        "test": "test_ai_raw_03",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "HARMFUL"
+      },
+      {
+        "faults_detected": 0,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": false,
+        "note": "fails against correct code",
+        "stable": true,
+        "test": "test_ai_raw_04",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "HARMFUL"
+      },
+      {
+        "faults_detected": 0,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": false,
+        "note": "fails against correct code",
+        "stable": true,
+        "test": "test_ai_raw_05",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "HARMFUL"
+      },
+      {
+        "faults_detected": 0,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": false,
+        "note": "fails against correct code",
+        "stable": true,
+        "test": "test_ai_raw_06",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "HARMFUL"
+      },
+      {
+        "faults_detected": 0,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": false,
+        "note": "fails against correct code",
+        "stable": true,
+        "test": "test_ai_raw_07",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "HARMFUL"
+      },
+      {
+        "faults_detected": 0,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": false,
+        "note": "fails against correct code",
+        "stable": true,
+        "test": "test_ai_raw_08",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "HARMFUL"
+      },
+      {
+        "faults_detected": 0,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": false,
+        "note": "fails against correct code",
+        "stable": true,
+        "test": "test_ai_raw_09",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "HARMFUL"
+      },
+      {
+        "faults_detected": 0,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": false,
+        "note": "fails against correct code",
+        "stable": true,
+        "test": "test_ai_raw_10",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "HARMFUL"
+      },
+      {
+        "faults_detected": 0,
+        "faults_missed_by_existing_suite": 0,
+        "green_on_clean": false,
+        "note": "fails against correct code",
+        "stable": true,
+        "test": "test_ai_raw_12",
+        "unique_fault_ids": [],
+        "uniquely_detected": 0,
+        "verdict": "HARMFUL"
+      }
+    ]
+  }
+}

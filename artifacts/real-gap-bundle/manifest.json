@@ -1,0 +1,34 @@
+{
+  "environment": {
+    "generated_at": "2026-08-31T13:53:17+00:00",
+    "model": {
+      "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+      "hosted": "local (Ollama)",
+      "name": "qwen2.5:7b",
+      "seed": 7,
+      "temperature": 0.0,
+      "usd_cost": 0.0
+    },
+    "packages": {
+      "coverage": "7.16.0",
+      "pytest": "9.0.2",
+      "pytest-cov": "7.1.0"
+    },
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.0"
+  },
+  "held_out_mutation_score": 0.5,
+  "human_approval_required": true,
+  "patch_path": "patch/test_placebo_suite.py",
+  "patch_sha256": "c11235b43440b90d28aaf2e1961ce06e6137832851851f6e8cc478460ae127bf",
+  "produced_by": "Placebo 0.1.0",
+  "scope": {
+    "adds_files": [
+      "patch/test_placebo_suite.py"
+    ],
+    "modifies_existing_tests": false,
+    "modifies_production_code": false
+  },
+  "subject_commit": "6adf8765f6e21910f1f0c13151ce84f32f8d431d",
+  "tests": 3
+}
