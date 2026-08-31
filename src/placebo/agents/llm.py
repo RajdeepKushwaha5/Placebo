@@ -20,7 +20,7 @@ import json
 import time
 import urllib.error
 import urllib.request
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, asdict
 from pathlib import Path
 
 DEFAULT_HOST = "http://127.0.0.1:11434"

@@ -35,7 +35,7 @@ def _load(path: Path):
 def cmd_audit(args: argparse.Namespace) -> int:
     """Classify each test in a patch by its marginal fault-detection value."""
     from .audit.marginal import (
-        Verdict, audit_suite, minimal_patch, sample_fault_corpus,
+        audit_suite, minimal_patch, sample_fault_corpus,
     )
     from .mutation.engine import enumerate_subject
     from .verification.runner import SubjectRunner

@@ -209,6 +209,71 @@ generated patch, not the generated tests in isolation.
 
 ---
 
+---
+
+## Path D — the evidence that does not depend on mutation score
+
+Every command below is **deterministic and makes zero model calls**. They are
+the answer to "mutation score is only a proxy".
+
+```bash
+# Real defects that shipped in semver 3.0.4 and were fixed upstream later.
+# Ground truth is the maintainers' own diff and issue number.
+python scripts/run_historical_bugs.py          # ~1 s
+
+# The identical pipeline on a second library with a different fault surface.
+python scripts/run_multirepo_census.py         # ~4 min
+
+# A level-3 oracle: properties, not recorded output values.
+python scripts/run_metamorphic.py              # ~7 s
+
+# Bootstrap spread over stored repeated runs.
+python scripts/run_variance.py                 # instant
+```
+
+Expected:
+
+| command | expected result |
+|---|---|
+| `run_historical_bugs.py` | witness for **3/3** behavior-changing bugs; **0/3** detected by semver's own suite; the one behavior-preserving refactor correctly yields no witness |
+| `run_multirepo_census.py` | semver **96.2%**, inflection **85.5%** |
+| `run_metamorphic.py` | 12/12 properties sound on clean code; detects **1/6** gaps |
+| `run_variance.py` | admitted 5/5/5, CI [5.0, 5.0]; retry recoveries 0-2, CI [0.0, 2.0] |
+
+`run_historical_bugs.py` needs a full clone of upstream semver for the fix
+commits. Without it the script says so and exits cleanly:
+
+```bash
+git clone https://github.com/python-semver/python-semver
+```
+
+Adjust `UPSTREAM` at the top of the script to point at that clone.
+
+## Path E — the model-dependent controls
+
+These **do** call the local model and take time.
+
+```bash
+# Does the scaffolding help, or does it just buy more model calls?
+python scripts/run_equal_budget.py --samples 3 --limit 12    # ~50 min
+
+# Error bars on the headline comparison.
+python scripts/run_seeds.py --repeats 3                      # ~2 h
+```
+
+Both write incrementally, so a partial run is still usable. Neither is required
+to reproduce any headline number; both exist to test whether the headline
+numbers survive scrutiny.
+
+## Packaging
+
+```bash
+python scripts/package_submission.py
+```
+
+Writes `../placebo-submission.zip` and verifies it: under the size limit, every
+required deliverable present, no credentials, no workspace or cache files.
+
 ## Timing and cost
 
 | Step | Runtime | Cost |

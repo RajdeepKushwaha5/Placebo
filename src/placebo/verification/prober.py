@@ -21,7 +21,6 @@ import subprocess
 import sys
 import ast
 from dataclasses import dataclass
-from pathlib import Path
 
 from ..mutation.models import Mutant
 from .runner import SubjectRunner

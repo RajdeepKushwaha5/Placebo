@@ -23,7 +23,6 @@ import subprocess
 import sys
 import os
 from dataclasses import dataclass, field, asdict
-from pathlib import Path
 
 from ..mutation.models import Mutant, MutantStatus
 from ..verification.runner import SubjectRunner

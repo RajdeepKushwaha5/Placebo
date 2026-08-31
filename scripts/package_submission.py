@@ -1,0 +1,152 @@
+"""Build the submission archive.
+
+Produces a single zip a judge can unpack and run, containing the code, the
+vendored subjects, every stored result, and the rendered evidence - but none of
+the disposable working state.
+
+Excluded, deliberately:
+
+* `.placebo-ws/` - execution workspaces, recreated by any run
+* `.git/` - history is on GitHub; the archive is a snapshot
+* `__pycache__`, `.pytest_cache`, `*.pyc` - build artefacts
+* `artifacts/*.log` - raw console logs, regenerable and noisy
+* `docs/VIDEO_SCRIPT.md`, `docs/DEMO_RUNBOOK.md` - presentation material
+
+The archive is verified after writing: it must be under the size limit, contain
+every required deliverable, and contain no credentials.
+
+Usage:
+  python scripts/package_submission.py
+"""
+
+from __future__ import annotations
+
+import re
+import zipfile
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+OUT = ROOT.parent / "placebo-submission.zip"
+SIZE_LIMIT_MB = 50
+
+EXCLUDE_DIRS = {
+    ".placebo-ws", ".git", "__pycache__", ".pytest_cache",
+    ".benchmarks", ".ruff_cache", ".mypy_cache", "node_modules",
+}
+EXCLUDE_FILES = {
+    "docs/VIDEO_SCRIPT.md",
+    "docs/DEMO_RUNBOOK.md",
+}
+EXCLUDE_SUFFIXES = {".pyc", ".pyo", ".log"}
+
+# Everything a judge must be able to find in the archive.
+REQUIRED = [
+    "README.md",
+    "SUBMISSION.md",
+    "LICENSE",
+    "requirements.lock",
+    "pyproject.toml",
+    "Makefile",
+    "docs/REPRODUCTION.md",
+    "docs/LIMITATIONS.md",
+    "src/placebo/cli.py",
+    "src/placebo/mutation/engine.py",
+    "src/placebo/audit/marginal.py",
+    "src/placebo/search/counterexample.py",
+    "src/placebo/search/metamorphic.py",
+    "scripts/run_census.py",
+    "scripts/run_audit.py",
+    "scripts/check_consistency.py",
+    "tests/test_placebo_engine.py",
+    "subject/PROVENANCE.md",
+    "subjects/inflection/PROVENANCE.md",
+    "artifacts/report.md",
+    "artifacts/evidence.html",
+    "experiments/results.json",
+    "trajectories/README.md",
+]
+
+SECRET = re.compile(
+    rb"sk-[A-Za-z0-9_-]{15,}|BEGIN (?:RSA|OPENSSH|PRIVATE) KEY",
+)
+
+
+def included(path: Path) -> bool:
+    rel = path.relative_to(ROOT).as_posix()
+    if any(part in EXCLUDE_DIRS for part in path.parts):
+        return False
+    if rel in EXCLUDE_FILES:
+        return False
+    return path.suffix not in EXCLUDE_SUFFIXES
+
+
+def main() -> int:
+    files = sorted(p for p in ROOT.rglob("*") if p.is_file() and included(p))
+    if not files:
+        print("nothing to package")
+        return 1
+
+    OUT.unlink(missing_ok=True)
+    with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+        for path in files:
+            archive.write(path, Path("placebo") / path.relative_to(ROOT))
+
+    size_mb = OUT.stat().st_size / 1_048_576
+    names = set(zipfile.ZipFile(OUT).namelist())
+
+    print("=" * 70)
+    print("  SUBMISSION ARCHIVE")
+    print("=" * 70)
+    print(f"  path  : {OUT}")
+    print(f"  files : {len(files)}")
+    print(f"  size  : {size_mb:.2f} MB  (limit {SIZE_LIMIT_MB} MB)")
+
+    problems = 0
+
+    if size_mb > SIZE_LIMIT_MB:
+        print(f"  FAIL  : exceeds the {SIZE_LIMIT_MB} MB limit")
+        problems += 1
+
+    missing = [r for r in REQUIRED if f"placebo/{r}" not in names]
+    if missing:
+        print(f"  FAIL  : {len(missing)} required file(s) missing")
+        for m in missing:
+            print(f"            {m}")
+        problems += 1
+    else:
+        print(f"  OK    : all {len(REQUIRED)} required deliverables present")
+
+    leaked = [n for n in names
+              if any(n.endswith(x) for x in ("VIDEO_SCRIPT.md", "DEMO_RUNBOOK.md"))]
+    if leaked:
+        print(f"  FAIL  : presentation material leaked: {leaked}")
+        problems += 1
+    else:
+        print("  OK    : presentation material excluded")
+
+    with zipfile.ZipFile(OUT) as archive:
+        hits = [
+            n for n in names
+            if n.endswith((".py", ".md", ".json", ".toml", ".lock", ".yml"))
+            and SECRET.search(archive.read(n))
+        ]
+    if hits:
+        print(f"  FAIL  : possible credentials in {hits[:3]}")
+        problems += 1
+    else:
+        print("  OK    : no credentials found")
+
+    workspace = [n for n in names if ".placebo-ws" in n or "__pycache__" in n]
+    if workspace:
+        print(f"  FAIL  : {len(workspace)} disposable file(s) included")
+        problems += 1
+    else:
+        print("  OK    : no workspace or cache files")
+
+    print("=" * 70)
+    print("  READY TO UPLOAD" if not problems else f"  {problems} PROBLEM(S) - fix before uploading")
+    return 1 if problems else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

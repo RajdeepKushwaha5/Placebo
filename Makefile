@@ -1,6 +1,6 @@
 PY ?= python
 
-.PHONY: evidence-page gap-search audit setup census pipeline real-gaps rescore test report bundle real-gap-bundle verify verify-real-gaps trajectories check reproduce
+.PHONY: historical multirepo metamorphic variance seeds equal-budget review-study package evidence-page gap-search audit setup census pipeline real-gaps rescore test report bundle real-gap-bundle verify verify-real-gaps trajectories check reproduce
 
 setup:                ## install pinned dependencies
 	$(PY) -m pip install -r requirements.lock
@@ -44,6 +44,30 @@ gap-search:           ## close confirmed real gaps by deterministic search (no m
 audit:                ## audit a patch for marginal fault-detection value
 	$(PY) scripts/build_as_generated_patch.py
 	$(PY) scripts/run_audit.py --suite artifacts/suites/as_generated_patch.py
+
+historical:           ## evaluate against real bugs that shipped in semver 3.0.4
+	$(PY) scripts/run_historical_bugs.py
+
+multirepo:            ## run the census across every subject repository
+	$(PY) scripts/run_multirepo_census.py
+
+metamorphic:          ## level-3 oracle: properties, no hardcoded expected values
+	$(PY) scripts/run_metamorphic.py
+
+variance:             ## bootstrap spread from stored repeated runs
+	$(PY) scripts/run_variance.py
+
+seeds:                ## repeat the headline conditions for error bars
+	$(PY) scripts/run_seeds.py --repeats 3
+
+equal-budget:         ## control: does scaffolding help, or just more calls?
+	$(PY) scripts/run_equal_budget.py --samples 3
+
+review-study:         ## build the blinded reviewer packet (instrument only)
+	$(PY) scripts/build_review_study.py
+
+package:              ## build and verify the submission archive
+	$(PY) scripts/package_submission.py
 
 evidence-page:        ## render the self-contained HTML evidence page
 	$(PY) scripts/build_evidence_page.py
