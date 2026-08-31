@@ -1,402 +1,566 @@
 # Placebo
 
-> Your test suite got bigger. Did its ability to catch faults get better?
+**Placebo is a test-suite auditor that tells a reviewer which generated tests actually earn their place.** It measures what a test would catch that nothing else already catches, then proposes a smaller patch carrying executable evidence for every test it keeps.
 
-Placebo audits a test suite for fault classes it does not detect, then produces
-**evidence-carrying test patches** — tests admitted only after execution shows they
-pass against clean code and fail against a specific injected fault. Improvement
-claims are scored on **faults the generation agent never saw**. A 29-fault
-stratified set was frozen before generation; an all-eligible 80-fault set is
-also reported under a deterministic, no-sampling rule.
+It runs entirely on a local 7B model on a consumer laptop GPU. No API key, no credentials in the repository, zero cost per run.
 
-It runs entirely on a **local model** on a consumer laptop GPU. No API key, no
-credentials in this repository, no marginal cost per run.
-
----
-
-## 1. The user and the bottleneck
-
-**Who.** A tech lead or maintainer on a team that has adopted AI coding
-assistants.
-
-**The bottleneck.** Their repository is filling with generated tests. Coverage
-climbs every sprint, CI stays green, review time goes up — and nobody can say
-which of those thousands of assertions would actually catch a regression. The
-failure is quiet and specific: a test written by reading the implementation can
-repeat *what the code currently does*, including an existing mistake. It can
-pass and raise coverage without necessarily adding useful fault detection.
-
-There is no routine way to tell those tests apart from real ones. Coverage
-cannot: it measures which lines were executed, not whether any assertion would
-have objected to a different answer. So the lead is left choosing between
-merging tests they cannot vouch for and hand-auditing generated code line by
-line, which is slower than writing the tests themselves.
-
-**Why it matters.** The whole value of a regression suite is the alarm it raises
-on the day someone breaks something. A suite full of tests that cannot fail is
-worse than a small honest one, because it is *believed*.
-
-### The problem is real on a serious, human-written codebase
-
-Placebo's subject is [`python-semver`](https://github.com/python-semver/python-semver)
-at tag `3.0.4` — a widely used, BSD-3-Clause library whose maintainers hold it to
-**100.0% line and branch coverage**.
-
-Placebo injects 185 small, single-token faults into `semver/version.py` and runs
-the project's own 329-test suite against each one:
-
-| suite | tests | line + branch coverage | faults detected |
-|---|---:|---:|---:|
-| semver's own expert suite | 329 | **100.0%** | **96.2%** (178/185) |
-
-That last column is the number coverage cannot give you. Even an excellent,
-human-written suite at full coverage misses 7 injected faults. Independent
-triage in `artifacts/survivor_triage.json` confirms that 6 are behaviorally
-detectable gaps and 1 is an equivalent mutant in dead code.
-
----
-
-## 2. What Placebo does
-
-1. **Enumerate faults.** A deterministic AST mutation engine produces minimal,
-   single-token edits (boundary flips, boolean swaps, constant and return-value
-   changes) with content-derived ids, so the fault inventory is stable across
-   machines and runs.
-2. **Find candidate gaps.** Run the suite against each fault. A *survivor* means
-   the evaluated suite did not distinguish the mutated program. Placebo then
-   separates confirmed detectable gaps from equivalent or unresolved mutants.
-3. **Author a test for each gap.** The agent is given the function and the
-   one-line fault diff, and proposes a test.
-4. **Admit only what execution proves.** A candidate is accepted only if it
-   passes on clean `HEAD`, fails on the targeted fault, survives static
-   anti-cheating checks, and is stable on repeat. Everything else is rejected
-   with a structured code.
-5. **Score on faults it never saw.** Results are reported on **held-out**
-   mutants drawn from the same functions but different source spans, with
-   same-line siblings excluded. The pre-generation manifest contains 29
-   stratified faults; the authoritative report also scores every one of the 80
-   eligible faults, eliminating sampling choice at the cost of being a
-   post-generation analysis. Both fingerprints and exact manifests ship.
-
-The final artifact is a review-ready test file where every test carries the
-specific injected fault it was execution-verified to detect. A human still
-decides whether that fault represents behavior worth preserving.
-
-### Auditing tests, not just generating them
-
-Generating a test that kills a mutant is the easy half. The reviewer's real
-question is different, and coverage cannot answer it:
-
-> Of the tests in this patch, which ones detect a failure that nothing else
-> already detects?
-
-A test that kills faults is still worthless if every fault it kills is already
-killed by another test. Value is therefore **counterfactual**, not absolute:
-
-```
-value(t) = faults detectable with t  -  faults detectable without t
-```
-
-`placebo audit` computes this per test against two references simultaneously —
-the repository's existing suite, and the sibling tests in the same patch — and
-classifies each test:
-
-| verdict | meaning |
+| | |
 |---|---|
-| `VALUABLE` | sole detector of a fault the existing suite misses |
-| `REDUNDANT_WITH_SIBLING` | detects a real gap, but a sibling detects it too |
-| `REDUNDANT_WITH_EXISTING` | only re-detects what the repo already catches |
-| `UNPROVEN` | no marginal sensitivity **under the evaluated fault models** |
-| `HARMFUL` | red or unstable against correct code |
+| **Repository** | https://github.com/RajdeepKushwaha5/Placebo |
+| **Verify in 3 minutes** | `pytest tests -q` then `python scripts/check_consistency.py` |
+| **Status** | 37 unit tests, 72 consistency checks, 2 evidence bundles replaying clean |
 
-`UNPROVEN` is deliberately not "this test is useless". It is a statement about
-what was measured, not about the test's intent.
+---
 
-The audit is efficient because pytest names the tests that failed: injecting one
-fault and running the suite once yields an entire **column** of the kill matrix.
-That reduces launches from tests x faults to one launch per fault; wall time
-still grows with the underlying suite's runtime.
+## Table of contents
 
-**Validation that the audit discriminates.** Run against two patches whose
-character is known in advance, it separates them cleanly:
+1. [The problem](#1-the-problem)
+2. [Demo](#2-demo)
+3. [How well does it work](#3-how-well-does-it-work)
+4. [Testing and consistency](#4-testing-and-consistency)
+5. [Quickstart](#5-quickstart)
+6. [Configuration and data](#6-configuration-and-data)
+7. [Architecture](#7-architecture)
+8. [Project structure](#8-project-structure)
+9. [Decisions and trade-offs](#9-decisions-and-trade-offs)
+10. [CI](#10-ci)
+11. [Improvement changelog](#11-improvement-changelog)
+12. [Main failure mode](#12-main-failure-mode)
+13. [Hot take](#13-hot-take)
+14. [What existed before this competition](#14-what-existed-before-this-competition)
+15. [Safety and scope](#15-safety-and-scope)
+16. [Limitations](#16-limitations)
 
-| patch | authored against | audit verdict |
-|---|---|---|
-| `placebo_D` | faults the existing suite already detects | **7/7 REDUNDANT** |
-| `real_gap_patch` | the 6 confirmed real gaps | **3/3 VALUABLE** |
+---
 
-An audit that called everything valuable would be worthless. This one does not.
+## 1. The problem
 
-### Closing every real gap: the model was never the bottleneck
+### Who has it
 
-After oracle grounding removed wrong expected values, one failure mode was left:
-the agent chose inputs that did not separate correct code from the fault. Of the
-six confirmed gaps in semver's own suite, Placebo's agent closed three and
-missed three — all three for that reason.
+A tech lead or maintainer on a team that has adopted an AI coding assistant.
 
-Searching an input space is not a language task. It is enumeration. So the
-search was taken away from the model entirely and given to a deterministic,
-cost-ordered enumerator over a boundary-heavy input domain, run differentially
-against clean and faulty code, shrinking to the simplest distinguishing input.
+### What goes wrong
+
+The repository fills with generated tests. Test count rises. Coverage rises. CI stays green. Nobody can say which of those thousands of assertions would actually catch a regression.
+
+The failure is quiet and specific. When an assistant writes a test, it reads the implementation first, then records what the implementation already does. If the code is correct, the test passes. If the code is wrong, the test records the wrong answer and still passes. Either way it goes green, and either way coverage goes up.
+
+A test written that way cannot fail. A test that cannot fail cannot warn anyone about anything.
+
+### Why coverage does not help
+
+Coverage measures which lines executed. It never asks whether any assertion would have objected had the answer come back wrong. A suite can reach 100 percent coverage and still miss real defects, which is not a hypothetical:
+
+| suite | tests | line and branch coverage | injected faults detected |
+|---|---:|---:|---:|
+| `python-semver` 3.0.4, written by its maintainers | 329 | **100.0%** | **96.2%** (178/185) |
+
+Seven faults survived a suite held at full coverage. Manual triage confirms six are behaviorally detectable gaps and one is an equivalent mutant sitting in dead code.
+
+### The question Placebo answers
+
+Not "does this test pass". Not "did coverage go up". Instead:
+
+> **What regression becomes detectable only because this test exists?**
+
+That question is counterfactual, so the answer is a subtraction rather than a total:
+
+```
+value(test) = faults detectable with it  minus  faults detectable without it
+```
+
+---
+
+## 2. Demo
+
+### The audit, on 33 tests written by this project's own agents
+
+```console
+$ placebo audit artifacts/suites/as_generated_patch.py --minimize
+
+  33 tests in as_generated_patch.py, audited against 185 fault models
+
+    REDUNDANT_WITH_EXISTING  test_ai_d_01
+    VALUABLE                 test_ai_gap_02
+    HARMFUL                  test_ai_raw_04
+    ... 30 more
+
+      1 add unique fault detection the existing suite lacks
+      3 duplicate a sibling test in this patch
+     18 only re-detect what the repo already detects
+      0 show no marginal sensitivity under these fault models
+     11 are red or unstable against correct code
+
+    gaps closed by this patch : 3
+    review burden reduction   : 64%
+
+    minimized patch -> as_generated_patch.minimized.py
+    (2 of 33 tests, preserving 3 measured novel faults)
+
+  Human approval required before merging. Placebo proposes; it does not merge.
+```
+
+One test out of thirty-three is the sole reason a fault would be caught. The patch shrinks from 33 tests to 2 while still detecting the same three faults, and the reduced patch is re-audited by execution rather than assumed to be equivalent.
+
+### Other commands
+
+```console
+$ placebo gaps                     # what the existing suite fails to detect
+$ placebo explain test_placebo_01  # why does this generated test exist?
+$ placebo verify --bundle artifacts/bundle   # re-execute every recorded claim
+```
+
+`gaps` and `explain` return instantly. A rendered, self-contained evidence page is at [`artifacts/evidence.html`](artifacts/evidence.html); every bar shows how many faults a test catches, with the green segment showing how many only it catches.
+
+---
+
+## 3. How well does it work
+
+Four independent lines of evidence, deliberately not all resting on mutation score.
+
+### 3.1 The headline comparison
+
+Twenty-nine faults were frozen and fingerprinted **before** any generation ran, and the agent never saw them. Every condition uses the same model, the same faults, the same admission gates and the same model-free repair step. Only the scaffolding differs.
+
+| condition | scaffolding | tests kept | confirmatory kill (n=29) | all-eligible (n=80) |
+|---|---|---:|---:|---:|
+| `baseline_A` | direct prompt, no fault shown | 0 | **0%** | 0% |
+| `mutant_aware_B1` | shown the fault, one attempt | 3 | 14% | 8% |
+| `placebo_B` | plus verification retry loop | 5 | 17% | 19% |
+| `placebo_C` | implementation body withheld | 4 | 21% | 18% |
+| **`placebo_D`** | **oracle-grounded** | **7** | **31%** | **31%** |
+
+The baseline retaining zero tests is a measured outcome, not a strawman. All twelve candidates were offered; eleven failed against correct code and one would not parse. Token counts ran 170 to 538 against a 900-token cap, so nothing was truncated by the harness. Full disposition is in [`artifacts/report.md`](artifacts/report.md).
+
+### 3.2 Closing real gaps: the model was never the bottleneck
+
+After oracle grounding removed wrong expected values, one failure mode remained. The agent chose inputs where correct and faulty code produce the same answer. Searching an input space is enumeration, not a language task, so the search was moved out of the model entirely.
 
 | approach | real gaps closed | model calls | wall time |
 |---|---:|---:|---:|
-| agent with oracle grounding | 3 / 6 | 13 | 512 s |
-| **+ deterministic counterexample search** | **6 / 6** | **0** | **36 s** |
+| agent with oracle grounding | 3 of 6 | 13 | 512 s |
+| **plus deterministic counterexample search** | **6 of 6** | **0** | **36 s** |
 
-Zero model calls. Every gap closed. The existing 329-test suite stays green, and
-each generated test is admitted only after execution shows it passes on clean
-code and fails on its specific fault.
-
-The witnesses the search found are ones the model never proposed:
+The existing 329-test suite stays green alongside the generated patch. Witnesses the search found that the model never proposed:
 
 ```python
-semver.Version.parse("0.0.0").match(">=0.0.0")            # True  -> False
-semver.Version.parse("0.0.0+0").is_compatible(...)        # True  -> False
-semver.Version.parse(3.14)                                # message differs only
+semver.Version.parse("0.0.0").match(">=0.0.0")     # True  becomes False
+semver.Version.parse("0.0.0+0").is_compatible(...) # True  becomes False
+semver.Version.parse(3.14)                         # only the error message differs
 ```
 
-That last witness is a useful sensitivity example: both versions raise
-`TypeError`, so `pytest.raises(TypeError)` cannot tell them apart. Checking the
-observed message distinguishes them. It is not automatically a good product
-requirement—exception text can be brittle—so Placebo presents it for human
-review instead of treating admission as permission to merge.
+That last one matters. Both versions raise `TypeError`, so `pytest.raises(TypeError)` structurally cannot separate them. Only asserting the observed message detects it.
 
-### Evidence beyond injected faults
+### 3.3 Real historical bugs, not injected ones
 
-Mutation score is a proxy, so the project does not rest on it alone. Four
-independent checks, none of which uses a language model:
+Mutation score is a proxy. To test outside it, defects that genuinely shipped in `semver` 3.0.4 and were fixed upstream afterwards were used, with the maintainers' own diffs and issue numbers as ground truth.
 
-| check | what it tests | result |
+| upstream issue | defect | outcome |
 |---|---|---|
-| **Real historical bugs** | defects that actually shipped in semver 3.0.4 and were fixed upstream later; ground truth is the maintainers' own diff and issue number | witness found for **3/3** behavior-changing bugs; **0/3** detected by semver's own suite |
-| **Second repository** | the identical pipeline on `inflection` (string transformation, 455 tests) rather than version comparison | mutation scores differ substantially between subjects |
-| **Metamorphic oracle** | properties asserting relationships, hardcoding no expected value | 12/12 sound on clean code; detects 1/6 gaps |
-| **Run-to-run variance** | three stored independent runs of one condition | admitted 5/5/5 (CI [5.0, 5.0]); retry recoveries 1/0/2 (CI [0.0, 2.0]) |
+| `#460` | `bump_prerelease` does not always produce a newer version | witness found |
+| `#469` | `next_version` does not bump build-only versions | witness found |
+| `#339` | `next_version` does not reset prerelease when the token changes | witness found |
+| `#463` | duplicate dead code in `bump_build` | correctly **no** witness |
 
-Two of these deserve emphasis because they cut *against* convenient claims.
+**3 of 3** behavior-changing bugs found, with zero model calls. `semver`'s own 329 tests detect **none** of them.
 
-**The oracle trade-off went against expectation.** Metamorphic properties are
-the stronger oracle — they cannot encode a pre-existing bug as expected — and
-they are the *weaker* detector: 1/6 gaps versus 6/6 for snapshot witnesses.
-Neither dominates. Both are reported.
+Issue `#463` is the interesting one. It removes dead code, so finding no witness is the correct answer, and it independently confirms the equivalent-mutant verdict this project reached from the other direction. Placebo flagged that block unkillable; upstream deleted it in January 2025.
 
-**Variance shows the outcome is stable and the mechanism is not.** Admitted
-counts were identical across three runs; retry recoveries swung from 0 to 2
-under nominally identical settings. That asymmetry is exactly why the retry loop
-is reported as unproven rather than as a contribution.
+### 3.4 A second repository
 
-**One external validation worth noting.** Placebo's equivalent-mutant triage
-concluded that a mutant in `bump_build` sits in dead code and cannot be killed.
-Upstream reached the same conclusion independently: issue **#463**, fixed in
-January 2025, removes that duplicated block. The historical-bug harness confirms
-it from the other direction by finding no behavioral witness for that commit.
+| subject | domain | tests | faults | mutation score |
+|---|---|---:|---:|---:|
+| `semver` | version comparison and boundary logic | 329 | 185 | **96.2%** |
+| `inflection` | string transformation | 455 | 76 | **85.5%** |
 
-### Two evaluations, kept deliberately separate
+The scores differ substantially, which is the useful part. The method reports a property of each suite rather than returning a constant.
 
-The controlled **authoring benchmark** uses 12 known-detectable faults, paired
-across every condition, and grades frozen suites on faults hidden from the
-generator. These 12 faults are a test-authoring benchmark; they are not claimed
-to be gaps in semver's expert suite.
+### 3.5 Oracle strength against detection power
 
-The **real-gap closure runs** start from the 6 behaviorally confirmed faults
-that actually survived semver's 329-test suite. The agent-only run closed 3/6;
-the later deterministic counterexample search closed 6/6. See
-[`experiments/real_gap_closure.json`](experiments/real_gap_closure.json),
-[`experiments/gap_search.json`](experiments/gap_search.json), and
-[`artifacts/suites/search_gap_patch.py`](artifacts/suites/search_gap_patch.py).
+| oracle level | hardcodes expected values | confirmed gaps detected |
+|---|:--:|---:|
+| level 4, execution snapshot | yes | **6 of 6** |
+| level 3, metamorphic properties | **no** | 1 of 6 |
+
+All twelve metamorphic properties were verified sound on clean code. The result went against expectation and is reported rather than resolved: the stronger oracle is the weaker detector. Snapshot witnesses close every gap but pin behavior rather than correctness. Metamorphic properties close far fewer but cannot encode an existing bug as expected.
+
+### 3.6 Run-to-run variance
+
+Three independent repeated runs of one condition, percentile bootstrap over the observed values:
+
+| measure | values | median | 95% CI |
+|---|---|---:|---|
+| candidates admitted | 5, 5, 5 | 5.0 | [5.0, 5.0] |
+| cases recovered by retry | 1, 0, 2 | 1.0 | [0.0, 2.0] |
+
+The asymmetry is the finding. The outcome is stable while the mechanism credited for it is not, which is exactly why no strong claim is made for the retry loop.
 
 ---
 
-## 3. Results
+## 4. Testing and consistency
 
-See [`artifacts/report.md`](artifacts/report.md) for the generated tables, and
-[`experiments/results.json`](experiments/results.json) for the raw numbers behind
-every claim.
+```console
+$ python -m pytest tests -q
+37 passed
 
-The **primary confirmatory result** uses the 29-fault manifest frozen before
-generation: oracle-grounded Placebo detected **9/29 (31%)**, versus **0/29** for
-the direct-prompt baseline. The independently useful all-eligible robustness
-analysis gives the same 31% headline on 80 faults:
+$ python scripts/check_consistency.py
+72/72 checks pass
+```
 
-| condition | retained tests | held-out faults detected |
-|---|---:|---:|
-| direct-prompt baseline | 0 | 0/80 (0%) |
-| fault shown, one attempt | 3 | 6/80 (8%) |
-| fault shown + verification retries | 5 | 15/80 (19%) |
-| implementation withheld | 4 | 14/80 (18%) |
-| **oracle-grounded Placebo** | **7** | **25/80 (31%)** |
+The 37 unit tests guard the parts that carry claims: mutant identity must be content-derived and stable, the held-out split must not leak, the admission gates must reject tests that cheat, and minimization must never drop a fault.
 
-The zero-test baseline is a measured limitation of this local 7B model, not an
-oracle-filtered strawman: all 12 first candidates were offered to the suite;
-one was malformed and the other 11 failed on correct code. The baseline was
-allowed to retain every clean candidate, while Placebo retained only candidates
-with two-sided execution evidence.
+`check_consistency.py` is the more unusual one. It re-derives every headline number from the stored artifacts and fails if the writeup drifts from the data. It is what caught a stale report contradicting its own raw results, and it runs in CI so the drift cannot return.
 
-On the end-to-end repository task, deterministic counterexample search produced
-a six-test patch that remained green with all 329 existing tests and closed
-**6/6 confirmed gaps (100%)**, with zero model calls. The earlier agent-only
-three-test patch closed 3/6 and remains as an intermediate changelog artifact,
-not the final result. Its evidence bundle can be rebuilt and independently
-replayed with:
+Both evidence bundles are independently replayable:
+
+```console
+$ python scripts/verify_bundle.py --bundle artifacts/bundle
+  7/7 claims hold
+$ python scripts/verify_bundle.py --bundle artifacts/real-gap-bundle
+  3/3 claims hold
+```
+
+---
+
+## 5. Quickstart
+
+**Requirements:** Python 3.11 or newer (3.13.0 used here). No GPU and no API key needed for the central result.
 
 ```bash
-python scripts/build_bundle.py --real-gaps --out artifacts/real-gap-bundle
-python scripts/verify_bundle.py --bundle artifacts/real-gap-bundle
+git clone https://github.com/RajdeepKushwaha5/Placebo.git
+cd Placebo
+python -m pip install -r requirements.lock
+python -m pip install -e .
+
+python -m pytest tests -q             # 37 passed
+python scripts/check_consistency.py   # 72/72 checks pass
 ```
 
-### Acceptance criteria and the challenging case
+### Reproduce the central claim without a model
 
-A usable run must satisfy three gates: every shipped test stays green on clean
-code, the final condition beats the same-model direct-prompt baseline on the
-frozen confirmatory set, and the resulting patch closes at least one manually
-confirmed repository gap without changing production code. Placebo met all
-three. The reported 6/6 is completeness only for this manually triaged six-gap
-set, not evidence that the repository has no other faults.
+```bash
+python scripts/run_census.py --workers 6     # about 2 minutes
+python scripts/triage_survivors.py
+```
 
-The hardest cases were two `Version.is_compatible` boundary mutants and a
-`Version.parse` arithmetic mutant. Across three attempts per case, the agent's
-proposed inputs never distinguished clean from faulty behavior, so all three
-were rejected as `TARGET_MUTANT_SURVIVED`. That failure led to the deterministic
-counterexample search above, which closed all three and then all six confirmed
-gaps. The highest-value next capability is no longer more search for semver; it
-is validating transfer on pinned external repositories and historical bugs.
+Expected output:
+
+```
+  mutants enumerated : 185
+  killed             : 178
+  SURVIVED (triage)  : 7
+  mutation score     : 96.2%
+```
+
+Then triage confirms 6 detectable gaps and 1 equivalent mutant.
+
+### Reproduce the evidence that does not depend on mutation score
+
+Every command below is deterministic and makes zero model calls.
+
+```bash
+python scripts/run_gap_search.py        # 6/6 real gaps, about 36 s
+python scripts/run_historical_bugs.py   # 3/3 real bugs, about 1 s
+python scripts/run_multirepo_census.py  # both subjects, about 4 min
+python scripts/run_metamorphic.py       # level-3 oracle, about 7 s
+python scripts/run_variance.py          # bootstrap intervals, instant
+```
+
+### Optional: the full agent comparison
+
+This part needs a local model.
+
+```bash
+# install Ollama from https://ollama.com, then:
+ollama pull qwen2.5:7b
+python scripts/run_pipeline.py --conditions baseline_A placebo_D --limit 12
+```
+
+Full details, expected outputs and runtimes for every path are in [`docs/REPRODUCTION.md`](docs/REPRODUCTION.md).
 
 ---
 
-## 4. Improvement changelog
+## 6. Configuration and data
 
-Every row is an experiment that was actually run, with the evidence that decided
-what happened next. Two of them are negative results that changed the design.
+There is nothing to configure. No `.env` file, no API keys, no external services.
+
+| input | where it comes from |
+|---|---|
+| Subject code under test | vendored at a pinned commit in `subject/` and `subjects/` |
+| Fault corpus | generated deterministically by the AST engine, not stored input |
+| Model | local Ollama at `http://127.0.0.1:11434`, only for the agent conditions |
+| Dependencies | three pinned packages in `requirements.lock` |
+
+```
+pytest==9.0.2
+pytest-cov==7.1.0
+coverage==7.16.0
+```
+
+Placebo's own engine imports only the Python standard library (`ast`, `tokenize`, `subprocess`, `hashlib`).
+
+Model settings, when used, are pinned and recorded in every evidence bundle: `qwen2.5:7b`, quantization `Q4_K_M`, digest `845dbda0ea48ed74...`, `temperature=0`, `seed=7`, `num_ctx=8192`.
+
+---
+
+## 7. Architecture
+
+```mermaid
+flowchart TD
+    A[Subject repository<br/>pinned commit] --> B[AST mutation engine<br/>content-hashed fault ids]
+    B --> C[Oracle runner<br/>disposable workspace copy]
+    C --> D{Existing suite<br/>detects the fault?}
+    D -->|yes| E[covered]
+    D -->|no| F[candidate gap]
+    F --> G[Equivalence triage<br/>executable, by hand]
+    G --> H[Confirmed detectable gap]
+
+    H --> I[Test author agent<br/>local 7B model]
+    H --> J[Counterexample search<br/>deterministic, zero model calls]
+    I --> K[Oracle probe<br/>observe, never predict, values]
+    J --> K
+    K --> L[Admission gates]
+    L -->|rejected with a code| I
+    L -->|admitted| M[Marginal-value audit]
+    M --> N[Set-cover minimization<br/>re-audited by execution]
+    N --> O[Evidence bundle<br/>independently replayable]
+    O --> P[Human reviewer decides]
+
+    style J fill:#e6f4ec,stroke:#1a7f4b
+    style L fill:#faf1d8,stroke:#8a6d1f
+    style P fill:#fbe9e9,stroke:#a33232
+```
+
+### What each stage guarantees
+
+| stage | guarantee |
+|---|---|
+| **Mutation engine** | fault ids are `sha256` over commit, file, function, operator, span and replacement, so enumeration order cannot change them and a split can be frozen |
+| **Oracle runner** | every execution happens in a disposable copy; a mutated file is always restored |
+| **Triage** | equivalent mutants are excluded from scoring rather than counted as failures |
+| **Oracle probe** | expected values are observed by executing the reference, never predicted by the model |
+| **Admission gates** | a test is admitted only if it passes on clean code **and** fails on its specific fault, both verified by pytest |
+| **Audit** | value is measured against the existing suite and against sibling tests at once |
+| **Minimization** | a set cover over novel faults, then re-audited by execution to confirm no loss |
+
+### The admission gate sequence
+
+```
+candidate test
+    |
+    +-- static checks ......... parses, defines a test, has an assertion,
+    |                           no skip/xfail/mock/subprocess/source inspection
+    +-- collection ............ pytest can import it
+    +-- clean HEAD ............ passes against correct code
+    +-- target fault .......... FAILS with the fault injected
+    +-- causal check .......... failure is behavioral, not an import error
+    +-- repeat stability ...... same verdict across runs
+    |
+    v
+admitted, with the fault it detects recorded alongside it
+```
+
+Anything that fails a gate is rejected with a structured code (`CLEAN_HEAD_FAILED`, `TARGET_MUTANT_SURVIVED`, `FORBIDDEN_PATTERN`, and eight more). Those codes are what made the project's central finding visible, because they turned "it did not work" into a distribution.
+
+---
+
+## 8. Project structure
+
+```
+placebo/
+├── src/placebo/
+│   ├── cli.py                     audit / gaps / explain / verify
+│   ├── mutation/
+│   │   ├── engine.py              AST fault injection, surgical one-token spans
+│   │   ├── models.py              content-hashed fault identity
+│   │   ├── census.py              parallel suite-versus-fault sweep
+│   │   └── split.py               frozen, fingerprinted held-out split
+│   ├── verification/
+│   │   ├── runner.py              the oracle: does the suite detect this fault?
+│   │   ├── admission.py           gate sequence and rejection codes
+│   │   └── prober.py              observe values by execution, sandboxed
+│   ├── audit/marginal.py          counterfactual value, set-cover minimization
+│   ├── search/
+│   │   ├── counterexample.py      deterministic input search, zero model calls
+│   │   └── metamorphic.py         level-3 oracle, twelve properties
+│   ├── agents/                    local model client and test author
+│   ├── evaluation/                suite assembly, model-free repair, scoring
+│   └── evidence/bundle.py         replayable evidence bundles
+│
+├── scripts/                       one entry point per experiment (25 files)
+├── tests/                         37 tests guarding the load-bearing parts
+│
+├── subject/                       vendored semver 3.0.4 (BSD-3), pinned
+├── subjects/inflection/           vendored inflection 0.5.1 (MIT), pinned
+│
+├── artifacts/
+│   ├── report.md                  generated comparison report
+│   ├── evidence.html              self-contained visual evidence page
+│   ├── census_summary.json        the 96.2% headline
+│   ├── survivor_triage.json       6 real gaps, 1 equivalent
+│   ├── bundle/                    benchmark evidence bundle
+│   └── real-gap-bundle/           real-gap evidence bundle
+│
+├── experiments/                   every stored result as JSON
+├── trajectories/                  6 rendered agent walkthroughs plus raw JSONL
+└── docs/
+    ├── REPRODUCTION.md            exact commands, expected output, runtimes
+    └── LIMITATIONS.md             written to help a reviewer find weak points
+```
+
+---
+
+## 9. Decisions and trade-offs
+
+### A custom mutation engine instead of mutmut or cosmic-ray
+
+`mutmut` requires `os.fork()`, which does not exist on Windows, and standardizing on Docker purely to obtain a mutation tool would raise the bar for anyone reproducing the work. More importantly, both tools address mutants by session ordering, and a held-out split cannot be frozen against an identifier that changes between runs.
+
+The cost is roughly 400 lines of engine to maintain and a smaller operator set than a mature tool. The benefit is content-derived fault identity, which the entire evaluation depends on.
+
+### A local 7B model instead of a hosted frontier model
+
+The claim under test is about scaffolding, not about model strength. Every condition is paired on the same model, so the relative finding holds. A local model also means judges reproduce results with no API key, no credentials in the repository and no spend.
+
+The cost is lower absolute numbers and a baseline weak enough to be worth flagging. That is stated rather than hidden.
+
+### Observe expected values instead of predicting them
+
+Measurement drove this. In the mutant-aware condition, 18 of 21 rejections were the model asserting a wrong expected value, and it could not repair them even when handed the exact assertion diff. Executing the reference removes that entire failure class by construction.
+
+The trade-off is real and is the project's sharpest limitation. A snapshot pins behavior against change, not against error. If the implementation is already wrong, the witness records the wrong answer as expected.
+
+### Deterministic search instead of more model attempts
+
+The residual failure was input choice, and enumeration does that better than language. The search is fully deterministic with a fixed cost-ordered candidate pool, so results cannot be re-rolled until they look good.
+
+The cost is that the input domain is hand-designed for this subject. Generalizing it to an arbitrary repository is unsolved and is listed as future work.
+
+### Minimization as set cover instead of a per-test filter
+
+The first minimizer kept only tests flagged `VALUABLE`. When several sibling tests detect the same fault each one looks redundant, so dropping them all loses the fault. The tool's own output exposed this by reporting three faults covered alongside a one-test patch, which is arithmetically impossible. Minimization is now a greedy set cover, verified afterwards by re-executing the reduced patch, with three regression tests.
+
+---
+
+## 10. CI
+
+[`.github/workflows/placebo.yml`](.github/workflows/placebo.yml) runs on every push and pull request.
+
+**No language model runs in CI, by design.** Putting an LLM in the hot path makes every build nondeterministic, slow and dependent on a provider staying up. What CI should do is re-execute evidence that already exists and fail if any claim stops holding.
+
+| step | what it proves |
+|---|---|
+| unit tests | the engine still behaves |
+| mutation census | the 96.2% figure still reproduces |
+| survivor triage | 6 gaps and 1 equivalent still hold |
+| counterexample search | 6 of 6 still closes with zero model calls |
+| bundle replay | every recorded claim still holds |
+| consistency check | the writeup still matches the data |
+| report drift guard | fails if `artifacts/report.md` is stale relative to committed results |
+
+That last step is the one worth stealing. It makes a stale number a build failure rather than something a reviewer has to catch.
+
+---
+
+## 11. Improvement changelog
+
+Every row is an experiment that was run, with the evidence that decided what happened next. Three rows are negative results that changed the design.
 
 | # | What was tried, and why | Evidence | Decision |
 |---|---|---|---|
-| **Baseline** | Direct prompt: show the function, ask for a test. What a developer gets from an assistant today, then keeps whatever passes. | 12 tests offered, **0 retained**, 0/29 confirmatory and 0/80 all-eligible. Eleven failed against correct code (for example, calling nonexistent `semver.cmp_prerelease_tag` or preserving prerelease data that `bump_minor` drops); one was malformed. Outputs were 170–538 tokens against a 900-token cap, so none was truncated — see `artifacts/report.md` "Candidate disposition". | Established the floor. A direct prompt produced twelve plausible-looking candidates, none mergeable after one clean execution. |
-| **1** | **Mutation-guided context.** Show the agent the one-line diff of a known-detectable evaluation fault. Isolates *context* as the variable. | 3/12 admitted; 4/29 confirmatory and 6/80 all-eligible faults detected | **Kept.** Targeting a concrete behavioral difference beats asking for "more tests". |
-| **2a** | **Verification retry loop.** Feed structured rejection codes back and allow 3 attempts. | 5/12 admitted; 5/29 confirmatory and 15/80 all-eligible; 2.4× one-shot model time | **Investigated.** More tests helped the broader set, but the confirmatory gain was only one fault. |
-| **2b** | **Diagnosis.** Most rejections were `CLEAN_HEAD_FAILED` — the model asserting a wrong expected value. The loop used pytest with `--tb=no`, so feedback lacked assertion detail; this was fixed to `--tb=short`. | Three stored B runs each admitted 5/12, but retry recoveries varied **0, 1 and 2** despite fixed settings | **Learning.** Better feedback helps sometimes, but retry benefit is small and stochastic; it is not the main contribution. |
-| **3** | **Contract grounding.** Withhold the implementation body; the agent writes against the signature and docstring, so it cannot copy current behavior. | 4/12 admitted; 6/29 confirmatory but 14/80 all-eligible | **Mixed.** It improved the frozen sample but regressed slightly on the broader analysis; isolation also removed useful context. |
-| **4** | **Oracle grounding.** Since the dominant failure was *guessing a value that can be computed*, stop asking for it. The model proposes only input expressions; those are executed against clean `HEAD` and against the fault; the assertion is synthesized from what clean `HEAD` actually returned, keeping only expressions that genuinely differ. | 7/12 admitted; **9/29** confirmatory and **25/80** all-eligible; `CLEAN_HEAD_FAILED` eliminated entirely | **Kept.** It wins on both sets and removes an entire failure class by construction rather than prompting. |
-| **5** | **Marginal-value audit.** Generating tests answers the easy question. The reviewer's question is counterfactual: which test detects something nothing else detects? Score every test against the existing suite *and* its siblings. Pytest names which tests failed, giving a whole kill-matrix column per fault launch; total runtime still depends on suite speed. | Audited 33 agent-written tests against 185 faults: **1** sole detector, 3 sibling-redundant, 18 already covered by the repo, 11 red on clean code. Minimized 33 -> 2 tests detecting **the same 3 faults**, verified by re-execution. | **Kept, and it reframed the project.** Placebo audits tests rather than only generating them. |
-| **5b** | **Bug found by the audit's own output.** The first minimizer kept only `VALUABLE` tests. But when several siblings detect one fault, each is "redundant" and dropping all of them loses the fault outright. | Reported 3 gaps closed but a 1-test minimized patch — an arithmetic impossibility that exposed the bug | **Fixed.** Minimization is now a greedy set cover over novel faults, with three regression tests and post-hoc verification by re-execution. |
-| **6** | **Deterministic counterexample search.** The remaining failure was input search, not value prediction. For the semver adapter, enumerate a hand-designed boundary-heavy domain, evaluate every candidate differentially against clean and faulty code, and shrink to the simplest input that separates them. The model is not involved in this run. | Real-gap closure **3/6 -> 6/6**, with **0 model calls** and 36 s wall time. Found witnesses the agent never proposed, including an error-message-only fault invisible to `pytest.raises(TypeError)`. | **Kept.** The single largest improvement in the project, and it removed the model from the loop rather than adding to it. |
-| **Removed** | **Contract-only isolation as the final architecture.** It was intended to stop implementation copying, but hid context the input-search agent needed. | 6/29 beat B on the frozen set, while 14/80 trailed B's 15/80 and D reached 25/80 | **Removed from the final configuration.** D keeps implementation context but removes value prediction from the model. |
+| **Baseline** | Direct prompt: show the function, ask for a test, keep whatever passes. | 12 offered, **0 retained**, 0/29. Eleven failed on correct code, one malformed. Outputs 170 to 538 tokens against a 900 cap, so nothing was truncated. | Established the floor, and the floor is zero. |
+| **1** | **Mutation-guided context.** Show the one-line diff of a known-detectable fault, isolating context as the variable. | 3/12 admitted; 4/29 confirmatory | **Kept.** Targeting a concrete behavioral difference beats asking for more tests. |
+| **2a** | **Verification retry loop.** Feed structured rejection codes back, allow three attempts. | 5/12; 2.4x the model time | **Investigated.** The gain looked suspiciously small. |
+| **2b** | **Diagnosis.** Most rejections were wrong expected values. The loop ran pytest with `--tb=no`, so feedback carried no assertion detail. Fixed to `--tb=short`. | Three stored runs admitted 5/12 each, but retry recoveries varied **0, 1 and 2** under identical settings | **Negative result.** Better feedback helps inconsistently. Retry is not the contribution. |
+| **3** | **Contract grounding.** Withhold the implementation body so current behavior cannot be copied. | 6/29 confirmatory but 14/80 all-eligible, below the retry condition | **Mixed.** Isolation removed useful context along with the harmful part. |
+| **4** | **Oracle grounding.** Stop asking for a value that can be computed. The model proposes inputs; execution supplies the expected values. | 7/12 admitted; **9/29** and **25/80**; `CLEAN_HEAD_FAILED` eliminated entirely | **Kept.** An entire failure class removed by construction. |
+| **5** | **Marginal-value audit.** Score every test counterfactually against the existing suite and its siblings, one execution per fault. | 33 tests audited: **1** sole detector, 3 sibling-redundant, 18 already covered, 11 red. Minimized 33 to 2 preserving the same 3 faults, verified by re-execution. | **Kept, and it reframed the project.** Placebo audits tests rather than only generating them. |
+| **5b** | **Bug found by the audit's own output.** The first minimizer kept only `VALUABLE` tests, which loses any fault several siblings share. | Reported 3 faults covered alongside a 1-test patch, an impossibility | **Fixed.** Greedy set cover, post-hoc verification, three regression tests. |
+| **6** | **Deterministic counterexample search.** The residual failure was input choice, so enumeration replaced the model for that step. | Real-gap closure **3/6 becomes 6/6**, with **0 model calls** and 36 s | **Kept.** The largest improvement in the project, and it removed the model from the loop rather than adding to it. |
+| **Removed** | **Contract-only isolation as the final architecture.** Intended to stop implementation copying, it hid context the input search needed. | 6/29 beat the retry condition while 14/80 trailed it; oracle grounding beat both | **Removed** from the recommended configuration. |
 
 ---
 
-## 5. Main failure mode
+## 12. Main failure mode
 
-Full detail in [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md), written to help a
-reviewer find the weak points rather than to list strengths.
+**Expected values are a snapshot of current behavior, not verified correctness.**
 
-**Placebo measures a proxy.** Mutation score is not real-fault detection.
-Single-token mutants are not distributed like real bugs, some survivors are
-*equivalent mutants* that no test can kill, and a suite tuned to kill mutants
-could in principle overfit to the operator set. Placebo mitigates this: the
-29-fault confirmatory set was frozen before generation; every scored fault is
-known-detectable by the expert suite; and same-line siblings are excluded. The
-80-fault all-eligible result is transparently labeled post-generation. This does
-not eliminate proxy risk. All 7 survivors of semver's own suite were manually triaged
-through the same execution oracle: 6 are confirmed detectable gaps and 1 is an
-equivalent mutant. The raw 96.2% and equivalence-adjusted 96.7% scores are both
-reported.
+Oracle grounding runs the chosen input against the reference implementation and records whatever came back. That guarantees consistency with the current implementation, not correctness with respect to intent. If `semver` already contained a bug on some input, Placebo would faithfully record the buggy output as expected, and the resulting test would lock that bug in. This is the same implementation-copying failure the project criticizes in AI-written tests, displaced one level.
 
-**Nondeterminism.** Ollama with partial GPU offload is not bitwise
-deterministic even at `temperature=0` with a fixed seed. Identical first attempts
-produced different outputs across two runs. Admission verdicts are deterministic
-(they are pytest runs); model outputs are not. Reported figures are single runs
-and should be read with that variance in mind.
+What a witness pins is behavior against **change**, not against **error**. That is genuinely useful for regression detection and genuinely insufficient for correctness.
 
-## 6. Hot take
+The oracle hierarchy this should eventually use:
 
-**Don't ask a language model to search. Ask it what to search for.**
+| level | oracle | strength | implemented |
+|---|---|---|:--:|
+| 1 | explicit specification, examples, invariants | correctness with respect to intent | no |
+| 2 | agreement between independent implementations | correctness by cross-check | no |
+| 3 | metamorphic properties | correctness of relationships, no hardcoded outputs | **yes** |
+| 4 | single-reference execution snapshot | consistency only | **yes, and used by default** |
 
-The two largest gains in this project both came from *removing* work from the
-model, and both were found by reading rejection codes rather than by intuition.
-
-First, it was guessing return values the implementation could simply be executed
-to obtain — 86% of failures, eliminated by construction. Then, with that fixed,
-it was guessing *inputs*: the agent closed 3 of 6 real gaps. A deterministic
-enumerator over the same input space closed **6 of 6, with zero model calls, in
-36 seconds**.
-
-The model is good at knowing which input domain is worth exploring. It is bad at
-exploring it. Those are different jobs, and giving both to the same component is
-why so much agent engineering underperforms.
-
-**Corollary: don't count tests. Account for them.**
-
-Every metric in common use — test count, coverage, even mutation score — is a
-*total*. Totals cannot tell you whether a test earns its place, because the
-question is counterfactual: *what failure becomes detectable only because this
-test exists?*
-
-The measurement is uncomfortable. Auditing 33 tests this project's own agents
-wrote, against 185 fault models:
-
-| verdict | count |
-|---|---:|
-| sole detector of a fault the existing suite misses | **1** |
-| detects a real gap, but a sibling detects it too | 3 |
-| only re-detects what the repository already catches | 18 |
-| red or unstable against correct code | 11 |
-
-Thirty-three tests. Two are needed. The minimized patch detects **the same 3
-faults** as the full patch, verified by re-execution — a 94% cut in review
-burden with no loss of protection. A suite can grow indefinitely while its
-ability to catch a regression does not move at all, and nothing on a normal
-dashboard would show it.
-
-**Never let a language model guess a value you can compute.**
-
-The single largest improvement in this project was not a better prompt, a bigger
-model, more retries, or another agent. It was noticing — from rejection-code
-data, not intuition — that 86% of failures were the model predicting a return
-value that the correct implementation was sitting right there ready to tell us.
-Removing that responsibility from the model eliminated the entire failure class.
-
-The corollary is the uncomfortable half: a retry loop feels like engineering,
-but its benefit here was small and unstable — zero to two recovered cases across
-three stored runs. Feedback only helps when the model can act on it. Keep a
-bounded retry as a safety net, measure it, and prefer removing an unnecessary
-decision from the model over asking it more politely.
+Level 3 exists and works, and measurably detects fewer faults than level 4. Both numbers are reported. Nothing in this repository is a correctness proof, which is why the word "proof" is avoided in favor of **executable witness**.
 
 ---
 
-## 7. What existed before this competition
+## 13. Hot take
 
-| Component | Origin |
+> **Do not ask a language model to search. Ask it what to search for.**
+
+The two largest gains in this project both came from taking work **away** from the model, and both were found by reading rejection-code distributions rather than by intuition.
+
+The first was value prediction. The model kept guessing return values that the implementation could simply be executed to obtain. That was 18 of 21 rejections, and it was eliminated by construction rather than by prompting.
+
+The second was input search. With values fixed, the agent still closed only 3 of 6 real gaps because it could not find inputs where correct and faulty code diverge. A deterministic enumerator over the same space closed **6 of 6, with zero model calls, in 36 seconds**.
+
+A language model is good at knowing where to look. It is bad at looking. Those are different jobs, and handing both to the same component is why a lot of agent engineering underperforms.
+
+The corollary, and the reason the audit exists:
+
+> **Do not count tests. Account for them.**
+
+Every metric in common use is a total. Totals cannot say whether a test earns its place, because that question is counterfactual. Thirty-three tests, two needed, and nothing on a normal dashboard would have shown it.
+
+---
+
+## 14. What existed before this competition
+
+| component | origin |
 |---|---|
-| `subject/` — semver 3.0.4 source and its 329 tests | **Third party.** BSD-3-Clause, vendored at pinned commit `6adf876`. See [`subject/PROVENANCE.md`](subject/PROVENANCE.md). Unmodified except two git symlinks materialized as files on Windows. |
-| `qwen2.5:7b` via Ollama | **Third party.** Off-the-shelf local model, unmodified, not fine-tuned. |
+| `subject/` semver 3.0.4 source and its 329 tests | **Third party.** BSD-3-Clause, vendored at pinned commit `6adf876`. See [`subject/PROVENANCE.md`](subject/PROVENANCE.md). Unmodified apart from two git symlinks materialized as files on Windows. |
+| `subjects/inflection/` 0.5.1 and its 455 tests | **Third party.** MIT, pinned at `b00d4d3`. See its `PROVENANCE.md`. |
+| `qwen2.5:7b` via Ollama | **Third party.** Off-the-shelf, unmodified, not fine-tuned. |
 | pytest, pytest-cov, coverage | **Third party.** Pinned in `requirements.lock`. |
-| `src/placebo/**` — mutation engine, oracle runner, admission gates, held-out split, prober, agent, evaluator | **Written for this competition.** |
+| `src/placebo/**` | **Written for this competition.** Mutation engine, oracle runner, admission gates, held-out split, prober, audit, counterexample search, metamorphic oracle, agent, evaluator, CLI. |
 | `scripts/**`, `tests/**`, all experiments, manifests and reports | **Written for this competition.** |
 
-Placebo's engine depends only on the Python standard library (`ast`,
-`tokenize`, `subprocess`, `hashlib`). No mutation-testing framework is used:
-`mutmut` requires `os.fork()` and cannot run on Windows, and both it and
-`cosmic-ray` address mutants by session ordering, which cannot be frozen into a
-reproducible held-out split.
+No mutation-testing framework is used. Subject code integrity is checked in CI against recorded hashes in `benchmark/manifests/subject_hashes.json`.
 
-## 8. Safety and scope
+---
 
-- The agent never modifies production code. A patch-scope gate rejects any
-  candidate touching anything outside the generated-test path, and the runner
-  restores the original file after every mutation.
-- All execution happens in a disposable workspace copy of the subject, never in
-  the source tree.
-- Static gates reject candidates using `subprocess`, sockets, `urllib`, `eval`,
-  `exec`, mocking, source inspection, or `skip`/`xfail`.
-- The oracle accepts only an AST-validated `semver` expression DSL and executes
-  it in a disposable subprocess with Python builtins disabled. A production
-  deployment should additionally use a networkless OS container.
-- Output is a **proposed test patch for human review**, never an automatic
-  merge. The tech lead is the decision-maker; Placebo supplies the evidence.
-- The subject is public, permissively licensed code. No private data, no
-  credentials, no personal information.
+## 15. Safety and scope
 
-## 9. Reproduction
+- **Production code is never modified.** A patch-scope gate rejects any candidate touching anything outside the generated-test path, and the runner restores the original file after every mutation.
+- **Nothing merges automatically.** Output is a proposal for a qualified human reviewer. The evidence bundle exists so that review is cheap.
+- **Execution is sandboxed.** Everything runs in a disposable workspace copy, never in the source tree.
+- **The oracle probe is constrained.** Model-proposed expressions are validated against a small AST allowlist and executed with a minimal builtins whitelist. Imports, file access, dunder attributes and process control are rejected. This is not an OS-level boundary; production use against untrusted providers should add a networkless container with resource limits.
+- **Static gates reject cheating.** Candidates using `skip`, `xfail`, mocks, `subprocess`, sockets, `eval`, `exec` or source inspection are refused.
+- **Public data only.** Both subjects are public, permissively licensed libraries. No private data, no credentials, no personal information.
 
-See [`docs/REPRODUCTION.md`](docs/REPRODUCTION.md) for exact commands, versions,
-runtimes and expected output from a clean environment.
+---
+
+## 16. Limitations
+
+[`docs/LIMITATIONS.md`](docs/LIMITATIONS.md) is written to help a reviewer find the weak points rather than to list strengths. The four that matter most:
+
+1. **Mutation score is a proxy.** Single-token faults are not distributed like real defects. Partly offset by the real historical bugs in section 3.3, but four real bugs is not four hundred, and a BugsInPy-scale study remains the right next step.
+2. **The base is narrow.** Two Python libraries, one module each, one small local model.
+3. **Most conditions are single runs.** Variance is measured for one condition. The headline comparison carries no error bars.
+4. **Compute budget is not fully controlled.** The best condition uses more model calls than the baseline. A resampling control is implemented in `scripts/run_equal_budget.py`; any result from it appears in `experiments/equal_budget.json` or is not claimed at all.
+
+A blinded reviewer study is prepared in `artifacts/review-study/` with patches stripped of condition markers, a rating form and a pre-registered analysis. **No ratings have been collected and no human acceptance rate is claimed anywhere.**
+
+---
+
+## License
+
+MIT for Placebo's own code. See [`LICENSE`](LICENSE). Vendored third-party subjects keep their original licenses.

@@ -43,10 +43,22 @@ main failure mode (§5), hot take (§6), what existed before the competition (§
 | Second repository (`inflection`): 85.5% vs semver's 96.2% | `experiments/multirepo_census.json` |
 | Metamorphic oracle: 12 properties sound, detects 1/6 | `experiments/metamorphic.json` |
 | Run-to-run variance: admitted stable, retry recoveries 0–2 | `experiments/variance.json` |
+| Equal-budget control: does scaffolding beat more calls? | `experiments/equal_budget.json` |
+| Repeated headline runs with bootstrap intervals | `experiments/seeds.json` |
 | Held-out comparison: baseline 0%, best condition 31% | `experiments/results.json` |
 
 Rendered together: [`artifacts/report.md`](artifacts/report.md) and the
 self-contained [`artifacts/evidence.html`](artifacts/evidence.html).
+
+## Packaging the archive
+
+```bash
+python scripts/package_submission.py
+```
+
+Writes `placebo-submission.zip` and verifies it before you upload: under the
+size limit, all required deliverables present, no credentials, no workspace or
+cache files. Current archive: **0.36 MB across 177 files**.
 
 ## The product surface
 
@@ -84,8 +96,9 @@ weak points rather than to list strengths. The four that matter most:
 2. **Mutation score is a proxy.** Partly offset by the real historical bugs, but
    four bugs is not four hundred (§1).
 3. **Narrow base.** Two Python libraries, one small local model (§5, §6).
-4. **Single runs.** Variance is measured for one condition only; the headline
-   comparison has no error bars (§3).
+4. **Single runs.** See §3. `experiments/seeds.json` carries repeated runs of
+   the headline conditions where they were completed; anything absent from that
+   file was not run, and no interval is claimed for it.
 
 Nothing in this repository claims a correctness proof. The artifacts are
 executable witnesses: each shows a test passes on clean code and fails on one
