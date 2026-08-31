@@ -314,6 +314,27 @@ def main() -> int:
               "reviewer study: patches carry no condition markers",
               ", ".join(leaked[:3]))
 
+    # -- 6i. equal-budget control -------------------------------------------
+    equal_budget = load(ROOT / "experiments" / "equal_budget.json")
+    if equal_budget:
+        detected = equal_budget["best_of_n_detects"]
+        faults = equal_budget["faults"]
+        check(detected <= faults,
+              "equal-budget: detections cannot exceed the fault set",
+              f"{detected}/{faults}")
+        check(equal_budget["kept_green_candidate"] <= faults,
+              "equal-budget: green candidates cannot exceed the fault set")
+        actual = sum(1 for r in equal_budget["results"]
+                     if r.get("any_draw_detects_fault"))
+        check(actual == detected,
+              "equal-budget: reported detections match the per-fault records",
+              f"{actual}")
+        if results and "placebo_D" in results.get("conditions", {}):
+            scaffolded = results["conditions"]["placebo_D"]
+            check(equal_budget["model_calls"] > scaffolded["usage"]["calls"],
+                  "equal-budget baseline was given at least as much compute",
+                  f"{equal_budget['model_calls']} vs {scaffolded['usage']['calls']} calls")
+
     # -- 7. no credentials --------------------------------------------------
     secret = re.compile(r"sk-[A-Za-z0-9_-]{15,}|BEGIN (?:RSA|OPENSSH) PRIVATE KEY")
     leaked = [

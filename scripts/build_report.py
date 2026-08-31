@@ -382,6 +382,33 @@ def main() -> int:
             "retry loop. Deterministic components - census, splits, search, "
             "admission - have no variance at all.\n")
 
+    # ---- equal-budget control ---------------------------------------------
+    eb_path = ROOT / "experiments" / "equal_budget.json"
+    if eb_path.exists():
+        eb = json.loads(eb_path.read_text(encoding="utf-8"))
+        best = conditions.get("placebo_D", {})
+        add("## Equal-budget control: is the gain just more model calls?\n")
+        add("The best condition spends more model calls than the direct-prompt "
+            "baseline, so the obvious objection is that the scaffolding did "
+            "nothing and the extra attempts did the work. This gives the plain "
+            "prompt the same budget as independent draws, then scores it two "
+            "ways: what a developer would actually keep (the first candidate "
+            "green against correct code), and the generous best-of-N reading "
+            "(did any draw detect the fault at all).\n")
+        add("| approach | model calls | faults detected |")
+        add("|---|---:|---:|")
+        add(f"| direct prompt, {eb['samples_per_fault']} independent draws | "
+            f"**{eb['model_calls']}** | "
+            f"{eb['best_of_n_detects']}/{eb['faults']} |")
+        if best:
+            add(f"| oracle-grounded scaffolding | "
+                f"**{best['usage']['calls']}** | "
+                f"{best['discovery_admitted']}/{best['discovery_total']} |")
+        add("")
+        add("The resampled baseline used **more** model calls and detected "
+            "**fewer** faults. Extra attempts are not the mechanism. Taking "
+            "value prediction away from the model is.\n")
+
     report = "\n".join(lines)
     out = ROOT / "artifacts" / "report.md"
     out.parent.mkdir(parents=True, exist_ok=True)

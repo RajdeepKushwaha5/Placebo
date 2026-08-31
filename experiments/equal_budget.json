@@ -1,0 +1,315 @@
+{
+  "best_of_n_detects": 3,
+  "comparison_note": "placebo_D admitted 7/12 using 23 model calls",
+  "faults": 12,
+  "kept_green_candidate": 3,
+  "method": "independent resampling of the direct prompt at matched budget",
+  "model_calls": 36,
+  "model_seconds": 1988.6,
+  "output_tokens": 14989,
+  "results": [
+    {
+      "any_draw_detects_fault": false,
+      "kept_a_green_candidate": false,
+      "mutant_id": "0a016d6d36518355",
+      "samples": [
+        {
+          "detects_fault": false,
+          "draw": 1,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": false,
+          "draw": 2,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": false,
+          "draw": 3,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        }
+      ]
+    },
+    {
+      "any_draw_detects_fault": false,
+      "kept_a_green_candidate": false,
+      "mutant_id": "1ac3986cca492880",
+      "samples": [
+        {
+          "detects_fault": false,
+          "draw": 1,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": false,
+          "draw": 2,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": false,
+          "draw": 3,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        }
+      ]
+    },
+    {
+      "any_draw_detects_fault": true,
+      "kept_a_green_candidate": true,
+      "mutant_id": "03fe90d993fa6512",
+      "samples": [
+        {
+          "detects_fault": false,
+          "draw": 1,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": true,
+          "draw": 2,
+          "green_on_clean": true,
+          "verdict": "ADMITTED"
+        },
+        {
+          "detects_fault": true,
+          "draw": 3,
+          "green_on_clean": true,
+          "verdict": "ADMITTED"
+        }
+      ]
+    },
+    {
+      "any_draw_detects_fault": false,
+      "kept_a_green_candidate": false,
+      "mutant_id": "0311cef58a002912",
+      "samples": [
+        {
+          "detects_fault": false,
+          "draw": 1,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": false,
+          "draw": 2,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": false,
+          "draw": 3,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        }
+      ]
+    },
+    {
+      "any_draw_detects_fault": false,
+      "kept_a_green_candidate": false,
+      "mutant_id": "1486704c2686bc4b",
+      "samples": [
+        {
+          "detects_fault": false,
+          "draw": 1,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": false,
+          "draw": 2,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": false,
+          "draw": 3,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        }
+      ]
+    },
+    {
+      "any_draw_detects_fault": false,
+      "kept_a_green_candidate": false,
+      "mutant_id": "5c7e1209a4ecd4ba",
+      "samples": [
+        {
+          "detects_fault": false,
+          "draw": 1,
+          "green_on_clean": false,
+          "verdict": "SYNTAX_ERROR"
+        },
+        {
+          "detects_fault": false,
+          "draw": 2,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": false,
+          "draw": 3,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        }
+      ]
+    },
+    {
+      "any_draw_detects_fault": true,
+      "kept_a_green_candidate": true,
+      "mutant_id": "0723feea7643f22a",
+      "samples": [
+        {
+          "detects_fault": false,
+          "draw": 1,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": true,
+          "draw": 2,
+          "green_on_clean": true,
+          "verdict": "ADMITTED"
+        },
+        {
+          "detects_fault": true,
+          "draw": 3,
+          "green_on_clean": true,
+          "verdict": "ADMITTED"
+        }
+      ]
+    },
+    {
+      "any_draw_detects_fault": false,
+      "kept_a_green_candidate": false,
+      "mutant_id": "1d331d5b9501ed06",
+      "samples": [
+        {
+          "detects_fault": false,
+          "draw": 1,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": false,
+          "draw": 2,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": false,
+          "draw": 3,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        }
+      ]
+    },
+    {
+      "any_draw_detects_fault": false,
+      "kept_a_green_candidate": false,
+      "mutant_id": "2efccfe40d947649",
+      "samples": [
+        {
+          "detects_fault": false,
+          "draw": 1,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": false,
+          "draw": 2,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": false,
+          "draw": 3,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        }
+      ]
+    },
+    {
+      "any_draw_detects_fault": false,
+      "kept_a_green_candidate": false,
+      "mutant_id": "085c382c12637d90",
+      "samples": [
+        {
+          "detects_fault": false,
+          "draw": 1,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": false,
+          "draw": 2,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": false,
+          "draw": 3,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        }
+      ]
+    },
+    {
+      "any_draw_detects_fault": true,
+      "kept_a_green_candidate": true,
+      "mutant_id": "05cc88d0e0cba70d",
+      "samples": [
+        {
+          "detects_fault": true,
+          "draw": 1,
+          "green_on_clean": true,
+          "verdict": "ADMITTED"
+        },
+        {
+          "detects_fault": true,
+          "draw": 2,
+          "green_on_clean": true,
+          "verdict": "ADMITTED"
+        },
+        {
+          "detects_fault": true,
+          "draw": 3,
+          "green_on_clean": true,
+          "verdict": "ADMITTED"
+        }
+      ]
+    },
+    {
+      "any_draw_detects_fault": false,
+      "kept_a_green_candidate": false,
+      "mutant_id": "1ca242d1ca74bb80",
+      "samples": [
+        {
+          "detects_fault": false,
+          "draw": 1,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": false,
+          "draw": 2,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        },
+        {
+          "detects_fault": false,
+          "draw": 3,
+          "green_on_clean": false,
+          "verdict": "CLEAN_HEAD_FAILED"
+        }
+      ]
+    }
+  ],
+  "samples_per_fault": 3,
+  "usd_cost": 0.0,
+  "wall_s": 2242.9
+}

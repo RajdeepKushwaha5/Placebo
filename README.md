@@ -8,7 +8,7 @@ It runs entirely on a local 7B model on a consumer laptop GPU. No API key, no cr
 |---|---|
 | **Repository** | https://github.com/RajdeepKushwaha5/Placebo |
 | **Verify in 3 minutes** | `pytest tests -q` then `python scripts/check_consistency.py` |
-| **Status** | 37 unit tests, 73 consistency checks, 2 evidence bundles replaying clean |
+| **Status** | 37 unit tests, 77 consistency checks, 2 evidence bundles replaying clean |
 
 ---
 
@@ -192,6 +192,22 @@ Three independent repeated runs of one condition, percentile bootstrap over the 
 | cases recovered by retry | 1, 0, 2 | 1.0 | [0.0, 2.0] |
 
 The asymmetry is the finding. The outcome is stable while the mechanism credited for it is not, which is exactly why no strong claim is made for the retry loop.
+
+
+### 3.7 The compute control
+
+The best condition spends more model calls than the baseline, which invites the
+obvious objection: maybe the scaffolding does nothing and the extra attempts do
+the work. Giving the plain prompt the same budget as independent draws settles
+it.
+
+| approach | model calls | faults detected |
+|---|---:|---:|
+| direct prompt, 3 independent draws | **36** | 3 of 12 |
+| oracle-grounded scaffolding | **23** | **7 of 12** |
+
+The resampled baseline spent more compute and detected fewer faults. Extra
+attempts are not the mechanism.
 
 ---
 

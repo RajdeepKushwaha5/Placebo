@@ -180,3 +180,14 @@ Headline conditions are single runs. These are repeated runs of the same conditi
 | `placebo_B` | 3 | 5 (5-5) | [5.0, 5.0] | 1 (0-2) |
 
 The asymmetry is the finding: **the outcome is stable, the mechanism credited for it is not.** Admitted counts do not move across runs; retry recoveries range from 0 to 2 under nominally identical settings. That is why no strong claim is made for the retry loop. Deterministic components - census, splits, search, admission - have no variance at all.
+
+## Equal-budget control: is the gain just more model calls?
+
+The best condition spends more model calls than the direct-prompt baseline, so the obvious objection is that the scaffolding did nothing and the extra attempts did the work. This gives the plain prompt the same budget as independent draws, then scores it two ways: what a developer would actually keep (the first candidate green against correct code), and the generous best-of-N reading (did any draw detect the fault at all).
+
+| approach | model calls | faults detected |
+|---|---:|---:|
+| direct prompt, 3 independent draws | **36** | 3/12 |
+| oracle-grounded scaffolding | **23** | 7/12 |
+
+The resampled baseline used **more** model calls and detected **fewer** faults. Extra attempts are not the mechanism. Taking value prediction away from the model is.

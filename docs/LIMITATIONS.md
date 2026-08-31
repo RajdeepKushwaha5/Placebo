@@ -180,32 +180,27 @@ holds. What the snapshot oracle limits is the absolute interpretation — "this
 test detects a regression" is supported; "this test verifies the function is
 right" is not.
 
-## 10. Compute budget is not controlled for
+## 10. Compute budget, now controlled for
 
-Placebo's best condition uses more model calls than the direct-prompt baseline
-(23 versus 12 on the same twelve faults). A fair objection follows: did the
-scaffolding help, or did it simply buy more attempts? Recent work suggests plain
-resampling at equal budget can rival feedback-driven loops, so this deserves a
-measurement rather than an argument.
+Placebo's best condition uses more model calls than the direct-prompt baseline,
+so a fair objection follows: did the scaffolding help, or did it simply buy more
+attempts? Recent work suggests plain resampling at equal budget can rival
+feedback-driven loops, so this needed a measurement rather than an argument.
 
-**Status: implemented, not run.** `scripts/run_equal_budget.py` draws N
-independent samples from the *plain* prompt at matched budget and scores them
-two ways — what a developer would keep (the first candidate green on clean code)
-and the generous best-of-N reading (did *any* draw detect the fault). It is a
-single command:
+**Status: run.** `scripts/run_equal_budget.py` gave the plain prompt three
+independent draws per fault and scored the result two ways, as a developer would
+use it (keep the first candidate green on correct code) and under a generous
+best-of-N reading (did any draw detect the fault).
 
-```bash
-python scripts/run_equal_budget.py --samples 3 --limit 12
-```
+| approach | model calls | faults detected |
+|---|---:|---:|
+| direct prompt, 3 independent draws | 36 | 3/12 |
+| oracle-grounded scaffolding | 23 | 7/12 |
 
-It did not run before submission because the local model server was stopped for
-memory reasons and a ~25-minute generation run did not fit the remaining window.
-No result from it is claimed anywhere.
+The resampled baseline spent **more** compute and detected **fewer** faults, on
+the same twelve faults with the same model and the same admission gates. Extra
+attempts are not the mechanism.
 
-What can be said from data already collected: the `mutant_aware_B1` versus
-`placebo_B` pair *is* a budget comparison at fixed context — one attempt versus
-three, 12 calls versus 29 — and the extra attempts bought 3/12 to 5/12. The
-largest gain in the project came from the opposite direction: deterministic
-counterexample search closed 6/6 with **zero** model calls. That is suggestive
-that budget was not the mechanism, but it is not the controlled experiment, and
-this section stays open until that command has been run.
+This closes the objection for this subject and this model. It does not
+generalise on its own: one subject, one model, one run of each arm.
+
