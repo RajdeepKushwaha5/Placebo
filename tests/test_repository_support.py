@@ -183,3 +183,82 @@ def test_doctor_report_is_json_serialisable():
 
     report = diagnose(ROOT / "subjects/inflection", quick=True)
     json.dumps(report.to_dict())
+
+
+# -- the CLI is repository-independent -------------------------------------
+
+
+def _cli(*argv: str) -> tuple[int, str]:
+    """Invoke the CLI in-process and capture what a user would see."""
+    import contextlib
+    import io
+
+    from placebo.cli import main
+
+    buffer = io.StringIO()
+    with contextlib.redirect_stdout(buffer):
+        code = main(list(argv))
+    return code, buffer.getvalue()
+
+
+def test_cli_exposes_the_documented_commands():
+    from placebo.cli import build_parser
+
+    actions = build_parser()._subparsers._group_actions[0].choices
+    for command in ("audit", "gaps", "census", "explain", "verify", "doctor"):
+        assert command in actions, f"'{command}' is documented but not wired up"
+
+
+def test_no_module_level_subject_constants():
+    """The CLI must not carry one repository's identity as a global."""
+    import placebo.cli as cli
+
+    assert not hasattr(cli, "SUBJECT_COMMIT")
+    assert not hasattr(cli, "TARGET_FILES")
+
+
+def test_gaps_reports_each_repository_with_its_own_numbers():
+    """A second repository must not be described using the first one's census."""
+    semver_code, semver_out = _cli("gaps")
+    other_code, other_out = _cli("gaps", "--repo", "subjects/inflection")
+    assert semver_code == 0 and other_code == 0
+
+    assert "185 fault models" in semver_out
+    assert "76 fault models" in other_out
+    assert "185" not in other_out.split("Undetected")[0]
+
+
+def test_gaps_distinguishes_untriaged_from_equivalent():
+    """Calling an unexamined survivor 'equivalent' would assert something
+    nobody checked."""
+    _code, out = _cli("gaps", "--repo", "subjects/inflection")
+    assert "untriaged" in out
+    assert "REAL GAP" not in out, "inflection has no triage, so nothing is confirmed"
+
+    _code, semver_out = _cli("gaps")
+    assert "REAL GAP" in semver_out and "equivalent" in semver_out
+
+
+def test_doctor_exits_non_zero_on_an_unsupported_repository(tmp_path):
+    code, out = _cli("doctor", str(tmp_path), "--quick")
+    assert code == 1, "doctor must be usable as a pipeline gate"
+    assert "NOT SUPPORTED" in out
+
+
+def test_doctor_json_output_is_machine_readable():
+    import json
+
+    code, out = _cli("doctor", "subject", "--quick", "--json")
+    assert code == 0
+    payload = json.loads(out)
+    assert payload["supported"] is True
+    assert payload["config"]["name"] == "semver"
+
+
+def test_audit_refuses_without_a_fault_map(tmp_path):
+    """An unconfigured repository must be told what to run, not crash."""
+    patch = tmp_path / "t.py"
+    patch.write_text("def test_x():\n    assert True\n", encoding="utf-8")
+    code, out = _cli("audit", str(patch), "--repo", str(tmp_path))
+    assert code == 2
+    assert "doctor" in out or "census" in out

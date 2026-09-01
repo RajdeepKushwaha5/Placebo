@@ -2,10 +2,16 @@
 
 The commands are named for the questions a reviewer actually asks:
 
+    placebo doctor   can Placebo audit this repository, and if not why not?
+    placebo census   which injected faults does the existing suite miss?
+    placebo gaps     show me those misses
     placebo audit    which of these tests earn their place?
-    placebo gaps     what does my suite fail to detect?
     placebo explain  why does this specific test exist?
     placebo verify   can I re-check these claims myself?
+
+Each command takes the repository to work on and reads its `.placebo.toml`
+contract, so nothing here is tied to a particular project. The vendored semver
+subject is the default only so existing invocations keep working.
 
 Every command is read-only with respect to the repository under test. Nothing
 here merges, rewrites production code, or acts without a human deciding to.
@@ -20,12 +26,117 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
-SUBJECT_COMMIT = "6adf8765f6e21910f1f0c13151ce84f32f8d431d"
-TARGET_FILES = ["semver/version.py"]
 
 
 def _load(path: Path):
     return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+
+
+
+DEFAULT_REPO = "subject"
+
+
+def _resolve_repo(args: argparse.Namespace):
+    """Load the repository contract named by --repo.
+
+    Returns (config, census_dict, existing_kill_ids) or None after printing an
+    actionable message. Census results are stored per repository so auditing a
+    second project cannot silently reuse the first one's fault map.
+    """
+    from .config import ConfigError, load
+
+    raw = getattr(args, "repo", None) or DEFAULT_REPO
+    repo = Path(raw)
+    if not repo.is_absolute():
+        repo = (ROOT / repo) if (ROOT / repo).exists() else (Path.cwd() / repo)
+
+    try:
+        config = load(repo)
+    except ConfigError as exc:
+        print(f"  {exc}")
+        print("  Run 'placebo doctor <repo>' for a full preflight.")
+        return None
+
+    census = _load(_census_path(config)) or {}
+    existing = {mid for mid, r in census.items() if r.get("status") == "killed"}
+    return config, census, existing
+
+
+def _census_path(config) -> Path:
+    """Where this repository's fault map lives.
+
+    The original single-subject path is preserved so existing artifacts and
+    every stored claim about them stay valid.
+    """
+    if config.name == "semver":
+        return ROOT / "artifacts" / "census.json"
+    return ROOT / "artifacts" / f"census_{config.name}.json"
+
+
+def _triage_path(config) -> Path:
+    """Where this repository's equivalence triage lives, if it has one."""
+    if config.name == "semver":
+        return ROOT / "artifacts" / "survivor_triage.json"
+    return ROOT / "artifacts" / f"survivor_triage_{config.name}.json"
+
+
+# --------------------------------------------------------------------------
+# census
+# --------------------------------------------------------------------------
+
+def cmd_census(args: argparse.Namespace) -> int:
+    """Build the fault map: which injected faults does the existing suite miss?"""
+    from .config import ConfigError, load
+    from .mutation.census import run_census
+    from .mutation.engine import enumerate_subject
+    from .mutation.models import write_json
+
+    repo = Path(args.repo)
+    if not repo.is_absolute():
+        repo = (ROOT / repo) if (ROOT / repo).exists() else (Path.cwd() / repo)
+    try:
+        config = load(repo)
+    except ConfigError as exc:
+        print(f"  {exc}")
+        print("  Run 'placebo doctor <repo>' for a full preflight.")
+        return 2
+
+    targets = config.resolved_targets()
+    if not targets:
+        print(f"  No mutation targets resolved for '{config.name}'.")
+        return 2
+
+    faults = enumerate_subject(config.root, targets, config.commit or "working-tree")
+    if args.faults:
+        faults = faults[: args.faults]
+
+    print(f"\n  {config.name}: {len(faults)} faults across "
+          f"{len({m.qualname for m in faults})} functions")
+    print(f"  Running the existing suite once per fault "
+          f"({args.workers} workers). This is the slow, exhaustive pass.\n")
+
+    try:
+        census = run_census(config.root, ROOT / ".placebo-ws" / f"census-{config.name}",
+                            faults, workers=args.workers,
+                            timeout_s=config.timeout_seconds * 5)
+    except RuntimeError as exc:
+        # The runner refuses to score faults when the clean suite is red.
+        print(f"  {exc}".splitlines()[0])
+        print("  A red suite makes every verdict meaningless. Fix it, then retry.")
+        return 2
+
+    summary = census.summary()
+    out = _census_path(config)
+    write_json(out, {mid: run.to_dict() for mid, run in sorted(census.runs.items())})
+
+    print(f"  faults evaluated : {summary['scorable']}")
+    print(f"  detected         : {summary['killed']}")
+    print(f"  UNDETECTED       : {summary['survived']}")
+    print(f"  mutation score   : {summary['mutation_score']:.1%}")
+    print(f"  wall             : {summary['wall_s']}s")
+    print(f"\n  fault map -> {out.relative_to(ROOT)}")
+    print(f"  Next: placebo gaps --repo {args.repo}\n")
+    return 0
 
 
 # --------------------------------------------------------------------------
@@ -47,15 +158,25 @@ def cmd_audit(args: argparse.Namespace) -> int:
         print(f"no such patch: {suite_path}")
         return 2
 
-    census = _load(ROOT / "artifacts" / "census.json") or {}
-    existing = {mid for mid, r in census.items() if r["status"] == "killed"}
-    faults = enumerate_subject(ROOT / "subject", TARGET_FILES, SUBJECT_COMMIT)
+    resolved = _resolve_repo(args)
+    if resolved is None:
+        return 2
+    config, census, existing = resolved
+    if not census:
+        print(f"  No fault map for '{config.name}'. Run: placebo census {args.repo}")
+        return 2
+    faults = enumerate_subject(
+        config.root, config.resolved_targets(), config.commit or "working-tree"
+    )
     if args.faults:
         # Never truncate away the faults the existing suite misses: doing so
         # would report a gap-closing patch as detecting nothing novel.
         faults = sample_fault_corpus(faults, existing, args.faults)
 
-    runner = SubjectRunner(ROOT / "subject", ROOT / ".placebo-ws" / "cli", timeout_s=60)
+    runner = SubjectRunner(
+        config.root, ROOT / ".placebo-ws" / f"cli-{config.name}",
+        timeout_s=config.timeout_seconds,
+    )
     runner.prepare()
 
     code = suite_path.read_text(encoding="utf-8")
@@ -120,15 +241,33 @@ def cmd_audit(args: argparse.Namespace) -> int:
 
 def cmd_gaps(args: argparse.Namespace) -> int:
     """Report faults the existing suite does not detect."""
-    census = _load(ROOT / "artifacts" / "census.json")
-    summary = _load(ROOT / "artifacts" / "census_summary.json")
-    triage = _load(ROOT / "artifacts" / "survivor_triage.json")
-    if not census or not summary:
-        print("no census found - run: python scripts/run_census.py")
+    resolved = _resolve_repo(args)
+    if resolved is None:
+        return 2
+    config, census, _existing = resolved
+    if not census:
+        print(f"  No fault map for '{config.name}'. Run: placebo census {args.repo}")
         return 2
 
+    # Derive the summary from this repository's own census. Reading the stored
+    # summary unconditionally would report semver's numbers for every project.
+    scorable = sum(1 for r in census.values()
+                   if r.get("status") in ("killed", "survived"))
+    killed = sum(1 for r in census.values() if r.get("status") == "killed")
+    summary = {
+        "scorable": scorable,
+        "killed": killed,
+        "mutation_score": killed / scorable if scorable else 0.0,
+    }
+    # Triage verdicts are recorded per repository; absent means untriaged.
+    triage = _load(_triage_path(config))
+
     from .mutation.engine import enumerate_subject
-    faults = {m.id: m for m in enumerate_subject(ROOT / "subject", TARGET_FILES, SUBJECT_COMMIT)}
+    faults = {
+        m.id: m for m in enumerate_subject(
+            config.root, config.resolved_targets(), config.commit or "working-tree"
+        )
+    }
     survivors = [mid for mid, r in census.items() if r["status"] == "survived"]
 
     print(f"\n  Suite: {summary['scorable']} fault models evaluated")
@@ -144,7 +283,13 @@ def cmd_gaps(args: argparse.Namespace) -> int:
         if not fault:
             continue
         verdict = verdicts.get(mid, "UNTRIAGED")
-        mark = "REAL GAP  " if verdict == "CONFIRMED_REAL_GAP" else "equivalent"
+        # Untriaged is not the same as equivalent. Reporting an unexamined
+        # survivor as "no test can distinguish it" would assert something
+        # nobody checked.
+        mark = {
+            "CONFIRMED_REAL_GAP": "REAL GAP  ",
+            "EQUIVALENT_OR_CONTRACT_ONLY": "equivalent",
+        }.get(verdict, "untriaged ")
         print(f"    {mark}  {mid}  {fault.label}")
     print("\n  'equivalent' means no test can distinguish it - excluded from scoring.\n")
     return 0
@@ -235,13 +380,26 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_audit = sub.add_parser("audit", help="classify tests in a patch by marginal value")
     p_audit.add_argument("patch", help="path to the test file to audit")
+    p_audit.add_argument("--repo", default=DEFAULT_REPO,
+                         help="repository to audit against (needs .placebo.toml)")
     p_audit.add_argument("--faults", type=int, default=0, help="cap the fault corpus")
     p_audit.add_argument("--minimize", action="store_true",
                          help="also write the smallest patch that loses no detection")
     p_audit.set_defaults(func=cmd_audit)
 
     p_gaps = sub.add_parser("gaps", help="list faults the existing suite misses")
+    p_gaps.add_argument("--repo", default=DEFAULT_REPO,
+                        help="repository to report on (needs .placebo.toml)")
     p_gaps.set_defaults(func=cmd_gaps)
+
+    p_census = sub.add_parser(
+        "census", help="build the fault map for a repository")
+    p_census.add_argument("repo", nargs="?", default=DEFAULT_REPO,
+                          help="repository to census (needs .placebo.toml)")
+    p_census.add_argument("--workers", type=int, default=4)
+    p_census.add_argument("--faults", type=int, default=0,
+                          help="cap the fault corpus for a quick pass")
+    p_census.set_defaults(func=cmd_census)
 
     p_explain = sub.add_parser("explain", help="why does this generated test exist?")
     p_explain.add_argument("test", help="test name or substring")
