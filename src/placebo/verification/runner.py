@@ -17,6 +17,7 @@ import shutil
 import subprocess
 import sys
 import time
+import uuid
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -61,6 +62,60 @@ class RunResult:
         if self.returncode in (_EXIT_INTERNAL, _EXIT_USAGE, _EXIT_NO_TESTS):
             return True
         return bool(_COLLECT_ERROR_RE.search(self.stdout + self.stderr))
+
+
+def allocate_workspace(base: Path, repository: str, commit: str,
+                       run_id: str | None = None) -> Path:
+    """A workspace path no other run will use.
+
+    Two runs against the same repository previously shared one directory, and
+    preparing a workspace deletes and recopies it, so the second run pulled the
+    subject out from under the first. Separating by run makes that impossible
+    rather than unlikely.
+
+    The path is not created here; `SubjectRunner.prepare` does that.
+    """
+    safe_repo = _slug(repository) or "repo"
+    safe_commit = _slug(commit)[:12] or "working-tree"
+    return Path(base) / safe_repo / safe_commit / (run_id or uuid.uuid4().hex[:12])
+
+
+def _slug(value: str) -> str:
+    """Filesystem-safe form of a repository name or commit."""
+    return "".join(c if (c.isalnum() or c in "-_.") else "-" for c in str(value))
+
+
+def prune_workspaces(base: Path, max_age_hours: float = 24.0) -> list[Path]:
+    """Remove run directories left behind by crashed runs.
+
+    Only leaf run directories older than the cutoff are removed, so a running
+    audit is never touched: its directory was created when it started and a
+    live run is younger than the cutoff, while its files are also being
+    written. Directories that cannot be removed are skipped rather than raising.
+    """
+    base = Path(base)
+    if not base.is_dir():
+        return []
+
+    cutoff = time.time() - (max_age_hours * 3600)
+    removed: list[Path] = []
+    for repo_dir in base.iterdir():
+        if not repo_dir.is_dir():
+            continue
+        for commit_dir in repo_dir.iterdir():
+            if not commit_dir.is_dir():
+                continue
+            for run_dir in commit_dir.iterdir():
+                if not run_dir.is_dir():
+                    continue
+                try:
+                    if run_dir.stat().st_mtime < cutoff:
+                        SubjectRunner._force_remove(run_dir)
+                        if not run_dir.exists():
+                            removed.append(run_dir)
+                except OSError:  # pragma: no cover - in use by another run
+                    continue
+    return removed
 
 
 class SubjectRunner:
@@ -141,6 +196,22 @@ class SubjectRunner:
             ignore=shutil.ignore_patterns("__pycache__", "*.pyc", ".pytest_cache"),
             dirs_exist_ok=True,
         )
+
+    def cleanup(self) -> None:
+        """Remove this run's workspace, and nothing else.
+
+        Only the run directory is removed. Its parents are shared with other
+        runs of the same repository and commit, so they are left alone even
+        when they happen to be empty.
+        """
+        self._force_remove(self.workspace)
+
+    def __enter__(self) -> "SubjectRunner":
+        self.prepare()
+        return self
+
+    def __exit__(self, *exc) -> None:
+        self.cleanup()
 
     def _read(self, relpath: str) -> str:
         return (self.workspace / relpath).read_text(encoding="utf-8")

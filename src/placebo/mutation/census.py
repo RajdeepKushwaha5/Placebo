@@ -98,7 +98,9 @@ def run_census(
     workspace_root = Path(workspace_root)
 
     # One isolated workspace per worker, handed out through a queue so a
-    # worker never shares a mutated file with another.
+    # worker never shares a mutated file with another. `workspace_root` is
+    # already unique to this run, so the per-worker directories beneath it
+    # cannot collide with another process's workers either.
     pool: queue.Queue[SubjectRunner] = queue.Queue()
     runners: list[SubjectRunner] = []
     for i in range(workers):

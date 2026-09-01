@@ -117,6 +117,7 @@ def cmd_census(args: argparse.Namespace) -> int:
     from .config import ConfigError, load
     from .mutation.census import run_census
     from .mutation.engine import enumerate_subject
+    from .verification.runner import allocate_workspace
     from .mutation.models import write_json
 
     repo = Path(args.repo)
@@ -144,7 +145,10 @@ def cmd_census(args: argparse.Namespace) -> int:
           f"({args.workers} workers). This is the slow, exhaustive pass.\n")
 
     try:
-        census = run_census(config.root, ROOT / ".placebo-ws" / f"census-{config.name}",
+        census = run_census(config.root,
+                            allocate_workspace(ROOT / ".placebo-ws",
+                                               f"census-{config.name}",
+                                               config.commit or "working-tree"),
                             faults, workers=args.workers,
                             timeout_s=config.timeout_seconds * 5,
                             source_roots=config.source_roots)
@@ -211,6 +215,12 @@ def cmd_audit(args: argparse.Namespace) -> int:
 def _run_audit(args, config, existing, faults, name, label, code,
                minimized_path, scope_note: str = "") -> int:
     """Audit one patch and print the report. Shared by audit and audit-pr."""
+    from .verification.runner import prune_workspaces
+
+    # Sweep run directories abandoned by earlier crashes. Only leaves older
+    # than a day are removed, so a concurrent run is never disturbed.
+    prune_workspaces(ROOT / ".placebo-ws")
+
     store = _open_cache(config, enabled=not args.no_cache)
     try:
         return _audit_and_report(args, config, existing, faults, name, label,
@@ -224,10 +234,14 @@ def _run_audit(args, config, existing, faults, name, label, code,
 def _audit_and_report(args, config, existing, faults, name, label, code,
                       minimized_path, scope_note, store) -> int:
     from .audit.marginal import AUDIT_PATH, audit_suite, minimal_patch
-    from .verification.runner import SubjectRunner
+    from .verification.runner import SubjectRunner, allocate_workspace
 
+    # Every run gets its own workspace. Sharing one per repository meant a
+    # second concurrent run deleted this one's subject files mid-audit.
     runner = SubjectRunner(
-        config.root, ROOT / ".placebo-ws" / f"cli-{config.name}",
+        config.root,
+        allocate_workspace(ROOT / ".placebo-ws", config.name,
+                           config.commit or "working-tree"),
         timeout_s=config.timeout_seconds,
         source_roots=config.source_roots,
     )

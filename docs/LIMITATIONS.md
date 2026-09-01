@@ -145,13 +145,14 @@ prediction eliminated `CLEAN_HEAD_FAILED` by construction.
   expressions. The workspace is disposable, but this is still not a hardened
   OS/container boundary; production use against untrusted model providers
   should add a networkless container and resource limits.
-- **Two runs against the same repository collide.** Execution workspaces are
-  named after the repository, and preparing one deletes and recopies it, so a
-  second concurrent run pulls the subject out from under the first. It surfaces
-  as a `FileNotFoundError` on a subject file, which looks like a corrupted
-  checkout rather than what it is. Run one audit at a time per repository. The
-  result cache is content-addressed and unaffected, so the second run loses time
-  rather than correctness.
+- Execution happens in a disposable directory copy, one per run, under
+  `.placebo-ws/<repository>/<commit>/<run-id>/`. Concurrent runs against the
+  same repository were previously a real hazard, since they shared a directory
+  and one would delete the other's subject files mid-audit; that is fixed and
+  covered by `tests/test_workspace_isolation.py`, which asserts that neither
+  run's workspace is destroyed, neither run's results are contaminated, both
+  caches stay valid, and cleanup removes only the owning run. Directories left
+  by a crashed run are swept after a day.
 
 ## 9. The oracle problem: what an "expected value" actually means
 
