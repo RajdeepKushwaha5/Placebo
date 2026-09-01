@@ -1,0 +1,19 @@
+# Placebo repository contract for the vendored semver subject.
+version = 1
+name = "semver"
+language = "python"
+commit = "6adf8765f6e21910f1f0c13151ce84f32f8d431d"
+
+test_command = ["python", "-m", "pytest", "-q"]
+
+source_roots = ["semver"]
+test_roots = ["tests"]
+
+mutation_targets = ["semver/version.py"]
+
+# The oracle probe may reference only these top-level names.
+import_names = ["semver"]
+
+timeout_seconds = 60
+adapter = "semver"
+notes = "Vendored at a pinned commit. See PROVENANCE.md."

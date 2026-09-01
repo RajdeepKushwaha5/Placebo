@@ -1,0 +1,18 @@
+# Placebo repository contract for the vendored inflection subject.
+version = 1
+name = "inflection"
+language = "python"
+commit = "b00d4d348b32ef5823221b20ee4cbd1d2d924462"
+
+test_command = ["python", "-m", "pytest", "-q"]
+
+source_roots = ["inflection"]
+test_roots = ["tests"]
+
+mutation_targets = ["inflection/__init__.py"]
+
+import_names = ["inflection"]
+
+timeout_seconds = 60
+adapter = "generic"
+notes = "Second subject: string transformation rather than boundary comparison."

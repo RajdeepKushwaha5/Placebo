@@ -25,10 +25,16 @@ from dataclasses import dataclass
 from ..mutation.models import Mutant
 from .runner import SubjectRunner
 
+# Top-level names a probe expression may reference. Callers with a
+# repository config pass its declared import_names; the default keeps
+# the vendored semver subject working unchanged.
+DEFAULT_ALLOWED_NAMES: tuple[str, ...] = ("semver",)
+
 _PROBE_SCRIPT = '''\
 import json, sys
 sys.path.insert(0, {workspace!r})
-import semver  # noqa: F401
+for _name in json.loads({modules!r}):
+    globals()[_name] = __import__(_name)
 
 # A minimal builtins whitelist. Passing an empty __builtins__ removes
 # str/repr/len, which silently turned every `str(...)` probe into a
@@ -45,7 +51,8 @@ expressions = json.loads({payload!r})
 out = []
 for expr in expressions:
     try:
-        value = eval(expr, {{"semver": semver, "__builtins__": _SAFE}})
+        value = eval(expr, {{**{{n: globals()[n] for n in json.loads({modules!r})}},
+                             "__builtins__": _SAFE}})
         out.append({{"expr": expr, "ok": True, "repr": repr(value)}})
     except Exception as exc:
         out.append({{"expr": expr, "ok": False,
@@ -78,12 +85,19 @@ class Observation:
         }
 
 
-def _evaluate(runner: SubjectRunner, expressions: list[str], timeout_s: int = 120) -> list[dict]:
+def _evaluate(
+    runner: SubjectRunner,
+    expressions: list[str],
+    timeout_s: int = 120,
+    allowed_names: tuple[str, ...] = DEFAULT_ALLOWED_NAMES,
+) -> list[dict]:
     """Run expressions inside the workspace and return their reprs."""
     if not expressions:
         return []
     script = _PROBE_SCRIPT.format(
-        workspace=str(runner.workspace), payload=json.dumps(expressions)
+        workspace=str(runner.workspace),
+        payload=json.dumps(expressions),
+        modules=json.dumps(list(allowed_names)),
     )
     env = dict(os.environ)
     env["PYTHONPATH"] = str(runner.workspace)
@@ -104,12 +118,15 @@ def _evaluate(runner: SubjectRunner, expressions: list[str], timeout_s: int = 12
 
 
 def observe(
-    runner: SubjectRunner, mutant: Mutant, expressions: list[str]
+    runner: SubjectRunner,
+    mutant: Mutant,
+    expressions: list[str],
+    allowed_names: tuple[str, ...] = DEFAULT_ALLOWED_NAMES,
 ) -> list[Observation]:
     """Evaluate each expression on clean HEAD and under the injected fault."""
-    clean = _evaluate(runner, expressions)
+    clean = _evaluate(runner, expressions, allowed_names=allowed_names)
     with runner.mutated(mutant):
-        mutated = _evaluate(runner, expressions)
+        mutated = _evaluate(runner, expressions, allowed_names=allowed_names)
 
     by_expr_clean = {r["expr"]: r for r in clean}
     by_expr_mut = {r["expr"]: r for r in mutated}
@@ -162,7 +179,11 @@ def synthesise_test(
     return ("\n".join(lines) + "\n", useful)
 
 
-def extract_expressions(text: str, limit: int = 8) -> list[str]:
+def extract_expressions(
+    text: str,
+    limit: int = 8,
+    allowed_names: tuple[str, ...] = DEFAULT_ALLOWED_NAMES,
+) -> list[str]:
     """Pull candidate expressions out of a model response.
 
     Accepts a fenced block or a bare list, one expression per line.
@@ -177,7 +198,7 @@ def extract_expressions(text: str, limit: int = 8) -> list[str]:
         line = raw.strip().lstrip("-*0123456789. ").strip()
         if not line or line.startswith("#"):
             continue
-        if "semver" not in line:
+        if not any(name in line for name in allowed_names):
             continue
         # Must parse as one expression from the deliberately small probe DSL.
         # The subprocess is disposable, but it is not an OS sandbox; rejecting
@@ -187,7 +208,7 @@ def extract_expressions(text: str, limit: int = 8) -> list[str]:
             tree = ast.parse(line, mode="eval")
         except SyntaxError:
             continue
-        if not _is_safe_probe(tree):
+        if not _is_safe_probe(tree, allowed_names):
             continue
         if line not in expressions:
             expressions.append(line)
@@ -204,12 +225,14 @@ _SAFE_NODES = (
 )
 
 
-def _is_safe_probe(tree: ast.AST) -> bool:
+def _is_safe_probe(
+    tree: ast.AST, allowed_names: tuple[str, ...] = DEFAULT_ALLOWED_NAMES
+) -> bool:
     """Validate the tiny expression language accepted by the oracle probe."""
     for node in ast.walk(tree):
         if not isinstance(node, _SAFE_NODES):
             return False
-        if isinstance(node, ast.Name) and node.id != "semver":
+        if isinstance(node, ast.Name) and node.id not in allowed_names:
             return False
         if isinstance(node, ast.Attribute) and node.attr.startswith("_"):
             return False
@@ -218,21 +241,21 @@ def _is_safe_probe(tree: ast.AST) -> bool:
             # forbidden. Calls must be attributes rooted in a semver expression.
             if not isinstance(node.func, ast.Attribute):
                 return False
-            if not _rooted_in_semver(node.func):
+            if not _rooted_in_allowed(node.func, allowed_names):
                 return False
             if any(keyword.arg is None for keyword in node.keywords):
                 return False
     return True
 
 
-def _rooted_in_semver(node: ast.AST) -> bool:
+def _rooted_in_allowed(node: ast.AST, allowed_names: tuple[str, ...]) -> bool:
     """True when an attribute/call chain ultimately starts at ``semver``."""
     if isinstance(node, ast.Name):
-        return node.id == "semver"
+        return node.id in allowed_names
     if isinstance(node, ast.Attribute):
-        return _rooted_in_semver(node.value)
+        return _rooted_in_allowed(node.value, allowed_names)
     if isinstance(node, ast.Call):
-        return _rooted_in_semver(node.func)
+        return _rooted_in_allowed(node.func, allowed_names)
     if isinstance(node, ast.Subscript):
-        return _rooted_in_semver(node.value)
+        return _rooted_in_allowed(node.value, allowed_names)
     return False

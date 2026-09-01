@@ -53,6 +53,13 @@ jobs:
       - name: Unit tests
         run: python -m pytest tests -q
 
+      - name: Repository support (both vendored subjects)
+        # Proves the generic path works for more than the original subject:
+        # each is described only by its .placebo.toml.
+        run: |
+          python -m placebo.cli doctor subject --quick
+          python -m placebo.cli doctor subjects/inflection --quick
+
       - name: Mutation census (deterministic, no model)
         run: python scripts/run_census.py --workers 2
 

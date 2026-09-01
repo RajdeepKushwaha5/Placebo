@@ -3,15 +3,16 @@
   "conditions": {
     "baseline_A": {
       "ci95": [
-        1.0,
+        0.0,
         1.0
       ],
       "max": 1.0,
-      "median": 1.0,
-      "min": 1.0,
-      "runs": 1,
+      "median": 0.5,
+      "min": 0.0,
+      "runs": 2,
       "values": [
-        1
+        1,
+        0
       ]
     }
   },
@@ -21,43 +22,55 @@
   "per_fault_admission": {
     "baseline_A": {
       "0311cef58a002912": [
+        false,
         false
       ],
       "03fe90d993fa6512": [
+        false,
         false
       ],
       "05cc88d0e0cba70d": [
-        true
+        true,
+        false
       ],
       "0723feea7643f22a": [
+        false,
         false
       ],
       "085c382c12637d90": [
+        false,
         false
       ],
       "0a016d6d36518355": [
+        false,
         false
       ],
       "1486704c2686bc4b": [
+        false,
         false
       ],
       "1ac3986cca492880": [
+        false,
         false
       ],
       "1ca242d1ca74bb80": [
+        false,
         false
       ],
       "1d331d5b9501ed06": [
+        false,
         false
       ],
       "2efccfe40d947649": [
+        false,
         false
       ],
       "5c7e1209a4ecd4ba": [
+        false,
         false
       ]
     }
   },
   "repeats_requested": 3,
-  "wall_s": 660.0
+  "wall_s": 1273.3
 }

@@ -196,6 +196,36 @@ def cmd_verify(args: argparse.Namespace) -> int:
     return verify_bundle.main()
 
 
+# --------------------------------------------------------------------------
+# doctor
+# --------------------------------------------------------------------------
+
+def cmd_doctor(args: argparse.Namespace) -> int:
+    """Report whether a repository can be audited, and what blocks it."""
+    from .doctor import diagnose, init_config, render
+
+    repo = Path(args.repo)
+    if not repo.is_absolute():
+        repo = (Path.cwd() / repo).resolve()
+
+    if args.init:
+        if not repo.is_dir():
+            print(f"no such directory: {repo}")
+            return 2
+        print(init_config(repo))
+        return 0
+
+    report = diagnose(repo, quick=args.quick)
+
+    if args.json:
+        print(json.dumps(report.to_dict(), indent=2, sort_keys=True))
+    else:
+        print(render(report))
+
+    # Non-zero exit so this can gate a pipeline.
+    return 0 if report.supported else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="placebo",
@@ -221,6 +251,17 @@ def build_parser() -> argparse.ArgumentParser:
     p_verify = sub.add_parser("verify", help="re-check every claim in a bundle")
     p_verify.add_argument("--bundle", default="artifacts/bundle")
     p_verify.set_defaults(func=cmd_verify)
+
+    p_doctor = sub.add_parser(
+        "doctor", help="can Placebo audit this repository, and if not why not?")
+    p_doctor.add_argument("repo", help="path to the repository to check")
+    p_doctor.add_argument("--init", action="store_true",
+                          help="print a starting .placebo.toml inferred from the layout")
+    p_doctor.add_argument("--quick", action="store_true",
+                          help="skip running the existing test suite")
+    p_doctor.add_argument("--json", action="store_true",
+                          help="emit the report as JSON")
+    p_doctor.set_defaults(func=cmd_doctor)
 
     return parser
 
