@@ -37,7 +37,8 @@ Written against the exit criteria below rather than against effort spent.
 | 1.2 parallel audit workers, checkpoint/resume beyond the cache | not started |
 | 1.3 containerised execution | **done** |
 | 2 oracle-level labels and brittleness policy | **done** |
-| 2 automatic L1 to L3 candidate sources | not started |
+| 2 automatic L1 sourcing from documentation | **done**, 21 on semver, 39 on inflection |
+| 2 automatic L2 sourcing (previous release, second implementation) | not started |
 | 3 fifty historical bugs across eight to ten projects | **blocked** |
 | 4 blinded reviewer study | **blocked** |
 | 5 SARIF output and a GitHub Action | **done** |

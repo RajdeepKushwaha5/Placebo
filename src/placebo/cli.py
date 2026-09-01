@@ -6,6 +6,7 @@ The commands are named for the questions a reviewer actually asks:
     placebo census   which injected faults does the existing suite miss?
     placebo gaps     show me those misses
     placebo audit    which of these tests earn their place?
+    placebo oracles  what does this repository already state about itself?
     placebo explain  why does this specific test exist?
     placebo verify   can I re-check these claims myself?
 
@@ -599,6 +600,70 @@ def cmd_audit_pr(args: argparse.Namespace) -> int:
 
 
 # --------------------------------------------------------------------------
+# oracles
+# --------------------------------------------------------------------------
+
+def cmd_oracles(args: argparse.Namespace) -> int:
+    """Report the oracles a repository already states, strongest first.
+
+    Every test Placebo generates is L4, because its expected values come from
+    running the implementation. This finds the places where the repository has
+    already said what it intends, so an assertion can cite a source instead of
+    inventing an answer.
+    """
+    from .sourcing import source_oracles
+
+    resolved = _resolve_repo(args)
+    if resolved is None:
+        return 2
+    config, _census, _existing = resolved
+
+    targets = [config.root / t for t in config.resolved_targets()]
+    report = source_oracles(targets)
+
+    if not report.candidates:
+        print()
+        print(f"  {config.name}: no documented examples in "
+              f"{len(targets)} mutation target(s).")
+        print("  Every generated assertion here would be an L4 snapshot: it")
+        print("  records current behaviour, not intended behaviour.")
+        print()
+        return 0
+
+    print()
+    print(f"  {config.name}: {len(report.candidates)} oracle(s) sourced from "
+          f"the repository's own documentation")
+    print()
+    for label, count in report.by_level().items():
+        if count:
+            print(f"    {count:>3} {label}")
+    print()
+
+    for candidate in report.candidates[: args.limit]:
+        print(f"    {candidate.source}")
+        print(f"      {candidate.expression}")
+        first = candidate.expected.splitlines()[0]
+        print(f"      -> {first[:64]}")
+    if len(report.candidates) > args.limit:
+        print(f"    ... {len(report.candidates) - args.limit} more")
+
+    print()
+    print("  These are claims the authors made, not values Placebo observed.")
+    print("  A generated test citing one says where its answer came from.")
+    print()
+
+    if args.json:
+        out = Path(args.json)
+        if not out.is_absolute():
+            out = Path.cwd() / out
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps(report.to_dict(), indent=2), encoding="utf-8")
+        print(f"  written -> {out.name}")
+        print()
+    return 0
+
+
+# --------------------------------------------------------------------------
 # gaps
 # --------------------------------------------------------------------------
 
@@ -795,6 +860,16 @@ def build_parser() -> argparse.ArgumentParser:
     p_pr.add_argument("--minimize", action="store_true",
                       help="also write the smallest patch that loses no detection")
     p_pr.set_defaults(func=cmd_audit_pr)
+
+    p_oracles = sub.add_parser(
+        "oracles", help="what does this repository already state about itself?")
+    p_oracles.add_argument("--repo", default=DEFAULT_REPO,
+                           help="repository to inspect (needs .placebo.toml)")
+    p_oracles.add_argument("--limit", type=int, default=8,
+                           help="how many candidates to print")
+    p_oracles.add_argument("--json", metavar="PATH",
+                           help="write the full report")
+    p_oracles.set_defaults(func=cmd_oracles)
 
     p_gaps = sub.add_parser("gaps", help="list faults the existing suite misses")
     p_gaps.add_argument("--repo", default=DEFAULT_REPO,
