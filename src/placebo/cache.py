@@ -35,6 +35,7 @@ import hashlib
 import json
 import sqlite3
 import sys
+import threading
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -122,7 +123,11 @@ class ResultCache:
         self.path = Path(path)
         self.fingerprint = fingerprint
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        self._db = sqlite3.connect(str(self.path))
+        # Parallel workers share one cache. A connection is bound to its
+        # creating thread unless told otherwise, and every access below is
+        # serialised by `_lock`, so permission and safety are both explicit.
+        self._lock = threading.Lock()
+        self._db = sqlite3.connect(str(self.path), check_same_thread=False)
         self._db.executescript(_SCHEMA)
         # Durability across an interrupted run without an fsync per write.
         self._db.execute("PRAGMA journal_mode=WAL")
@@ -158,26 +163,35 @@ class ResultCache:
     # -- access ------------------------------------------------------------
 
     def get(self, key: str) -> dict | None:
-        row = self._db.execute(
-            "SELECT payload FROM results WHERE key = ? AND fingerprint = ?",
-            (key, self.fingerprint),
-        ).fetchone()
-        if row is None:
-            self._misses += 1
-            return None
-        self._hits += 1
-        return json.loads(row[0])
+        with self._lock:
+            row = self._db.execute(
+                "SELECT payload FROM results WHERE key = ? AND fingerprint = ?",
+                (key, self.fingerprint),
+            ).fetchone()
+            if row is None:
+                self._misses += 1
+                return None
+            self._hits += 1
+            payload = row[0]
+        return json.loads(payload)
 
     def put(self, key: str, payload: dict) -> None:
+        """Record one result, committed before returning.
+
+        The commit is what makes an interrupted run resumable: a fault whose
+        result was known is on disk, so the next run does not re-execute it.
+        """
         import time
 
-        self._db.execute(
-            "INSERT OR REPLACE INTO results (key, fingerprint, payload, created_at) "
-            "VALUES (?, ?, ?, ?)",
-            (key, self.fingerprint, json.dumps(payload, sort_keys=True), time.time()),
-        )
-        self._db.commit()
-        self._writes += 1
+        encoded = json.dumps(payload, sort_keys=True)
+        with self._lock:
+            self._db.execute(
+                "INSERT OR REPLACE INTO results "
+                "(key, fingerprint, payload, created_at) VALUES (?, ?, ?, ?)",
+                (key, self.fingerprint, encoded, time.time()),
+            )
+            self._db.commit()
+            self._writes += 1
 
     # -- maintenance -------------------------------------------------------
 
@@ -186,27 +200,32 @@ class ResultCache:
 
     def entries(self) -> int:
         """Entries valid for the current environment."""
-        return self._db.execute(
-            "SELECT COUNT(*) FROM results WHERE fingerprint = ?", (self.fingerprint,)
-        ).fetchone()[0]
+        with self._lock:
+            return self._db.execute(
+                "SELECT COUNT(*) FROM results WHERE fingerprint = ?",
+                (self.fingerprint,),
+            ).fetchone()[0]
 
     def prune_stale(self) -> int:
         """Drop entries recorded under a different environment.
 
         They can never be read again, so keeping them only grows the file.
         """
-        cursor = self._db.execute(
-            "DELETE FROM results WHERE fingerprint != ?", (self.fingerprint,)
-        )
-        self._db.commit()
-        return cursor.rowcount
+        with self._lock:
+            cursor = self._db.execute(
+                "DELETE FROM results WHERE fingerprint != ?", (self.fingerprint,)
+            )
+            self._db.commit()
+            return cursor.rowcount
 
     def clear(self) -> None:
-        self._db.execute("DELETE FROM results")
-        self._db.commit()
+        with self._lock:
+            self._db.execute("DELETE FROM results")
+            self._db.commit()
 
     def close(self) -> None:
-        self._db.close()
+        with self._lock:
+            self._db.close()
 
     def __enter__(self) -> "ResultCache":
         return self

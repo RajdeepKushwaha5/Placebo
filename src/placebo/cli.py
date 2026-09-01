@@ -23,6 +23,7 @@ import argparse
 import hashlib
 import json
 import sys
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -245,6 +246,20 @@ def cmd_audit(args: argparse.Namespace) -> int:
     )
 
 
+def _bar(current: int, total: int, width: int = 18) -> str:
+    """A progress bar. Cheap, and it turns a number into a shape."""
+    filled = int(width * current / total) if total else 0
+    return "[" + "#" * filled + "." * (width - filled) + "]"
+
+
+def _clock(seconds: float) -> str:
+    """Seconds as something a person reads at a glance."""
+    seconds = max(0, int(seconds))
+    if seconds < 60:
+        return f"{seconds}s"
+    return f"{seconds // 60}m{seconds % 60:02d}s"
+
+
 def _run_audit(args, config, existing, faults, name, label, code,
                minimized_path, scope_note: str = "") -> int:
     """Audit one patch and print the report. Shared by audit and audit-pr."""
@@ -295,12 +310,14 @@ def _audit_and_report(args, config, existing, faults, name, label, code,
         print("\n  The subject's own suite is not green here, so no verdict "
               "would mean anything.")
         combined = baseline.stderr + baseline.stdout
-        if baseline.collection_broken or "No module named pytest" in combined:
-            print("  pytest could not run in the chosen environment.")
+        if "No module named pytest" in combined:
+            print("  pytest is not available in the chosen environment.")
             if runner.executor.isolated:
-                print("  The container image has no pytest. Build the runner "
-                      "image (docs/SANDBOX.md), or pass --unsafe-local to run "
-                      "on this host instead.")
+                print("  Build the runner image (docs/SANDBOX.md), or pass "
+                      "--unsafe-local to run on this host instead.")
+        elif baseline.collection_broken:
+            print("  pytest could not collect the suite. Usually the subject "
+                  "is not importable: check source_roots in .placebo.toml.")
         elif baseline.timed_out:
             print("  The suite timed out. Raise timeout_seconds in .placebo.toml.")
         else:
@@ -310,8 +327,27 @@ def _audit_and_report(args, config, existing, faults, name, label, code,
         runner.cleanup()
         return 2
 
+    started_at = time.perf_counter()
+    phase_started: dict[str, float] = {}
+
     def show_progress(phase: str, current: int, total: int) -> None:
-        print(f"\r    {phase:24s} {current:>3}/{total:<3}", end="", flush=True)
+        """One line, overwritten, carrying a rate and an estimate.
+
+        A bare counter tells you it is alive. What a user actually wants to
+        know is whether to wait, so the remaining time is shown once enough
+        items have completed for the rate to mean anything.
+        """
+        now = time.perf_counter()
+        begun = phase_started.setdefault(phase, now)
+        elapsed = now - begun
+        suffix = ""
+        if current >= 3 and elapsed > 1:
+            rate = current / elapsed
+            remaining = (total - current) / rate if rate else 0
+            suffix = f"  {rate:4.1f}/s  eta {_clock(remaining)}"
+        bar = _bar(current, total)
+        print(f"\r    {phase:24s} {bar} {current:>4}/{total:<4}{suffix}   ",
+              end="", flush=True)
 
     commit = config.commit or "working-tree"
     coverage_map = None
@@ -336,11 +372,32 @@ def _audit_and_report(args, config, existing, faults, name, label, code,
         print(f"\n  Running audit ({warm} cached executions available):")
     else:
         print("\n  Running audit (first run is intentionally exhaustive):")
-    audit = audit_suite(
-        runner, name, code, faults, existing, progress=show_progress,
-        cache=store, subject_commit=commit, coverage_map=coverage_map,
-        budget_s=args.budget or None,
-    )
+    pool = [runner]
+    requested = max(1, int(getattr(args, "workers", 1) or 1))
+    for _ in range(requested - 1):
+        extra = SubjectRunner(
+            config.root,
+            allocate_workspace(ROOT / ".placebo-ws", config.name,
+                               config.commit or "working-tree"),
+            timeout_s=config.timeout_seconds,
+            source_roots=config.source_roots,
+            executor=runner.executor,
+        )
+        extra.prepare()
+        pool.append(extra)
+    if len(pool) > 1:
+        print(f"  Workers: {len(pool)}, each in its own workspace")
+
+    try:
+        audit = audit_suite(
+            runner, name, code, faults, existing, progress=show_progress,
+            cache=store, subject_commit=commit, coverage_map=coverage_map,
+            budget_s=args.budget or None,
+            workers=pool if len(pool) > 1 else None,
+        )
+    finally:
+        for extra in pool[1:]:
+            extra.cleanup()
     print("\r" + " " * 48 + "\r", end="")
     summary = audit.summary()
     counts = summary["verdicts"]
@@ -699,6 +756,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_audit.add_argument("--unsafe-local", action="store_true",
                          help="run on this host with no boundary, inheriting your "
                               "environment, credentials and network")
+    p_audit.add_argument("--workers", type=int, default=1,
+                         help="run the fault matrix across N workers")
     p_audit.add_argument("--budget", type=float, default=0,
                          help="stop after N seconds and report partial evidence")
     p_audit.add_argument("--sarif", metavar="PATH",
@@ -725,6 +784,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_pr.add_argument("--unsafe-local", action="store_true",
                       help="run on this host with no boundary, inheriting your "
                            "environment, credentials and network")
+    p_pr.add_argument("--workers", type=int, default=1,
+                      help="run the fault matrix across N workers")
     p_pr.add_argument("--budget", type=float, default=0,
                       help="stop after N seconds and report partial evidence")
     p_pr.add_argument("--sarif", metavar="PATH",

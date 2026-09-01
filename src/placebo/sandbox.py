@@ -237,6 +237,14 @@ class DockerExecutor:
             command += ["--mount",
                         f"type=bind,src={self.subject_root},dst=/subject,readonly"]
 
+        # A bind mount keeps its host ownership, so the container has to run as
+        # the host user or it cannot write to its own workspace. This is still
+        # non-root: it is whoever invoked Placebo. Windows has no uid to map and
+        # Docker Desktop handles ownership itself.
+        identity = _host_identity()
+        if identity:
+            command += ["--user", identity]
+
         # The environment is constructed, never inherited. Anything not named
         # here does not exist inside the container.
         for key in _ALLOWED_ENV:
@@ -262,6 +270,13 @@ class DockerExecutor:
         return ExecutionResult(proc.returncode, proc.stdout, proc.stderr)
 
 
+def _host_identity() -> str:
+    """`uid:gid` of the invoking user, or empty where that is meaningless."""
+    if os.name == "nt" or not hasattr(os, "getuid"):
+        return ""
+    return f"{os.getuid()}:{os.getgid()}"
+
+
 def _as_text(value) -> str:
     if isinstance(value, bytes):
         return value.decode("utf-8", "replace")
@@ -269,8 +284,16 @@ def _as_text(value) -> str:
 
 
 def _translate(value: str, workspace: Path) -> str:
-    """Rewrite host paths to their location inside the container."""
-    return value.replace(str(workspace), "/work").replace("\\", "/")
+    """Rewrite host paths to their location inside the container.
+
+    The list separator is translated too. A Windows host joins PYTHONPATH with
+    ";" while the Linux container expects ":", so without this the container
+    receives one nonsensical path and a src/ layout cannot import itself.
+    """
+    translated = value.replace(str(workspace), "/work").replace("\\", "/")
+    if os.pathsep != ":":
+        translated = translated.replace(os.pathsep, ":")
+    return translated
 
 
 def _translate_argv(argv: list[str], workspace: Path) -> list[str]:

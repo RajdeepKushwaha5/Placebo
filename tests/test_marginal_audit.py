@@ -660,3 +660,122 @@ def test_no_budget_means_no_truncation_claim():
                         [fault("f")], set())
     assert audit.summary()["budget_exhausted"] is False
     assert "budget" not in audit.tests[0].note
+
+
+# -- parallel execution and resume -----------------------------------------
+
+
+def test_worker_count_never_changes_a_verdict():
+    """The exit criterion for parallelism. Executions are independent, so the
+    only thing more workers may change is how long it takes."""
+    faults = [fault(f"f{i}") for i in range(24)]
+    code = suite("test_a", "test_b", "test_c")
+    kills = {
+        faults[0].id: ["test_a"],
+        faults[1].id: ["test_a", "test_b"],
+        faults[2].id: ["test_c"],
+        faults[5].id: ["test_b"],
+        faults[9].id: ["test_a", "test_c"],
+    }
+    existing = {faults[2].id}
+
+    serial = audit_suite(FakeRunner(kills=kills), "s", code, faults, existing)
+    for count in (2, 4, 8):
+        pool = [FakeRunner(kills=kills) for _ in range(count)]
+        parallel = audit_suite(pool[0], "s", code, faults, existing, workers=pool)
+        assert [t.to_dict() for t in parallel.tests] == \
+            [t.to_dict() for t in serial.tests], f"{count} workers disagreed"
+
+
+def test_detected_fault_lists_are_ordered_identically_under_parallelism():
+    """Order matters because these lists are serialised into evidence. A set
+    comparison would pass while the artifact churned on every run."""
+    faults = [fault(f"f{i}") for i in range(12)]
+    code = suite("test_a")
+    kills = {f.id: ["test_a"] for f in faults}
+
+    serial = audit_suite(FakeRunner(kills=kills), "s", code, faults, set())
+    pool = [FakeRunner(kills=kills) for _ in range(6)]
+    parallel = audit_suite(pool[0], "s", code, faults, set(), workers=pool)
+
+    assert parallel.tests[0].detects == serial.tests[0].detects
+
+
+def test_every_worker_is_used():
+    faults = [fault(f"f{i}") for i in range(30)]
+    pool = [FakeRunner(kills={}) for _ in range(4)]
+    audit_suite(pool[0], "s", suite("test_a"), faults, set(), workers=pool)
+    assert all(w.mutant_runs > 0 for w in pool), "a worker sat idle"
+    assert sum(w.mutant_runs for w in pool) == len(faults)
+
+
+def test_an_interrupted_audit_resumes_instead_of_restarting(tmp_path):
+    """Every fault result is written when it is known, so a run killed part
+    way through leaves that work recorded for the next one."""
+    from placebo.cache import ResultCache
+
+    faults = [fault(f"f{i}") for i in range(20)]
+    code = suite("test_a")
+    kills = {faults[0].id: ["test_a"]}
+
+    class Interrupting(FakeRunner):
+        """Stops abruptly after a few faults, like a killed process."""
+
+        def run_mutant(self, mutant, selection=None, extra=None):
+            if self.mutant_runs >= 8:
+                raise KeyboardInterrupt("interrupted")
+            return super().run_mutant(mutant, selection, extra)
+
+    with ResultCache(tmp_path / "c.sqlite", "fp") as store:
+        with pytest.raises(KeyboardInterrupt):
+            audit_suite(Interrupting(kills=kills), "s", code, faults, set(),
+                        cache=store, subject_commit="c")
+        completed = store.entries()
+        assert completed >= 8, "finished work was not recorded before the stop"
+
+        resumed_runner = FakeRunner(kills=kills)
+        resumed = audit_suite(resumed_runner, "s", code, faults, set(),
+                              cache=store, subject_commit="c")
+
+    assert resumed_runner.mutant_runs < len(faults), \
+        "the resumed run re-executed everything"
+    assert resumed.tests[0].detects == [faults[0].id]
+
+
+def test_a_resumed_audit_matches_an_uninterrupted_one(tmp_path):
+    from placebo.cache import ResultCache
+
+    faults = [fault(f"f{i}") for i in range(15)]
+    code = suite("test_a", "test_b")
+    kills = {faults[1].id: ["test_a"], faults[4].id: ["test_b"]}
+
+    clean = audit_suite(FakeRunner(kills=kills), "s", code, faults, set())
+
+    with ResultCache(tmp_path / "c.sqlite", "fp") as store:
+        # A first pass that only gets partway, simulated with a tight budget.
+        audit_suite(SlowRunner(kills=kills, seconds=0.02), "s", code, faults,
+                    set(), cache=store, subject_commit="c", budget_s=0.05)
+        resumed = audit_suite(FakeRunner(kills=kills), "s", code, faults,
+                              set(), cache=store, subject_commit="c")
+
+    assert [t.to_dict() for t in resumed.tests] == [t.to_dict() for t in clean.tests]
+
+
+def test_parallel_workers_share_one_cache_without_losing_results(tmp_path):
+    from placebo.cache import ResultCache
+
+    faults = [fault(f"f{i}") for i in range(30)]
+    code = suite("test_a")
+    kills = {f.id: ["test_a"] for f in faults[:10]}
+
+    with ResultCache(tmp_path / "c.sqlite", "fp") as store:
+        pool = [FakeRunner(kills=kills) for _ in range(5)]
+        first = audit_suite(pool[0], "s", code, faults, set(), workers=pool,
+                            cache=store, subject_commit="c")
+
+        warm = [FakeRunner(kills=kills) for _ in range(5)]
+        second = audit_suite(warm[0], "s", code, faults, set(), workers=warm,
+                             cache=store, subject_commit="c")
+
+    assert sum(w.mutant_runs for w in warm) == 0, "a warm parallel run executed"
+    assert [t.to_dict() for t in second.tests] == [t.to_dict() for t in first.tests]

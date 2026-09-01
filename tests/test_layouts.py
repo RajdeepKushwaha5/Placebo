@@ -65,11 +65,20 @@ SUITE = textwrap.dedent("""\
 
 
 def cli(*argv: str) -> tuple[int, str]:
+    """Invoke the CLI in-process.
+
+    Audits run locally here. These tests are about layout independence, not
+    the execution boundary; `tests/test_sandbox.py` covers that.
+    """
     from placebo.cli import main
+
+    argv = list(argv)
+    if argv and argv[0] in ("audit", "audit-pr") and "--unsafe-local" not in argv:
+        argv.append("--unsafe-local")
 
     buffer = io.StringIO()
     with contextlib.redirect_stdout(buffer):
-        code = main(list(argv))
+        code = main(argv)
     return code, buffer.getvalue()
 
 

@@ -215,6 +215,7 @@ def audit_suite(
     subject_commit: str = "",
     coverage_map: "CoverageMap | None" = None,
     budget_s: float | None = None,
+    workers: list | None = None,
 ) -> SuiteAudit:
     """Compute per-test marginal fault-detection value.
 
@@ -285,50 +286,119 @@ def audit_suite(
         return audit
 
     # ---- kill matrix: one execution per fault ----------------------------
-    for index, fault in enumerate(faults, 1):
-        # Stop on the budget rather than run past it, and record how far we
-        # got. A cached lookup costs nothing, so the budget is only checked
-        # against work that was actually executed.
-        if budget_s is not None and time.perf_counter() - started > budget_s:
-            audit.budget_exhausted = True
-            break
-        audit.faults_evaluated = index
+    def plan(fault: Mutant) -> tuple[set[str], list[str], str] | None:
+        """What this fault needs run, or None when nothing can reach it."""
         # A test that never executes the mutated line cannot detect the fault,
         # so running it proves nothing. The map is conservative: anything it
         # cannot positively attribute selects the whole eligible set.
-        if coverage_map is not None:
-            selected = coverage_map.tests_for(fault) & eligible
-        else:
-            selected = eligible
-        if not selected:
-            audit.skipped_by_selection += 1
-            if progress:
-                progress("fault matrix", index, len(faults))
-            continue
-
+        chosen = coverage_map.tests_for(fault) & eligible if coverage_map else eligible
+        if not chosen:
+            return None
         selection = (
-            [AUDIT_PATH] if selected == eligible
-            else sorted(f"{AUDIT_PATH}::{name}" for name in selected)
+            [AUDIT_PATH] if chosen == eligible
+            else sorted(f"{AUDIT_PATH}::{name}" for name in chosen)
         )
-        key = ResultCache.key(commit, fault.id, patch_hash, selection)
+        return chosen, selection, ResultCache.key(
+            commit, fault.id, patch_hash, selection)
+
+    def evaluate(worker, fault: Mutant, selection: list[str], key: str):
+        """Execute one fault, or reuse a recorded result.
+
+        The result is written before returning, so an interruption loses at
+        most the faults still in flight.
+        """
         cached = store.get(key)
         if cached is not None:
-            status, failing = cached["status"], cached["failing_tests"]
-        else:
-            run = runner.run_mutant(
-                fault, selection=selection, extra={AUDIT_PATH: suite_code}
-            )
-            status, failing = run.status.value, list(run.failing_tests)
-            store.put(key, {"status": status, "failing_tests": failing})
-        if progress:
-            progress("fault matrix", index, len(faults))
+            return cached["status"], cached["failing_tests"]
+        run = worker.run_mutant(
+            fault, selection=selection, extra={AUDIT_PATH: suite_code}
+        )
+        status, failing = run.status.value, list(run.failing_tests)
+        store.put(key, {"status": status, "failing_tests": failing})
+        return status, failing
+
+    def credit(fault: Mutant, chosen: set[str], status: str,
+               failing: list[str]) -> None:
         if status not in ("killed", "survived"):
-            continue  # invalid/timeout faults are not scoreable evidence
-        detected_by = _failing_test_names(failing) & selected
-        for name in detected_by:
+            return  # invalid/timeout faults are not scoreable evidence
+        for name in sorted(_failing_test_names(failing) & chosen):
             records[name].detects.append(fault.id)
             if fault.id not in existing_kills:
                 records[name].novel.append(fault.id)
+
+    def over_budget() -> bool:
+        return budget_s is not None and time.perf_counter() - started > budget_s
+
+    pool = list(workers or [])
+    if len(pool) > 1:
+        # Results are applied in corpus order after collection, so the verdicts
+        # do not depend on the order workers happened to finish in.
+        from concurrent.futures import ThreadPoolExecutor
+        from queue import Queue
+
+        available: "Queue" = Queue()
+        for worker in pool:
+            available.put(worker)
+
+        def task(item):
+            index, fault, chosen, selection, key = item
+            worker = available.get()
+            try:
+                return index, fault, chosen, evaluate(worker, fault, selection, key)
+            finally:
+                available.put(worker)
+
+        queued = []
+        for index, fault in enumerate(faults, 1):
+            prepared = plan(fault)
+            if prepared is None:
+                audit.skipped_by_selection += 1
+                audit.faults_evaluated = index
+                continue
+            chosen, selection, key = prepared
+            queued.append((index, fault, chosen, selection, key))
+
+        collected: dict[int, tuple] = {}
+        done = 0
+        with ThreadPoolExecutor(max_workers=len(pool)) as executor:
+            futures = []
+            for item in queued:
+                if over_budget():
+                    audit.budget_exhausted = True
+                    break
+                futures.append(executor.submit(task, item))
+            for future in futures:
+                index, fault, chosen, outcome = future.result()
+                collected[index] = (fault, chosen, outcome)
+                done += 1
+                if progress:
+                    progress("fault matrix", done, len(faults))
+
+        for index in sorted(collected):
+            fault, chosen, (status, failing) = collected[index]
+            audit.faults_evaluated = max(audit.faults_evaluated, index)
+            credit(fault, chosen, status, failing)
+    else:
+        worker = pool[0] if pool else runner
+        for index, fault in enumerate(faults, 1):
+            # Stop on the budget rather than run past it, and record how far we
+            # got. A cached lookup costs nothing, so the budget is only checked
+            # against work that was actually executed.
+            if over_budget():
+                audit.budget_exhausted = True
+                break
+            audit.faults_evaluated = index
+            prepared = plan(fault)
+            if prepared is None:
+                audit.skipped_by_selection += 1
+                if progress:
+                    progress("fault matrix", index, len(faults))
+                continue
+            chosen, selection, key = prepared
+            status, failing = evaluate(worker, fault, selection, key)
+            if progress:
+                progress("fault matrix", index, len(faults))
+            credit(fault, chosen, status, failing)
 
     # ---- counterfactual: which novel faults has exactly one detector? ----
     novel_detectors: dict[str, list[str]] = {}

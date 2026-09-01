@@ -70,12 +70,21 @@ CONFIG = textwrap.dedent(f"""\
 
 
 def cli(*argv: str) -> tuple[int, str]:
-    """Invoke the CLI in-process and capture what a user would see."""
+    """Invoke the CLI in-process and capture what a user would see.
+
+    Audits run locally here. These tests are about command behaviour, not the
+    execution boundary, and containerising them would make them slow and couple
+    two concerns. `tests/test_sandbox.py` covers the boundary itself.
+    """
     from placebo.cli import main
+
+    argv = list(argv)
+    if argv and argv[0] in ("audit", "audit-pr") and "--unsafe-local" not in argv:
+        argv.append("--unsafe-local")
 
     buffer = io.StringIO()
     with contextlib.redirect_stdout(buffer):
-        code = main(list(argv))
+        code = main(argv)
     return code, buffer.getvalue()
 
 
@@ -320,3 +329,70 @@ def test_explain_names_the_fault_a_test_exists_to_detect():
 def test_explain_is_honest_about_an_unknown_test():
     code, out = cli("explain", "test_that_was_never_generated")
     assert code != 0 or "no" in out.lower()
+
+
+# -- structural guards -----------------------------------------------------
+
+
+def test_no_command_can_return_none():
+    """Every command's exit code is checked by callers and by CI.
+
+    A command that falls off the end returns None, which compares unequal to
+    every exit code and reads as a crash nobody caused. This happened: a patch
+    inserted two module-level helpers into the middle of the audit body, so
+    everything after them became unreachable and the audit returned None while
+    still printing a plausible-looking header.
+    """
+    import ast
+
+    source = (ROOT / "src" / "placebo" / "cli.py").read_text(encoding="utf-8")
+    tree = ast.parse(source)
+
+    commands = [
+        node for node in tree.body
+        if isinstance(node, ast.FunctionDef)
+        and (node.name.startswith("cmd_") or node.name in ("_run_audit",
+                                                           "_audit_and_report"))
+    ]
+    assert commands, "no command functions found"
+
+    for node in commands:
+        returns = [n for n in ast.walk(node) if isinstance(n, ast.Return)]
+        assert returns, f"{node.name} returns nothing"
+        assert any(r.value is not None for r in returns), \
+            f"{node.name} never returns a value"
+
+
+def test_no_unreachable_code_follows_a_return():
+    """The shape of the bug above: statements after a return in the same block.
+
+    Python accepts it silently, and the function simply stops doing what it
+    looks like it does.
+    """
+    import ast
+
+    source = (ROOT / "src" / "placebo" / "cli.py").read_text(encoding="utf-8")
+    offenders = []
+    for node in ast.walk(ast.parse(source)):
+        body = getattr(node, "body", None)
+        if not isinstance(body, list):
+            continue
+        for index, statement in enumerate(body[:-1]):
+            if isinstance(statement, (ast.Return, ast.Raise)):
+                following = body[index + 1]
+                offenders.append(
+                    f"{type(node).__name__} line {statement.lineno}: "
+                    f"{type(following).__name__} at {following.lineno} is unreachable"
+                )
+    assert not offenders, "unreachable code:\n  " + "\n  ".join(offenders)
+
+
+def test_every_documented_command_is_reachable_from_the_parser():
+    from placebo.cli import build_parser
+
+    choices = build_parser()._subparsers._group_actions[0].choices
+    for command in ("audit", "audit-pr", "gaps", "census", "explain",
+                    "verify", "doctor"):
+        assert command in choices
+        assert choices[command].get_default("func") is not None, \
+            f"{command} has no handler"
