@@ -248,9 +248,23 @@ four weeks, and publish the failures and operating cost.
 
 ## Engineering quality gate
 
-The current unit suite passes but line coverage is about 46 percent, with the
-CLI, evidence bundle builder, census runner, counterexample search, and
-metamorphic engine containing major untested paths. Before a 1.0 release:
+Line coverage is now **79 percent**, up from 46. The CLI, census runner and
+counterexample search were the modules named here as untested and are now at 84,
+95 and 86 percent, with end-to-end tests for every public command.
+
+What is still uncovered, and why it matters differently in each case:
+
+| module | line coverage | note |
+|---|---:|---|
+| `evidence/bundle.py` | 0% | exercised end to end by `scripts/build_bundle.py`, no unit tests |
+| `search/metamorphic.py` | 0% | exercised end to end by `scripts/run_metamorphic.py`, no unit tests |
+| `verification/admission.py` | 45% | the model-facing paths, reachable only with a model running |
+| `evaluation/evaluator.py` | 54% | same |
+| `verification/prober.py` | 61% | the sandbox rejection paths are tested; the evaluation paths need a subject |
+
+The two zeros are the honest concern. Both run in CI through their scripts, so
+they are executed rather than unverified, but neither has a test that would
+localise a regression. Before a 1.0 release:
 
 - reach at least 85 percent branch coverage on generic core modules;
 - add end-to-end tests for every public CLI command;
