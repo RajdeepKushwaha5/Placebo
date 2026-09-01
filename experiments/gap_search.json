@@ -7,7 +7,7 @@
     {
       "admission": {
         "admitted": true,
-        "clean_duration_s": 1.888,
+        "clean_duration_s": 2.696,
         "code": null,
         "gates_passed": [
           "static",
@@ -39,7 +39,7 @@
     {
       "admission": {
         "admitted": true,
-        "clean_duration_s": 1.806,
+        "clean_duration_s": 2.349,
         "code": null,
         "gates_passed": [
           "static",
@@ -71,7 +71,7 @@
     {
       "admission": {
         "admitted": true,
-        "clean_duration_s": 1.775,
+        "clean_duration_s": 2.528,
         "code": null,
         "gates_passed": [
           "static",
@@ -103,7 +103,7 @@
     {
       "admission": {
         "admitted": true,
-        "clean_duration_s": 1.821,
+        "clean_duration_s": 2.615,
         "code": null,
         "gates_passed": [
           "static",
@@ -135,7 +135,7 @@
     {
       "admission": {
         "admitted": true,
-        "clean_duration_s": 1.763,
+        "clean_duration_s": 2.677,
         "code": null,
         "gates_passed": [
           "static",
@@ -167,7 +167,7 @@
     {
       "admission": {
         "admitted": true,
-        "clean_duration_s": 1.743,
+        "clean_duration_s": 2.765,
         "code": null,
         "gates_passed": [
           "static",
@@ -199,5 +199,5 @@
   ],
   "union_clean_passes": true,
   "usd_cost": 0.0,
-  "wall_s": 35.6
+  "wall_s": 52.2
 }

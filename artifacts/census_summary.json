@@ -1,5 +1,5 @@
 {
-  "baseline_duration_s": 2.96,
+  "baseline_duration_s": 7.23,
   "killed": 178,
   "mutation_score": 0.9622,
   "operator_families": {
@@ -12,7 +12,7 @@
     "return_value": 50
   },
   "scorable": 185,
-  "started_at": "2026-08-31T03:20:34",
+  "started_at": "2026-09-01T12:27:36",
   "status_counts": {
     "killed": 178,
     "survived": 7
@@ -23,5 +23,5 @@
     "semver/version.py"
   ],
   "total_mutants": 185,
-  "wall_s": 129.0
+  "wall_s": 302.6
 }

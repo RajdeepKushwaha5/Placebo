@@ -49,7 +49,15 @@ Three results, each independently verifiable.
 
 **It works on real bugs, not just injected ones.** Mutation score is a proxy, so I went through semver's actual git history for defects that shipped in 3.0.4 and were fixed upstream later, using the maintainers' own diffs and issue numbers as ground truth. The search found a distinguishing input for all three behavior-changing bugs. Semver's own 329 tests catch none of them. The fourth commit removes dead code, so finding no witness there is the correct answer, and it independently confirms an equivalent-mutant verdict Placebo had reached from the opposite direction.
 
-In the controlled comparison, scored on 29 faults frozen and fingerprinted before any generation ran, the direct-prompt baseline detected 0 percent and the best configuration detected 31 percent.
+**It refuses evidence it cannot verify.** Every claim ships in a bundle anyone can replay. Writing the tests for that subsystem found the worst defect in the project: `verify` read the patch hash out of a bundle's manifest and never compared anything against it, so a bundle whose patch had been edited replayed and reported that all seven claims held. A verification step endorsing what it never checked is worse than none. Validation now runs before replay and refuses a patch that does not match its recorded hash, a manifest path that escapes the bundle, a mismatched revision, or truncated evidence. Editing one line of a shipped bundle now exits 2 with the reason.
+
+In the controlled comparison, scored on 29 faults frozen and fingerprinted before any generation ran, the direct-prompt baseline detected 0 percent and the best configuration detected 31 percent. Repeating both ends three times, the baseline admitted 1, 0 and 0 faults and the best configuration admitted 6, 7 and 7. Those ranges do not overlap.
+
+**It runs on repositories it was not built for.** The whole workflow runs against pinned public repositories described only by a config file, with no Placebo source edited: `inflection` 0.5.1 at 74.2 percent and `pathspec` v1.1.1 at 64.3 percent. A third, `toml-sort`, needs a dependency Placebo does not install, so its own suite is red and the census refuses rather than producing a number. That work found a real defect no fixture could: the configured test directory was being ignored, so any repository not keeping its suite in `tests/` could not be audited at all.
+
+**It is fast enough to use, and safe enough to run.** A cold audit of 33 tests against 185 faults takes about nine minutes; a re-run takes seconds, with identical verdicts test for test. Execution happens inside a container with no network, a read-only mount of the source, no inherited environment, dropped capabilities and capped CPU, memory, processes and time. Eleven adversarial tests start real containers and attempt each escape rather than assuming it is blocked.
+
+**It labels how strong each oracle is, and sources better ones.** Every generated test carries L1 to L4 and its brittleness warnings; all 33 of Placebo's own come back L4 snapshot, which is the honest reading of tests whose expected values were taken by executing the implementation. `placebo oracles` is the way out: it extracts 21 expected values from semver's own documented examples and 39 from inflection, each citing the line it came from.
 
 ## Can another person reproduce the result?
 
@@ -124,13 +132,23 @@ The minimizer had a bug, and the tool caught it in its own output. It reported t
 
 I also found that `--faults N`, a documented flag, could invert an audit verdict by truncating the corpus in source order and dropping exactly the faults that matter. The same patch scored 0 valuable at one setting and 3 valuable on the full corpus. Fixed so known gaps are always retained.
 
+The worst one was in the evidence subsystem, and I found it only by writing tests for the part I had been trusting. `verify` recorded a hash for the patch inside each bundle and never compared anything to it. I edited one line of a shipped bundle and it replayed happily, exit 0, reporting seven of seven claims holding. The whole argument of this project is that its output is checked rather than asserted, and the checker was not checking.
+
+Two more came from building the container boundary. `PYTHONPATH` was being joined with the host separator and handed to a Linux container that expects a different one, so a `src/` layout could not import itself inside the sandbox. And the first containerised audit reported all 33 tests as harmful, because the base image had no pytest: "red against correct code" and "the harness could not run anything" produce the same observation, and the audit reported the first while the second was true. It now runs the subject's own suite before trusting any verdict and refuses with an actionable message.
+
+Both of those failed only on Linux and passed on Windows, so CI caught them rather than I did.
+
 ---
 
 ## Limitations I am not hiding
 
 Expected values are observed by running the current code, so they pin behavior rather than correctness. If the implementation is already wrong, a witness records the wrong answer as expected. This is the sharpest limitation in the project and it is documented in full.
 
-Two Python libraries is a narrow base. Four real bugs is not four hundred. Most conditions are single runs, and only one has error bars. The best configuration uses more model calls than the baseline, and while a resampling control is implemented, any result from it appears in the artifacts or is not claimed at all.
+Four Python repositories is still a narrow base, and two of them are the same library. Four real bugs is not four hundred. Both ends of the headline comparison were repeated three times and their ranges do not overlap, but that was measured on a 12-fault subset rather than the frozen 29-fault split, three runs give a wide interval, and the two middle conditions were not repeated at all, so nothing is claimed about the ordering between them. The best configuration uses more model calls than the baseline, and while a resampling control is implemented, any result from it appears in the artifacts or is not claimed at all.
+
+Placebo runs a repository's suite; it does not install that repository's dependencies. Where they are missing the baseline is red, and a red baseline makes every verdict meaningless, so it refuses. One of the three external repositories is in exactly that state and is reported rather than dropped.
+
+The container is a strong boundary, not a perfect one. A kernel escape is outside what it addresses, and a subject whose own suite deletes its working directory will succeed in deleting the copy.
 
 A blinded reviewer study is prepared with patches stripped of condition markers, a rating form and a pre-registered analysis. No ratings have been collected and no human acceptance rate is claimed anywhere.
 
