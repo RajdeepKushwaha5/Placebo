@@ -66,7 +66,7 @@ That takes about two minutes and prints 185 faults, 178 detected, 96.2 percent. 
 
 Everything that does not need a model is reproducible the same way: the counterexample search (6 of 6, 36 seconds), the real historical bugs (3 of 3, 1 second), the second repository, the metamorphic oracle and the variance analysis.
 
-Reproducibility is also enforced rather than promised. `scripts/check_consistency.py` re-derives all 94 headline numbers from the stored artifacts and fails if the writeup drifts from the data. It runs in CI, so a stale number becomes a build failure instead of something a reviewer has to notice. It is what caught a report contradicting its own raw results during development.
+Reproducibility is also enforced rather than promised. `scripts/check_consistency.py` re-derives all 98 headline numbers from the stored artifacts and fails if the writeup drifts from the data. It runs in CI, so a stale number becomes a build failure instead of something a reviewer has to notice. It is what caught a report contradicting its own raw results during development.
 
 Both evidence bundles replay independently: `python scripts/verify_bundle.py` re-applies each recorded fault and re-runs the test that claims to detect it, reporting HOLDS or BROKEN per test.
 
@@ -176,6 +176,6 @@ No API keys, no hosted model calls, no credentials in the submission, and zero m
 Verify all of it in three minutes:
 
 ```
-python -m pytest tests -q             # 58 passed
-python scripts/check_consistency.py   # 73/73 checks pass
+python -m pytest tests -q             # 80 passed
+python scripts/check_consistency.py   # 98/98 checks pass
 ```

@@ -3,8 +3,8 @@
 Written for someone starting from a clean environment with this repository and
 nothing else.
 
-There are **two paths**. Path A reproduces the central result — that a
-100%-coverage expert suite still misses real faults — and needs no model at all.
+There are **two paths**. Path A reproduces the central result (that a
+100%-coverage expert suite still misses real faults) and needs no model at all.
 Path B reproduces the full agent comparison and needs a local model.
 
 ---
@@ -42,13 +42,13 @@ Placebo's own engine imports only the standard library.
 python -m pytest tests -q
 ```
 
-Expected: **30 passed** in a few seconds. These cover mutant-identity stability,
+Expected: **80 passed** in a few seconds. These cover mutant-identity stability,
 held-out split disjointness, static admission gates, suite assembly, and the
 malformed-candidate regression found during the final audit.
 
 ---
 
-## Path A — the central result, no model required
+## Path A: the central result, no model required
 
 **Runtime: ~2.5 minutes.** This is the claim that motivates the project, and it
 is fully deterministic: no model is involved anywhere in it.
@@ -91,7 +91,7 @@ Wall time on the development machine: **129 s** with 6 workers.
 ### Why you can trust it
 
 Mutant ids are `sha256` over (subject commit, file, function, operator, source
-span, replacement), so enumeration order cannot change them — re-running, or
+span, replacement), so enumeration order cannot change them. Re-running, or
 running on another machine, produces identical ids. Verify with:
 
 ```bash
@@ -100,7 +100,7 @@ python -m pytest tests -q -k "deterministic or unique or content_derived"
 
 ---
 
-## Path B — the full agent comparison
+## Path B: the full agent comparison
 
 **Runtime: ~3 hours** on the development machine (see the timing note below).
 
@@ -142,7 +142,7 @@ python scripts/run_pipeline.py --conditions baseline_A placebo_D --limit 12
 
 1. Selects 12 **discovery** faults, stratified round-robin across operator
    families, deterministically.
-2. Freezes a stratified **held-out** set of 29 faults — same functions,
+2. Freezes a stratified **held-out** set of 29 faults: same functions,
    different source spans, same-line siblings excluded, and restricted to
    faults semver's own suite demonstrably kills. The manifest fingerprint is
    `491a2c1f8af0ef27`.
@@ -181,7 +181,7 @@ A comparison table, plus:
 
 ### B4. Rebuild the report
 
-Reads only stored artifacts — **no model needed**, so a judge can regenerate
+Reads only stored artifacts and needs **no model**, so a judge can regenerate
 every table without spending a single GPU-second:
 
 ```bash
@@ -192,7 +192,7 @@ Writes `artifacts/report.md`.
 
 ---
 
-## Path C — close gaps in the real expert suite
+## Path C: close gaps in the real expert suite
 
 The comparison benchmark above uses known-detectable faults so every condition
 gets the same 12 paired authoring tasks. This separate product run starts only
@@ -211,7 +211,7 @@ generated patch, not the generated tests in isolation.
 
 ---
 
-## Path D — the evidence that does not depend on mutation score
+## Path D: the evidence that does not depend on mutation score
 
 Every command below is **deterministic and makes zero model calls**. They are
 the answer to "mutation score is only a proxy".
@@ -249,7 +249,7 @@ git clone https://github.com/python-semver/python-semver
 
 Adjust `UPSTREAM` at the top of the script to point at that clone.
 
-## Path E — the model-dependent controls
+## Path E: the model-dependent controls
 
 These **do** call the local model and take time.
 
@@ -295,7 +295,7 @@ that fits the model in VRAM, Path B will be substantially faster.
 
 ## Determinism: what is and is not reproducible
 
-**Deterministic — should match exactly:**
+**Deterministic (should match exactly):**
 
 - the fault inventory and every mutant id;
 - the census verdicts and the 96.2% score;
@@ -319,18 +319,18 @@ central claim, involves no model and is fully reproducible.
 
 ## Troubleshooting
 
-**`ModuleNotFoundError: No module named 'semver'`** — the subject is vendored at
+**`ModuleNotFoundError: No module named 'semver'`**: the subject is vendored at
 `subject/semver`; the runner sets `PYTHONPATH` to its workspace copy. Do not
 `pip install semver`; an installed copy can shadow the vendored one. Remove it
 with `python -m pip uninstall semver`.
 
-**Census reports the baseline suite is not green** — the runner refuses to score
+**Census reports the baseline suite is not green**: the runner refuses to score
 faults when the clean suite is red, by design. Check `python -m pytest
 subject/tests` with `PYTHONPATH=subject`.
 
-**Windows: `FileExistsError` on the workspace** — handled by a retrying
+**Windows: `FileExistsError` on the workspace**: handled by a retrying
 force-remove in `SubjectRunner.prepare()`. If it persists, delete
 `.placebo-ws/` manually.
 
-**Model unreachable** — Path A does not need the model. Run it first to confirm
+**Model unreachable**: Path A does not need the model. Run it first to confirm
 the core result, then debug Ollama separately.

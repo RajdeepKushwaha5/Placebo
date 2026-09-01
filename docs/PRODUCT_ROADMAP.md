@@ -1,4 +1,4 @@
-# Placebo after the hackathon — product and research roadmap
+# Placebo after the hackathon: product and research roadmap
 
 This is deliberately prioritized. It is not a list of every feature that might
 look impressive. The project should not claim to be a general test auditor until
@@ -26,7 +26,7 @@ still hardcoded around the vendored semver repository. The second repository
 shows that the mutation engine transfers; it does not show that the full audit
 workflow transfers.
 
-## Phase 1 — make the command honest and useful
+## Phase 1: make the command honest and useful
 
 ### 1. Repository adapter and preflight
 
@@ -98,7 +98,7 @@ and no host credentials. Record the image digest in the evidence bundle.
 access, process spawning, environment-secret reads, and resource exhaustion are
 blocked and covered by integration tests on Linux CI.
 
-## Phase 2 — solve the oracle problem instead of hiding it
+## Phase 2: solve the oracle problem instead of hiding it
 
 Every proposed test should carry an explicit oracle level:
 
@@ -124,7 +124,7 @@ Add automatic candidate sources for levels 1–3:
 often Placebo finds a witness and how often the produced assertion agrees with
 the maintainer's fixed behavior. Measure false behavior-locking, not only kills.
 
-## Phase 3 — establish external validity
+## Phase 3: establish external validity
 
 The current historical result is promising but too small: three
 behavior-changing bugs from one library. Build a frozen benchmark of at least
@@ -154,7 +154,7 @@ cost. Do not use a zero-retained small-model baseline as the primary comparison.
 baseline on held-out projects and historical bugs, with uncertainty intervals
 and a predeclared primary metric.
 
-## Phase 4 — validate the human value proposition
+## Phase 4: validate the human value proposition
 
 The reviewer-study instrument exists but has no participants. Run it blinded
 with at least 12 experienced engineers. Compare normal test PR review with a
@@ -174,7 +174,7 @@ it is evidence that the audit improves decisions without automating judgment.
 **Exit criterion:** reviewers make more accurate decisions or reach equally
 accurate decisions materially faster, without increased false removals.
 
-## Phase 5 — ship the workflow teams will actually adopt
+## Phase 5: ship the workflow teams will actually adopt
 
 Build a GitHub App/Action that comments only on changed tests and exposes:
 
@@ -208,7 +208,7 @@ metamorphic engine containing major untested paths. Before a 1.0 release:
 - benchmark false positives and performance regressions in CI; and
 - publish a stable plugin API and semantic-versioning policy.
 
-Coverage is not the goal by itself—the project already argues that—but public
+Coverage is not the goal by itself (the project already argues that), but public
 paths with zero automated execution are an avoidable reliability risk.
 
 ## What not to build yet

@@ -1,10 +1,10 @@
-# Placebo — results
+# Placebo: results
 
 - **Subject**: `semver` @ `6adf8765f6e2`, `semver/version.py`
 - **Model**: `qwen2.5:7b` (local, temperature 0, seed 7)
 - **Discovery mutants**: 12 (shown to the agent)
-- **Held-out faults (all-eligible robustness analysis)**: 80 — every eligible fault, with no per-function cap, so the sample has no tunable parameter. Materialized after generation as an all-eligible analysis; never shown to the agent. Fingerprint `cb088e4cd91a408c`
-- **Held-out faults (primary confirmatory set)**: 29 — the pre-generation, frozen stratified sample of 3 per function, retained as the strict confirmatory check. Fingerprint `491a2c1f8af0ef27`
+- **Held-out faults (all-eligible robustness analysis)**: 80, every eligible fault, with no per-function cap, so the sample has no tunable parameter. Materialized after generation as an all-eligible analysis; never shown to the agent. Fingerprint `cb088e4cd91a408c`
+- **Held-out faults (primary confirmatory set)**: 29, the pre-generation, frozen stratified sample of 3 per function, retained as the strict confirmatory check. Fingerprint `491a2c1f8af0ef27`
 
 ## Candidate disposition (baseline fairness audit)
 
@@ -90,7 +90,7 @@ This product run is separate from the controlled authoring benchmark. It starts 
 
 ## Marginal-value audit of agent-written tests
 
-Coverage cannot answer the reviewer's actual question: *which of these tests detects a failure that nothing else already detects?* Each test is scored counterfactually against two references at once — the repository's existing suite, and its sibling tests in the same patch.
+Coverage cannot answer the reviewer's actual question: *which of these tests detects a failure that nothing else already detects?* Each test is scored counterfactually against two references at once: the repository's existing suite, and its sibling tests in the same patch.
 
 | patch | tests | valuable | redundant (sibling) | redundant (existing) | unproven | harmful | gaps closed |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -104,9 +104,9 @@ Coverage cannot answer the reviewer's actual question: *which of these tests det
 - novel faults detected after: 3
 - **no loss verified by re-execution: yes**
 
-Minimization is a set cover over the faults only this patch detects, not a filter on per-test verdicts. Keeping only `VALUABLE` tests would drop any fault that several sibling tests detect — each looks redundant, yet removing all of them loses the fault. The reduced patch is re-audited by execution rather than trusted.
+Minimization is a set cover over the faults only this patch detects, not a filter on per-test verdicts. Keeping only `VALUABLE` tests would drop any fault that several sibling tests detect, each looks redundant, yet removing all of them loses the fault. The reduced patch is re-audited by execution rather than trusted.
 
-`UNPROVEN` means *no marginal fault sensitivity under the evaluated fault models* — not that the test is worthless. A test may encode a requirement no fault in the corpus expresses.
+`UNPROVEN` means *no marginal fault sensitivity under the evaluated fault models*, not that the test is worthless. A test may encode a requirement no fault in the corpus expresses.
 
 ## Deterministic counterexample search on confirmed real gaps
 
@@ -117,7 +117,7 @@ After oracle grounding removed wrong expected values, the remaining failure was 
 | agent with oracle grounding | 3/6 | 13 | 512 s |
 | **+ counterexample search** | **6/6** | **0** | **36 s** |
 
-Existing 329-test suite plus the generated patch stays green: **True**. The search is deterministic — a fixed, cost-ordered candidate pool with no sampling and no seed — so the same witnesses are found on every run.
+Existing 329-test suite plus the generated patch stays green: **True**. The search is deterministic (a fixed, cost-ordered candidate pool with no sampling and no seed) so the same witnesses are found on every run.
 
 Minimal witnesses found by search:
 

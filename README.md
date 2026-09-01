@@ -8,10 +8,10 @@ It runs entirely on a local 7B model on a consumer laptop GPU. No API key, no cr
 |---|---|
 | **Repository** | https://github.com/RajdeepKushwaha5/Placebo |
 | **Verify in 3 minutes** | `pytest tests -q` then `python scripts/check_consistency.py` |
-| **Status** | 80 unit tests, 94 consistency checks, 2 evidence bundles replaying clean |
+| **Status** | 80 unit tests, 98 consistency checks, 2 evidence bundles replaying clean |
 
-The honest post-hackathon plan—including the requirements for calling this a
-general product—is in [`docs/PRODUCT_ROADMAP.md`](docs/PRODUCT_ROADMAP.md).
+The honest post-hackathon plan, including the requirements for calling this a
+general product, is in [`docs/PRODUCT_ROADMAP.md`](docs/PRODUCT_ROADMAP.md).
 
 ---
 
@@ -45,7 +45,7 @@ A tech lead or maintainer on a team that has adopted an AI coding assistant.
 The repository fills with generated tests. Test count rises. Coverage rises. CI stays green. Nobody can say which of those thousands of assertions would actually catch a regression.
 
 The failure is quiet and specific. An assistant can read the implementation and
-encode its current behavior—including an existing mistake—as the expected
+encode its current behavior, including an existing mistake, as the expected
 answer. The result goes green and raises coverage, yet may add little or no new
 regression sensitivity. Implementation-aware tests are not automatically bad;
 the problem is that ordinary CI does not show which ones added protection.
@@ -229,10 +229,10 @@ attempts are not the mechanism.
 
 ```console
 $ python -m pytest tests -q
-58 passed
+80 passed
 
 $ python scripts/check_consistency.py
-94/94 checks pass
+98/98 checks pass
 ```
 
 The 80 unit tests guard the parts that carry claims: mutant identity must be content-derived and stable, the held-out split must not leak, the admission gates must reject tests that cheat, minimization must never drop a fault, and the repository contract must fail with an actionable reason rather than a traceback. The counterexample search is covered there too: its candidate pool must stay deterministic and put relevant probes ahead of merely short ones, and a synthesized test must assert an observed error message rather than an exception type alone. Both of those are regression tests for mistakes that were made and measured, not hypotheticals.
@@ -260,8 +260,8 @@ cd Placebo
 python -m pip install -r requirements.lock
 python -m pip install -e .
 
-python -m pytest tests -q             # 58 passed
-python scripts/check_consistency.py   # 94/94 checks pass
+python -m pytest tests -q             # 80 passed
+python scripts/check_consistency.py   # 98/98 checks pass
 ```
 
 ### Reproduce the central claim without a model

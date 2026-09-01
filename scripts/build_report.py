@@ -50,20 +50,20 @@ def main() -> int:
     lines: list[str] = []
     add = lines.append
 
-    add("# Placebo — results\n")
+    add("# Placebo: results\n")
     add(f"- **Subject**: `semver` @ `{results['subject_commit'][:12]}`, "
         f"`{results['target_files'][0]}`")
     add(f"- **Model**: `{results['model']}` (local, temperature 0, seed 7)")
     add(f"- **Discovery mutants**: {results['discovery_count']} "
         f"(shown to the agent)")
-    add(f"- **Held-out faults (all-eligible robustness analysis)**: {results['held_out_count']} — every "
+    add(f"- **Held-out faults (all-eligible robustness analysis)**: {results['held_out_count']}, every "
         f"eligible fault, with no per-function cap, so the sample has no "
         f"tunable parameter. Materialized after generation as an all-eligible "
         f"analysis; never shown to the agent. "
         f"Fingerprint `{results['split_fingerprint']}`")
     if results.get("held_out_count_stratified"):
         add(f"- **Held-out faults (primary confirmatory set)**: "
-            f"{results['held_out_count_stratified']} — the pre-generation, "
+            f"{results['held_out_count_stratified']}, the pre-generation, "
             f"frozen stratified sample of 3 per function, retained as the "
             f"strict confirmatory check. Fingerprint "
             f"`{results.get('split_fingerprint_stratified', '')}`")
@@ -126,7 +126,7 @@ def main() -> int:
         if name == "baseline_A":
             baseline_score = strat["mutation_score"]
         add(
-            f"| `{name}` | {meta.get('suite_policy','—')} | "
+            f"| `{name}` | {meta.get('suite_policy','-')} | "
             f"{meta['tests_after_repair']} | "
             f"{meta['discovery_admitted']}/{meta['discovery_total']} | "
             f"**{strat['mutation_score']*100:.0f}%** "
@@ -210,7 +210,7 @@ def main() -> int:
         add("Coverage cannot answer the reviewer's actual question: *which of "
             "these tests detects a failure that nothing else already detects?* "
             "Each test is scored counterfactually against two references at "
-            "once — the repository's existing suite, and its sibling tests in "
+            "once: the repository's existing suite, and its sibling tests in "
             "the same patch.\n")
         add("| patch | tests | valuable | redundant (sibling) | redundant (existing) | unproven | harmful | gaps closed |")
         add("|---|---:|---:|---:|---:|---:|---:|---:|")
@@ -238,12 +238,12 @@ def main() -> int:
             add("Minimization is a set cover over the faults only this patch "
                 "detects, not a filter on per-test verdicts. Keeping only "
                 "`VALUABLE` tests would drop any fault that several sibling "
-                "tests detect — each looks redundant, yet removing all of them "
+                "tests detect, each looks redundant, yet removing all of them "
                 "loses the fault. The reduced patch is re-audited by execution "
                 "rather than trusted.\n")
 
         add("`UNPROVEN` means *no marginal fault sensitivity under the "
-            "evaluated fault models* — not that the test is worthless. A test "
+            "evaluated fault models*, not that the test is worthless. A test "
             "may encode a requirement no fault in the corpus expresses.\n")
 
     # ---- deterministic counterexample search ------------------------------
@@ -269,8 +269,8 @@ def main() -> int:
             f"**{gs['model_calls']}** | **{gs['wall_s']:.0f} s** |")
         add("")
         add(f"Existing 329-test suite plus the generated patch stays green: "
-            f"**{gs['union_clean_passes']}**. The search is deterministic — a "
-            f"fixed, cost-ordered candidate pool with no sampling and no seed — "
+            f"**{gs['union_clean_passes']}**. The search is deterministic (a "
+            f"fixed, cost-ordered candidate pool with no sampling and no seed) "
             f"so the same witnesses are found on every run.\n")
         add("Minimal witnesses found by search:\n")
         add("| fault | witness input | clean | under fault |")

@@ -17,8 +17,8 @@ weak once suite size and mutation location are controlled for.
 Concretely, what this means here:
 
 - Single-token mutants are not distributed like real defects. Real bugs are
-  often missing cases, wrong abstractions, or interactions between functions —
-  none of which this operator set produces.
+  often missing cases, wrong abstractions, or interactions between functions.
+  This operator set produces none of those.
 - A suite optimized against a fixed operator set could in principle overfit to
   that set. Placebo's held-out split limits this (the agent never sees the
   scored faults) but does not remove it, because held-out faults are drawn from
@@ -41,8 +41,8 @@ Counting them as survivors understates a suite's true score.
 All 7 survivors of semver's own suite were triaged by hand
 (`scripts/triage_survivors.py`, results in `artifacts/survivor_triage.json`):
 
-- **6 confirmed real gaps** — a killing test was written and verified for each.
-- **1 confirmed equivalent** — the mutant sits in genuinely dead code:
+- **6 confirmed real gaps**: a killing test was written and verified for each.
+- **1 confirmed equivalent**: the mutant sits in genuinely dead code:
   `bump_build` in semver 3.0.4 computes `build`, increments it, then recomputes
   the identical `if/elif` chain and increments again, discarding the first
   result entirely.
@@ -102,7 +102,7 @@ separated by more than run-to-run noise.
 Everything here is Python and pytest. There are now **two** subjects, not one:
 `semver` (comparison and boundary logic, 329 tests) and `inflection` (string
 transformation, 455 tests). Their mutation scores differ substantially, which is
-the useful part — the method reports a property of each suite rather than a
+the useful part: the method reports a property of each suite rather than a
 constant. Two Python libraries is still a narrow base. Nothing here establishes
 that the result transfers to other languages, larger modules, or codebases with
 slow test suites.
@@ -116,7 +116,7 @@ fault. On a subject with a ten-minute suite, the census alone would take days.
 every condition's absolute numbers.
 
 This cuts both ways and should be read carefully. The **comparison** is
-paired — every condition uses the same model, seed and gates — so the *relative*
+paired (every condition uses the same model, seed and gates), so the *relative*
 finding is meaningful. Retry recoveries varied from zero to two cases across
 three stored runs with nominally fixed settings, so no strong claim about retry
 effectiveness is justified. A stronger model may use corrective feedback more
@@ -126,7 +126,7 @@ prediction eliminated `CLEAN_HEAD_FAILED` by construction.
 ## 7. What Placebo does not do
 
 - It does not prove correctness, and cannot.
-- It does not find unknown real bugs — it closes measured gaps against faults it
+- It does not find unknown real bugs. It closes measured gaps against faults it
   injected itself.
 - It does not judge whether a test is *well written*, only whether it detects
   something.
@@ -161,8 +161,9 @@ run the chosen input against the reference implementation
 That guarantees **consistency with the current implementation**, not
 **correctness with respect to intent**. If `semver` already contained a bug on
 some input, Placebo would faithfully record the buggy output as expected, and
-the resulting test would lock that bug in — the same implementation-copying
-failure this project criticizes in AI-written tests, displaced one level.
+the resulting test would lock that bug in. That is the same
+implementation-copying failure this project criticizes in AI-written tests,
+displaced one level.
 
 What the witness therefore pins is behavior against *change*, not against
 *error*. That is genuinely useful for regression detection and genuinely
@@ -194,7 +195,7 @@ no result in this project should be read as a correctness claim.
 
 The comparison between conditions is unaffected: every condition is scored
 against the same injected faults with the same oracle, so the *relative* finding
-holds. What the snapshot oracle limits is the absolute interpretation — "this
+holds. What the snapshot oracle limits is the absolute interpretation: "this
 test detects a regression" is supported; "this test verifies the function is
 right" is not.
 

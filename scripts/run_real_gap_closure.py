@@ -63,7 +63,7 @@ def main() -> int:
     config = AuthorConfig("real_gap_closure", condition="D", max_attempts=3)
 
     print("=" * 74)
-    print("  REAL GAP CLOSURE — semver expert suite + Placebo patch")
+    print("  REAL GAP CLOSURE: semver expert suite + Placebo patch")
     print(f"  confirmed gaps: {len(gaps)}")
     print("=" * 74)
     started = time.perf_counter()
@@ -125,7 +125,7 @@ def main() -> int:
     write_json(ROOT / "experiments" / "real_gap_closure.json", payload)
 
     report = [
-        "# Placebo — real gap closure\n",
+        "# Placebo: real gap closure\n",
         f"- Existing expert suite: **329 tests, 100% line and branch coverage**",
         f"- Confirmed detectable gaps before Placebo: **{len(gaps)}**",
         f"- Generated tests retained: **{count_tests(suite)}**",

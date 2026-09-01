@@ -1,9 +1,9 @@
-# Placebo — real gap closure
+# Placebo: real gap closure
 
 > **This is the intermediate agent-only run, not the final result.**
 > It measures what the LLM agent achieved on its own: **3 of 6** confirmed gaps.
 > The final end-to-end result uses deterministic counterexample search and
-> closes **6 of 6** with zero model calls — see
+> closes **6 of 6** with zero model calls, see
 > [`artifacts/report.md`](report.md) and
 > [`../experiments/gap_search.json`](../experiments/gap_search.json).
 > Both are kept so the improvement can be traced rather than asserted.

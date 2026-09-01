@@ -416,6 +416,20 @@ def main() -> int:
               "README quotes the real unit test count",
               f"{counted} collected, README says {', '.join(sorted(set(quoted))) or 'nothing'}")
 
+        # The pasted "N passed" transcripts are a separate phrasing that the
+        # count above does not match, and they drifted independently of it.
+        # Every doc that shows the command must show the real result.
+        for name in ("README.md", "SUBMISSION.md",
+                     "docs/SUBMISSION_ANSWERS.md", "docs/REPRODUCTION.md"):
+            path = ROOT / name
+            if not path.is_file():
+                continue
+            shown = re.findall(r"(\d+) passed", path.read_text(encoding="utf-8"))
+            if shown:
+                check(all(int(v) == counted for v in shown),
+                      f"{name} shows the real pytest result",
+                      f"{counted} collected, shows {', '.join(sorted(set(shown)))}")
+
     # -- 9. the README's own check count -------------------------------------
     # Self-referential on purpose, and stable: this is the last check appended,
     # so the total it compares against includes itself.
