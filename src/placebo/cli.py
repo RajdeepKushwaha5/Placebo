@@ -74,6 +74,39 @@ def _census_path(config) -> Path:
     return ROOT / "artifacts" / f"census_{config.name}.json"
 
 
+def _select_sandbox(args, config):
+    """Choose an execution backend and say which one, plainly.
+
+    Isolation is preferred wherever it is available. Falling back to the host
+    is allowed but never silent: repository tests and model-produced code would
+    then run with this user's environment, credentials and network.
+    """
+    from .sandbox import Limits, SandboxUnavailable, select
+
+    mode = "local" if getattr(args, "unsafe_local", False) else getattr(
+        args, "sandbox", "auto")
+    try:
+        executor = select(
+            mode,
+            subject_root=config.root,
+            limits=Limits(timeout_s=config.timeout_seconds),
+        )
+    except SandboxUnavailable as exc:
+        print(f"\n  {exc}")
+        return None
+
+    if executor.isolated:
+        described = executor.describe()
+        print(f"\n  Sandbox: {described['image_digest']}")
+        print(f"           network {described['network']}, read-only root, "
+              f"limits {described['limits']['cpus']} cpu / "
+              f"{described['limits']['memory']}")
+    else:
+        print("\n  Sandbox: NONE. Tests run on this host with your "
+              "environment and network.")
+    return executor
+
+
 def _open_cache(config, enabled: bool = True):
     """Open this repository's execution cache.
 
@@ -236,6 +269,10 @@ def _audit_and_report(args, config, existing, faults, name, label, code,
     from .audit.marginal import AUDIT_PATH, audit_suite, minimal_patch
     from .verification.runner import SubjectRunner, allocate_workspace
 
+    executor = _select_sandbox(args, config)
+    if executor is None:
+        return 2
+
     # Every run gets its own workspace. Sharing one per repository meant a
     # second concurrent run deleted this one's subject files mid-audit.
     runner = SubjectRunner(
@@ -244,8 +281,34 @@ def _audit_and_report(args, config, existing, faults, name, label, code,
                            config.commit or "working-tree"),
         timeout_s=config.timeout_seconds,
         source_roots=config.source_roots,
+        executor=executor,
     )
     runner.prepare()
+
+    # A verdict only means something if the suite can run at all. Without this,
+    # a sandbox whose image lacks pytest reports every test as red against
+    # correct code, which reads as a finding and is really a broken
+    # environment. The census already refused on a red baseline; the audit is
+    # the path where a wrong answer would actually be believed.
+    baseline = runner.check_baseline()
+    if not baseline.passed:
+        print("\n  The subject's own suite is not green here, so no verdict "
+              "would mean anything.")
+        combined = baseline.stderr + baseline.stdout
+        if baseline.collection_broken or "No module named pytest" in combined:
+            print("  pytest could not run in the chosen environment.")
+            if runner.executor.isolated:
+                print("  The container image has no pytest. Build the runner "
+                      "image (docs/SANDBOX.md), or pass --unsafe-local to run "
+                      "on this host instead.")
+        elif baseline.timed_out:
+            print("  The suite timed out. Raise timeout_seconds in .placebo.toml.")
+        else:
+            print("  Fix the failing tests, then retry.")
+        for line in (baseline.stdout or baseline.stderr).strip().splitlines()[-3:]:
+            print(f"    {line}")
+        runner.cleanup()
+        return 2
 
     def show_progress(phase: str, current: int, total: int) -> None:
         print(f"\r    {phase:24s} {current:>3}/{total:<3}", end="", flush=True)
@@ -370,6 +433,8 @@ def _audit_and_report(args, config, existing, faults, name, label, code,
             oracles=oracles,
             include_snapshot_notes=args.sarif_oracle_notes,
         )
+        document["runs"][0]["invocations"][0]["properties"]["sandbox"] = (
+            runner.executor.describe())
         out_path = Path(args.sarif)
         if not out_path.is_absolute():
             out_path = Path.cwd() / out_path
@@ -628,6 +693,12 @@ def build_parser() -> argparse.ArgumentParser:
                          help="re-execute everything, ignoring recorded results")
     p_audit.add_argument("--no-select", action="store_true",
                          help="skip coverage-based selection and audit exhaustively")
+    p_audit.add_argument("--sandbox", choices=("auto", "docker", "local"),
+                         default="auto",
+                         help="execution isolation; auto prefers a container")
+    p_audit.add_argument("--unsafe-local", action="store_true",
+                         help="run on this host with no boundary, inheriting your "
+                              "environment, credentials and network")
     p_audit.add_argument("--budget", type=float, default=0,
                          help="stop after N seconds and report partial evidence")
     p_audit.add_argument("--sarif", metavar="PATH",
@@ -648,6 +719,12 @@ def build_parser() -> argparse.ArgumentParser:
                       help="re-execute everything, ignoring recorded results")
     p_pr.add_argument("--no-select", action="store_true",
                       help="skip coverage-based selection and audit exhaustively")
+    p_pr.add_argument("--sandbox", choices=("auto", "docker", "local"),
+                      default="auto",
+                      help="execution isolation; auto prefers a container")
+    p_pr.add_argument("--unsafe-local", action="store_true",
+                      help="run on this host with no boundary, inheriting your "
+                           "environment, credentials and network")
     p_pr.add_argument("--budget", type=float, default=0,
                       help="stop after N seconds and report partial evidence")
     p_pr.add_argument("--sarif", metavar="PATH",

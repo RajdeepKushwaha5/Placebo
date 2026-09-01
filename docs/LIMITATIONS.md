@@ -142,9 +142,15 @@ prediction eliminated `CLEAN_HEAD_FAILED` by construction.
 - The oracle probe executes a deliberately small AST-validated expression DSL
   in a subprocess with Python builtins disabled. It rejects non-`semver` names,
   dunder access, direct function calls, comprehensions and control-flow
-  expressions. The workspace is disposable, but this is still not a hardened
-  OS/container boundary; production use against untrusted model providers
-  should add a networkless container and resource limits.
+  expressions.
+- Execution now happens inside a networkless container with a read-only root, a
+  read-only subject mount, dropped capabilities, a non-root user and capped cpu,
+  memory, processes and time. Eleven adversarial tests start real containers and
+  attempt the escape rather than assuming it is blocked. This is a strong
+  boundary and not a perfect one: a kernel escape is outside what it addresses,
+  and a subject whose own suite deletes its working directory will succeed in
+  deleting the copy. Running without it requires `--unsafe-local`, and which one
+  ran is recorded in the evidence bundle. See `SANDBOX.md`.
 - Execution happens in a disposable directory copy, one per run, under
   `.placebo-ws/<repository>/<commit>/<run-id>/`. Concurrent runs against the
   same repository were previously a real hazard, since they shared a directory

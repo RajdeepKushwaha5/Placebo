@@ -65,8 +65,16 @@ def _sha256(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def environment_record(model_name: str, model_digest: str) -> dict:
-    """Everything needed to explain how these results were produced."""
+def environment_record(model_name: str, model_digest: str,
+                       sandbox: dict | None = None) -> dict:
+    """Everything needed to explain how these results were produced.
+
+    `sandbox` describes the boundary the subject's tests ran inside. It is
+    recorded because an isolated run and a host run are different evidence: the
+    second one's results were produced by code that had this user's network,
+    environment and credentials. A reader should be able to tell which they are
+    looking at without having been present.
+    """
     import importlib.metadata as md
 
     def version(pkg: str) -> str:
@@ -91,6 +99,15 @@ def environment_record(model_name: str, model_digest: str) -> dict:
             "seed": 7,
             "hosted": "local (Ollama)",
             "usd_cost": 0.0,
+        },
+        "sandbox": sandbox or {
+            "backend": "local",
+            "isolated": False,
+            "warning": (
+                "Executed on the host without a sandbox. Repository tests and "
+                "model-produced code ran with this user's environment, "
+                "credentials and network access."
+            ),
         },
     }
 

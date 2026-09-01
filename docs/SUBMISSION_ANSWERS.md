@@ -176,6 +176,6 @@ No API keys, no hosted model calls, no credentials in the submission, and zero m
 Verify all of it in three minutes:
 
 ```
-python -m pytest tests             # 308 passed
+python -m pytest tests             # 337 passed
 python scripts/check_consistency.py   # 102/102 checks pass
 ```

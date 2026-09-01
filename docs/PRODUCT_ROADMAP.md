@@ -35,7 +35,7 @@ Written against the exit criteria below rather than against effort spent.
 | 1.2 cache, coverage selection, changed-file scope, time budget | **done** |
 | 1.2 run-isolated workspaces, safe under concurrency | **done** |
 | 1.2 parallel audit workers, checkpoint/resume beyond the cache | not started |
-| 1.3 containerised execution | not started |
+| 1.3 containerised execution | **done** |
 | 2 oracle-level labels and brittleness policy | **done** |
 | 2 automatic L1 to L3 candidate sources | not started |
 | 3 fifty historical bugs across eight to ten projects | **blocked** |

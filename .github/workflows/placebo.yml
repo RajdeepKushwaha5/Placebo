@@ -50,8 +50,21 @@ jobs:
         # tamper check rather than a line-ending check.
         run: python scripts/hash_subjects.py --check
 
+      - name: Build the sandbox runner image
+        # The container has no network, so the image cannot be fetched once it
+        # is running. Building it here is what makes the adversarial tests
+        # below execute rather than skip.
+        run: docker build -t placebo-runner:1 .
+
       - name: Unit tests
-        run: python -m pytest tests -q
+        run: python -m pytest tests
+
+      - name: Sandbox boundary, adversarial
+        # Each of these starts a real container and attempts an escape:
+        # network access, writing the read-only subject, reading host
+        # credentials, spawning unbounded processes, exhausting memory.
+        # They skip without a daemon, so this step is where they count.
+        run: python -m pytest tests/test_sandbox.py -v
 
       - name: Repository support (both vendored subjects)
         # Proves the generic path works for more than the original subject:

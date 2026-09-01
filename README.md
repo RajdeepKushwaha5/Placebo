@@ -8,7 +8,7 @@ It runs entirely on a local 7B model on a consumer laptop GPU. No API key, no cr
 |---|---|
 | **Repository** | https://github.com/RajdeepKushwaha5/Placebo |
 | **Verify** | `pytest tests -m "not slow"` (1 min) then `python scripts/check_consistency.py` (2 s) |
-| **Status** | 308 unit tests, 102 consistency checks, 2 evidence bundles replaying clean |
+| **Status** | 337 unit tests, 102 consistency checks, 2 evidence bundles replaying clean |
 
 The honest post-hackathon plan, including the requirements for calling this a
 general product, is in [`docs/PRODUCT_ROADMAP.md`](docs/PRODUCT_ROADMAP.md).
@@ -188,6 +188,41 @@ requires positive structural evidence, so the label understates rather than
 overstates. Every test in this project's own generated patch is L4, which is the
 honest reading of how they were made.
 
+### Where the tests actually run
+
+Placebo executes two kinds of code it did not write: the repository's own
+tests, and tests produced by a model. Both used to run on the host as the
+invoking user, with that user's environment, credentials and network. A
+disposable directory copy protected the source and nothing else.
+
+```bash
+docker build -t placebo-runner:1 .   # once
+placebo audit patch.py               # now isolated automatically
+```
+
+Inside the boundary there is no network, the subject source is mounted
+read-only, the only writable mount is the throwaway workspace, the root
+filesystem is immutable, every capability is dropped, the process runs as a
+non-root user, and cpu, memory, processes and time are all capped. The
+environment is built from an allowlist rather than inherited, so a credential
+that is never passed cannot be read. The image is pinned by digest and recorded
+in the evidence bundle.
+
+Eleven tests start real containers and attempt the escape rather than assuming
+it is blocked: reaching the network, writing the read-only source, reading host
+credentials, spawning unbounded processes, exhausting memory, running forever.
+They skip when no daemon is present, because a test that silently exercises
+nothing is worse than one that says it did not run.
+
+The cost is about 0.4 seconds per execution, roughly 1.3 minutes across a
+185-fault audit, and results are cached. On the same patch the container and
+the host produce identical verdicts, test for test.
+
+The fallback is explicit. `--sandbox docker` refuses rather than degrading,
+because a run asked to be isolated that quietly was not would put a false claim
+in its evidence. `--unsafe-local` is spelled that way on purpose. Details in
+[`docs/SANDBOX.md`](docs/SANDBOX.md).
+
 ### Other commands
 
 ```console
@@ -314,13 +349,13 @@ attempts are not the mechanism.
 
 ```console
 $ python -m pytest tests
-308 passed
+337 passed
 
 $ python scripts/check_consistency.py
 102/102 checks pass
 ```
 
-The 308 unit tests guard the parts that carry claims: mutant identity must be content-derived and stable, the held-out split must not leak, the admission gates must reject tests that cheat, minimization must never drop a fault, and the repository contract must fail with an actionable reason rather than a traceback. The counterexample search is covered there too: its candidate pool must stay deterministic and put relevant probes ahead of merely short ones, and a synthesized test must assert an observed error message rather than an exception type alone. Both of those are regression tests for mistakes that were made and measured, not hypotheticals.
+The 337 unit tests guard the parts that carry claims: mutant identity must be content-derived and stable, the held-out split must not leak, the admission gates must reject tests that cheat, minimization must never drop a fault, and the repository contract must fail with an actionable reason rather than a traceback. The counterexample search is covered there too: its candidate pool must stay deterministic and put relevant probes ahead of merely short ones, and a synthesized test must assert an observed error message rather than an exception type alone. Both of those are regression tests for mistakes that were made and measured, not hypotheticals.
 
 `check_consistency.py` is the more unusual one. It re-derives every headline number from the stored artifacts and fails if the writeup drifts from the data. It is what caught a stale report contradicting its own raw results, and it runs in CI so the drift cannot return.
 
@@ -345,7 +380,7 @@ cd Placebo
 python -m pip install -r requirements.lock
 python -m pip install -e .
 
-python -m pytest tests             # 308 passed
+python -m pytest tests             # 337 passed
 python scripts/check_consistency.py   # 102/102 checks pass
 ```
 
@@ -501,7 +536,7 @@ placebo/
 │   └── evidence/bundle.py         replayable evidence bundles
 │
 ├── scripts/                       one entry point per experiment (25 files)
-├── tests/                         308 tests guarding the load-bearing parts
+├── tests/                         337 tests guarding the load-bearing parts
 │
 ├── subject/                       vendored semver 3.0.4 (BSD-3), pinned
 ├── subjects/inflection/           vendored inflection 0.5.1 (MIT), pinned

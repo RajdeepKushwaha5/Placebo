@@ -133,12 +133,20 @@ class SubjectRunner:
         test_dir: str = "tests",
         timeout_s: int = 300,
         source_roots: tuple[str, ...] = (),
+        executor=None,
     ) -> None:
         self.subject_root = Path(subject_root).resolve()
         self.workspace = Path(workspace).resolve()
         self.test_dir = test_dir
         self.timeout_s = timeout_s
         self.source_roots = tuple(source_roots)
+        # Where the subject's tests actually run. Local execution is not a
+        # security boundary; see placebo.sandbox.
+        if executor is None:
+            from ..sandbox import LocalExecutor
+
+            executor = LocalExecutor()
+        self.executor = executor
         self._originals: dict[str, str] = {}
 
     def import_paths(self) -> list[str]:
@@ -277,38 +285,23 @@ class SubjectRunner:
             "addopts=",
             *(extra_args or []),
         ]
-        env = dict(os.environ)
+        # A local run inherits the host environment; an isolated one is handed
+        # only the variables it needs, and the executor decides which.
+        env = dict(os.environ) if not self.executor.isolated else {}
         env["PYTHONPATH"] = os.pathsep.join(self.import_paths())
         env["PYTHONDONTWRITEBYTECODE"] = "1"
         env["PYTHONHASHSEED"] = "0"
 
         start = time.perf_counter()
-        try:
-            proc = subprocess.run(
-                cmd,
-                cwd=self.workspace,
-                env=env,
-                capture_output=True,
-                text=True,
-                timeout=self.timeout_s,
-            )
-        except subprocess.TimeoutExpired as exc:
-            return RunResult(
-                returncode=-1,
-                duration_s=time.perf_counter() - start,
-                stdout=(exc.stdout or b"").decode("utf-8", "replace")
-                if isinstance(exc.stdout, bytes)
-                else (exc.stdout or ""),
-                stderr="TIMEOUT",
-                timed_out=True,
-            )
+        outcome = self.executor.run(cmd, self.workspace, env, self.timeout_s)
         duration = time.perf_counter() - start
         return RunResult(
-            returncode=proc.returncode,
+            returncode=outcome.returncode,
             duration_s=duration,
-            stdout=proc.stdout,
-            stderr=proc.stderr,
-            failing_tests=sorted(set(_FAILED_RE.findall(proc.stdout))),
+            stdout=outcome.stdout,
+            stderr=outcome.stderr,
+            failing_tests=sorted(set(_FAILED_RE.findall(outcome.stdout))),
+            timed_out=outcome.timed_out,
         )
 
     # -- mutant classification --------------------------------------------

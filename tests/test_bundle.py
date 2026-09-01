@@ -321,3 +321,40 @@ def test_the_shipped_bundles_validate():
         report = validate_bundle(ROOT / "artifacts" / name)
         assert report.replayable, \
             f"{name}: {[f.to_dict() for f in report.errors]}"
+
+
+# -- the boundary is part of the evidence ----------------------------------
+
+
+def test_the_environment_records_that_a_run_was_not_isolated():
+    """A host run and an isolated run are different evidence, so a reader must
+    be able to tell them apart without having been present."""
+    record = environment_record("qwen2.5:7b", "sha256:abc")
+    assert record["sandbox"]["isolated"] is False
+    assert "without a sandbox" in record["sandbox"]["warning"]
+
+
+def test_the_environment_records_the_container_it_ran_in():
+    from placebo.sandbox import DockerExecutor
+
+    described = DockerExecutor(digest="python@sha256:deadbeef").describe()
+    record = environment_record("qwen2.5:7b", "sha256:abc", sandbox=described)
+
+    assert record["sandbox"]["isolated"] is True
+    assert record["sandbox"]["image_digest"] == "python@sha256:deadbeef"
+    assert record["sandbox"]["network"] == "none"
+    json.dumps(record)
+
+
+def test_a_bundle_carries_the_sandbox_into_its_manifest(tmp_path):
+    from placebo.sandbox import DockerExecutor
+
+    environment = environment_record(
+        "m", "d", sandbox=DockerExecutor(digest="python@sha256:abc").describe())
+    out = build_bundle(
+        out_dir=tmp_path / "b", suite_code=SUITE, evidences=[],
+        heldout_score={"mutation_score": 0.0},
+        environment=environment, subject_commit=COMMIT,
+    )
+    manifest = json.loads((out / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["environment"]["sandbox"]["image_digest"] == "python@sha256:abc"
