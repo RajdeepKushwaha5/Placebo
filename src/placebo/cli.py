@@ -20,6 +20,7 @@ here merges, rewrites production code, or acts without a human deciding to.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -71,6 +72,33 @@ def _census_path(config) -> Path:
     if config.name == "semver":
         return ROOT / "artifacts" / "census.json"
     return ROOT / "artifacts" / f"census_{config.name}.json"
+
+
+def _open_cache(config, enabled: bool = True):
+    """Open this repository's execution cache.
+
+    The fingerprint covers the interpreter, pytest, Placebo and the digest of
+    every mutation target, so editing the subject invalidates the cache instead
+    of serving results for code that no longer exists.
+    """
+    from .cache import NullCache, ResultCache, environment_fingerprint
+
+    if not enabled:
+        return NullCache()
+
+    digests = {}
+    for relative in config.resolved_targets():
+        path = config.root / relative
+        if path.is_file():
+            raw = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+            digests[relative] = hashlib.sha256(raw).hexdigest()
+
+    fingerprint = environment_fingerprint(digests)
+    cache = ResultCache(
+        ROOT / ".placebo-cache" / f"{config.name}.sqlite", fingerprint
+    )
+    cache.prune_stale()
+    return cache
 
 
 def _triage_path(config) -> Path:
@@ -145,11 +173,8 @@ def cmd_census(args: argparse.Namespace) -> int:
 
 def cmd_audit(args: argparse.Namespace) -> int:
     """Classify each test in a patch by its marginal fault-detection value."""
-    from .audit.marginal import (
-        audit_suite, minimal_patch, sample_fault_corpus,
-    )
+    from .audit.marginal import sample_fault_corpus
     from .mutation.engine import enumerate_subject
-    from .verification.runner import SubjectRunner
 
     suite_path = Path(args.patch)
     if not suite_path.is_absolute():
@@ -173,26 +198,79 @@ def cmd_audit(args: argparse.Namespace) -> int:
         # would report a gap-closing patch as detecting nothing novel.
         faults = sample_fault_corpus(faults, existing, args.faults)
 
+    return _run_audit(
+        args, config, existing, faults,
+        name=suite_path.stem,
+        label=suite_path.name,
+        code=suite_path.read_text(encoding="utf-8"),
+        minimized_path=suite_path.with_suffix(".minimized.py"),
+    )
+
+
+def _run_audit(args, config, existing, faults, name, label, code,
+               minimized_path, scope_note: str = "") -> int:
+    """Audit one patch and print the report. Shared by audit and audit-pr."""
+    store = _open_cache(config, enabled=not args.no_cache)
+    try:
+        return _audit_and_report(args, config, existing, faults, name, label,
+                                 code, minimized_path, scope_note, store)
+    finally:
+        # Windows holds a lock while a sqlite connection is open, so a missed
+        # close leaves the cache file undeletable for the next run.
+        store.close()
+
+
+def _audit_and_report(args, config, existing, faults, name, label, code,
+                      minimized_path, scope_note, store) -> int:
+    from .audit.marginal import AUDIT_PATH, audit_suite, minimal_patch
+    from .verification.runner import SubjectRunner
+
     runner = SubjectRunner(
         config.root, ROOT / ".placebo-ws" / f"cli-{config.name}",
         timeout_s=config.timeout_seconds,
     )
     runner.prepare()
 
-    code = suite_path.read_text(encoding="utf-8")
     def show_progress(phase: str, current: int, total: int) -> None:
         print(f"\r    {phase:24s} {current:>3}/{total:<3}", end="", flush=True)
 
-    print("\n  Running audit (first run is intentionally exhaustive):")
+    commit = config.commit or "working-tree"
+    coverage_map = None
+    if not args.no_select:
+        from .evaluation.repair import split_tests
+        from .selection import load_or_build_coverage_map
+
+        _preamble, patch_tests = split_tests(code)
+        coverage_map = load_or_build_coverage_map(
+            runner, store, commit, AUDIT_PATH, code,
+            {name for name, _src in patch_tests}, list(config.import_names),
+        )
+        if coverage_map.complete:
+            saved = coverage_map.reduction(faults)
+            print(f"\n  Coverage map: {coverage_map.to_dict()['attributed_lines']} "
+                  f"attributed lines, avoiding {saved:.0%} of test executions")
+        else:
+            print("\n  Coverage map unavailable; auditing exhaustively.")
+
+    warm = store.entries()
+    if warm:
+        print(f"\n  Running audit ({warm} cached executions available):")
+    else:
+        print("\n  Running audit (first run is intentionally exhaustive):")
     audit = audit_suite(
-        runner, suite_path.stem, code, faults, existing, progress=show_progress
+        runner, name, code, faults, existing, progress=show_progress,
+        cache=store, subject_commit=commit, coverage_map=coverage_map,
+        budget_s=args.budget or None,
     )
     print("\r" + " " * 48 + "\r", end="")
     summary = audit.summary()
     counts = summary["verdicts"]
 
-    print(f"\n  {summary['tests_audited']} tests in {suite_path.name}, "
-          f"audited against {summary['fault_corpus']} fault models\n")
+    print(f"\n  {summary['tests_audited']} tests in {label}, "
+          f"audited against {summary['fault_corpus']} fault models")
+    if scope_note:
+        print(f"  {scope_note}")
+    print()
     for record in audit.tests:
         print(f"    {record.verdict.value:24s} {record.name}")
     print()
@@ -202,12 +280,48 @@ def cmd_audit(args: argparse.Namespace) -> int:
     print(f"    {counts['UNPROVEN']:>3} show no marginal sensitivity under these fault models")
     print(f"    {counts['HARMFUL']:>3} are red or unstable against correct code")
     print()
+    if summary.get("budget_exhausted"):
+        print(f"    PARTIAL: the {args.budget}s budget stopped the audit after "
+              f"{summary['faults_evaluated']} of {summary['fault_corpus']} faults "
+              f"({summary['corpus_coverage']:.0%} of the corpus).")
+        print("    UNPROVEN below means 'not shown within the budget'.")
+        print()
+    if summary.get("faults_skipped_by_selection"):
+        print(f"    {summary['faults_skipped_by_selection']:>3} faults no test in "
+              f"this patch can reach (not executed)")
+        print()
     print(f"    gaps closed by this patch : {summary['gaps_closed_by_patch']}")
     print(f"    review burden reduction   : {summary['review_burden_reduction']:.0%}")
 
+    # Oracle strength is a separate axis from marginal value. A test can be the
+    # sole detector of a real fault and still only pin current behaviour, so the
+    # two are reported side by side rather than combined into one score.
+    from .oracle import report_suite, summarise as summarise_oracles
+
+    oracles = report_suite(code)
+    if oracles:
+        levels = summarise_oracles(oracles)
+        print()
+        print("    oracle strength:")
+        for label, count in levels["by_level"].items():
+            if count:
+                print(f"      {count:>3} {label}")
+        if levels["snapshot_only"]:
+            print(f"      {levels['snapshot_only']} test(s) record current behaviour "
+                  f"rather than verified correctness.")
+        if levels["brittle"]:
+            print(f"      {levels['brittle']} test(s) carry {levels['warnings']} "
+                  f"brittleness warning(s):")
+            kinds: dict[str, int] = {}
+            for report in oracles:
+                for warning in report.warnings:
+                    kinds[warning.kind] = kinds.get(warning.kind, 0) + 1
+            for kind, count in sorted(kinds.items(), key=lambda kv: -kv[1]):
+                print(f"        {count:>3} {kind}")
+
     if args.minimize:
         minimized, kept, preserved = minimal_patch(audit, code)
-        out = suite_path.with_suffix(".minimized.py")
+        out = minimized_path
         out.write_text(minimized or "# no tests carried measured novel value\n",
                        encoding="utf-8")
         print(f"\n    minimized patch -> {out.name} "
@@ -217,7 +331,7 @@ def cmd_audit(args: argparse.Namespace) -> int:
             preserved_faults = [f for f in faults if f.id in preserved]
             recheck = audit_suite(
                 runner,
-                f"{suite_path.stem}.minimized",
+                f"{name}.minimized",
                 minimized,
                 preserved_faults,
                 existing,
@@ -231,8 +345,103 @@ def cmd_audit(args: argparse.Namespace) -> int:
                 print(f"    lost faults: {sorted(preserved - still_detected)}")
                 return 1
             print("    minimized patch verification: NO LOSS (re-executed)")
+
+    stats = store.stats()
+    if stats.lookups:
+        print(f"\n    cache: {stats.hits} reused, {stats.misses} executed "
+              f"({stats.hit_rate:.0%} reused)")
     print("\n  Human approval required before merging. Placebo proposes; it does not merge.\n")
     return 0
+
+
+# --------------------------------------------------------------------------
+# audit-pr
+# --------------------------------------------------------------------------
+
+def cmd_audit_pr(args: argparse.Namespace) -> int:
+    """Audit only the tests a diff adds or changes.
+
+    A reviewer looking at a pull request is deciding about that diff, not about
+    the repository, so this scopes both sides of the question: the tests come
+    from the diff, and the fault corpus is narrowed to the source lines the
+    diff touched. The scope is printed with the verdicts, because "UNPROVEN
+    against 12 faults from one file" is a different statement from "UNPROVEN
+    against the full corpus".
+    """
+    from .diff import (
+        changed_test_functions, extract_tests, parse_unified_diff, scope_faults,
+    )
+    from .mutation.engine import enumerate_subject
+
+    if args.diff == "-":
+        text = sys.stdin.read()
+        source = "stdin"
+    else:
+        diff_path = Path(args.diff)
+        if not diff_path.is_absolute():
+            diff_path = Path.cwd() / diff_path
+        if not diff_path.is_file():
+            print(f"  no such diff: {diff_path}")
+            print("  Pass a unified diff file, or '-' to read one from stdin.")
+            return 2
+        text = diff_path.read_text(encoding="utf-8", errors="replace")
+        source = diff_path.name
+
+    resolved = _resolve_repo(args)
+    if resolved is None:
+        return 2
+    config, census, existing = resolved
+
+    # Diagnose the diff before demanding a fault map. A malformed diff, or one
+    # that touches no test, is knowable without a census, and reporting the
+    # census first would name the wrong problem.
+    diff = parse_unified_diff(text)
+    if not diff.files:
+        print(f"  {source} contains no recognisable file changes.")
+        return 2
+
+    selections = changed_test_functions(diff, config.root, config.test_roots)
+    if not selections:
+        print(f"\n  {source}: {len(diff.files)} file(s) changed, no test "
+              f"functions added or modified.")
+        print("  Nothing to audit. A diff that changes no test needs no test audit.\n")
+        return 0
+
+    code = extract_tests(config.root, selections)
+    if not code:
+        print("  Changed tests were found but could not be extracted.")
+        return 2
+
+    if not census:
+        print(f"  No fault map for '{config.name}'. Run: placebo census {args.repo}")
+        return 2
+
+    faults = enumerate_subject(
+        config.root, config.resolved_targets(), config.commit or "working-tree"
+    )
+    total = len(faults)
+    faults = scope_faults(faults, diff, config.test_roots)
+
+    changed = sum(len(names) for names in selections.values())
+    print(f"\n  {source}: {changed} changed test(s) across "
+          f"{len(selections)} file(s)")
+    for path in sorted(selections):
+        print(f"    {path}: {', '.join(selections[path])}")
+
+    if len(faults) < total:
+        note = (f"scope: {len(faults)} of {total} faults, limited to source "
+                f"lines this diff touched")
+    else:
+        note = f"scope: the full corpus of {total} faults (no source file changed)"
+
+    return _run_audit(
+        args, config, existing, faults,
+        name="pr",
+        label=source,
+        code=code,
+        minimized_path=ROOT / "artifacts" / "pr.minimized.py",
+        scope_note=note,
+    )
 
 
 # --------------------------------------------------------------------------
@@ -383,9 +592,31 @@ def build_parser() -> argparse.ArgumentParser:
     p_audit.add_argument("--repo", default=DEFAULT_REPO,
                          help="repository to audit against (needs .placebo.toml)")
     p_audit.add_argument("--faults", type=int, default=0, help="cap the fault corpus")
+    p_audit.add_argument("--no-cache", action="store_true",
+                         help="re-execute everything, ignoring recorded results")
+    p_audit.add_argument("--no-select", action="store_true",
+                         help="skip coverage-based selection and audit exhaustively")
+    p_audit.add_argument("--budget", type=float, default=0,
+                         help="stop after N seconds and report partial evidence")
     p_audit.add_argument("--minimize", action="store_true",
                          help="also write the smallest patch that loses no detection")
     p_audit.set_defaults(func=cmd_audit)
+
+    p_pr = sub.add_parser("audit-pr",
+                          help="audit only the tests a diff adds or changes")
+    p_pr.add_argument("diff", help="unified diff file, or '-' for stdin")
+    p_pr.add_argument("--repo", default=DEFAULT_REPO,
+                      help="repository to audit against (needs .placebo.toml)")
+    p_pr.add_argument("--faults", type=int, default=0, help="cap the fault corpus")
+    p_pr.add_argument("--no-cache", action="store_true",
+                      help="re-execute everything, ignoring recorded results")
+    p_pr.add_argument("--no-select", action="store_true",
+                      help="skip coverage-based selection and audit exhaustively")
+    p_pr.add_argument("--budget", type=float, default=0,
+                      help="stop after N seconds and report partial evidence")
+    p_pr.add_argument("--minimize", action="store_true",
+                      help="also write the smallest patch that loses no detection")
+    p_pr.set_defaults(func=cmd_audit_pr)
 
     p_gaps = sub.add_parser("gaps", help="list faults the existing suite misses")
     p_gaps.add_argument("--repo", default=DEFAULT_REPO,

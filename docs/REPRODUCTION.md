@@ -42,7 +42,11 @@ Placebo's own engine imports only the standard library.
 python -m pytest tests
 ```
 
-Expected: **101 passed** in a few seconds. These cover mutant-identity stability,
+Expected: **212 passed**, about 7 minutes. Most run in under a second; the
+`slow` marker covers the end-to-end CLI tests, which build a real repository
+and run real pytest subprocesses. For a fast subset while iterating, use
+`python -m pytest tests -m "not slow"` (about 1 minute). These cover
+mutant-identity stability,
 held-out split disjointness, static admission gates, suite assembly, and the
 malformed-candidate regression found during the final audit.
 

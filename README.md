@@ -7,8 +7,8 @@ It runs entirely on a local 7B model on a consumer laptop GPU. No API key, no cr
 | | |
 |---|---|
 | **Repository** | https://github.com/RajdeepKushwaha5/Placebo |
-| **Verify in 3 minutes** | `pytest tests` then `python scripts/check_consistency.py` |
-| **Status** | 101 unit tests, 102 consistency checks, 2 evidence bundles replaying clean |
+| **Verify** | `pytest tests -m "not slow"` (1 min) then `python scripts/check_consistency.py` (2 s) |
+| **Status** | 212 unit tests, 102 consistency checks, 2 evidence bundles replaying clean |
 
 The honest post-hackathon plan, including the requirements for calling this a
 general product, is in [`docs/PRODUCT_ROADMAP.md`](docs/PRODUCT_ROADMAP.md).
@@ -229,13 +229,13 @@ attempts are not the mechanism.
 
 ```console
 $ python -m pytest tests
-101 passed
+212 passed
 
 $ python scripts/check_consistency.py
 102/102 checks pass
 ```
 
-The 101 unit tests guard the parts that carry claims: mutant identity must be content-derived and stable, the held-out split must not leak, the admission gates must reject tests that cheat, minimization must never drop a fault, and the repository contract must fail with an actionable reason rather than a traceback. The counterexample search is covered there too: its candidate pool must stay deterministic and put relevant probes ahead of merely short ones, and a synthesized test must assert an observed error message rather than an exception type alone. Both of those are regression tests for mistakes that were made and measured, not hypotheticals.
+The 212 unit tests guard the parts that carry claims: mutant identity must be content-derived and stable, the held-out split must not leak, the admission gates must reject tests that cheat, minimization must never drop a fault, and the repository contract must fail with an actionable reason rather than a traceback. The counterexample search is covered there too: its candidate pool must stay deterministic and put relevant probes ahead of merely short ones, and a synthesized test must assert an observed error message rather than an exception type alone. Both of those are regression tests for mistakes that were made and measured, not hypotheticals.
 
 `check_consistency.py` is the more unusual one. It re-derives every headline number from the stored artifacts and fails if the writeup drifts from the data. It is what caught a stale report contradicting its own raw results, and it runs in CI so the drift cannot return.
 
@@ -260,7 +260,7 @@ cd Placebo
 python -m pip install -r requirements.lock
 python -m pip install -e .
 
-python -m pytest tests             # 101 passed
+python -m pytest tests             # 212 passed
 python scripts/check_consistency.py   # 102/102 checks pass
 ```
 
@@ -416,7 +416,7 @@ placebo/
 │   └── evidence/bundle.py         replayable evidence bundles
 │
 ├── scripts/                       one entry point per experiment (25 files)
-├── tests/                         101 tests guarding the load-bearing parts
+├── tests/                         212 tests guarding the load-bearing parts
 │
 ├── subject/                       vendored semver 3.0.4 (BSD-3), pinned
 ├── subjects/inflection/           vendored inflection 0.5.1 (MIT), pinned

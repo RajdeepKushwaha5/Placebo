@@ -152,13 +152,17 @@ class SubjectRunner:
     # -- execution ---------------------------------------------------------
 
     def run_suite(
-        self, selection: list[str] | None = None, tb: str = "no"
+        self, selection: list[str] | None = None, tb: str = "no",
+        extra_args: list[str] | None = None,
     ) -> RunResult:
         """Run the subject suite (or a selection of node ids / files).
 
         ``tb`` controls traceback detail. Census runs use ``no`` for speed, but
         the admission gate uses ``short`` so the rejection feedback handed back
         to the agent contains the actual assertion values it got wrong.
+
+        ``extra_args`` are appended verbatim, which is how the coverage pass
+        turns instrumentation on without every other caller paying for it.
         """
         target = selection if selection else [self.test_dir]
         cmd = [
@@ -174,6 +178,7 @@ class SubjectRunner:
             "--no-header",
             "-o",
             "addopts=",
+            *(extra_args or []),
         ]
         env = dict(os.environ)
         env["PYTHONPATH"] = str(self.workspace)

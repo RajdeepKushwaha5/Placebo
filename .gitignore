@@ -1,5 +1,6 @@
 # Disposable execution workspaces (recreated by SubjectRunner.prepare())
 .placebo-ws/
+.placebo-cache/
 .benchmarks/
 __pycache__/
 *.pyc

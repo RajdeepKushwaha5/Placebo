@@ -35,12 +35,15 @@ in the corpus expresses.
 from __future__ import annotations
 
 import re
+import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Callable
 
+from ..cache import NullCache, ResultCache
 from ..evaluation.repair import split_tests
 from ..mutation.models import Mutant
+from ..selection import CoverageMap
 from ..verification.runner import SubjectRunner
 
 AUDIT_PATH = "tests/test_placebo_audit.py"
@@ -108,6 +111,12 @@ class SuiteAudit:
     tests: list[TestAudit] = field(default_factory=list)
     fault_corpus: int = 0
     existing_suite_gaps: int = 0
+    # Faults no eligible test can reach, so no execution was spent on them.
+    skipped_by_selection: int = 0
+    # Faults actually considered. Lower than fault_corpus only when a
+    # wall-clock budget stopped the matrix early.
+    faults_evaluated: int = 0
+    budget_exhausted: bool = False
 
     def by_verdict(self, verdict: Verdict) -> list[TestAudit]:
         return [t for t in self.tests if t.verdict is verdict]
@@ -137,6 +146,13 @@ class SuiteAudit:
             "existing_suite_gaps_in_corpus": self.existing_suite_gaps,
             "verdicts": counts,
             "gaps_closed_by_patch": len(covered),
+            "faults_skipped_by_selection": self.skipped_by_selection,
+            "faults_evaluated": self.faults_evaluated,
+            "budget_exhausted": self.budget_exhausted,
+            "corpus_coverage": (
+                round(self.faults_evaluated / self.fault_corpus, 4)
+                if self.fault_corpus else 0.0
+            ),
             "review_burden_reduction": (
                 round((len(self.tests) - len(kept)) / len(self.tests), 4)
                 if self.tests else 0.0
@@ -195,13 +211,29 @@ def audit_suite(
     existing_kills: set[str],
     stability_repeats: int = 2,
     progress: Callable[[str, int, int], None] | None = None,
+    cache: "ResultCache | NullCache | None" = None,
+    subject_commit: str = "",
+    coverage_map: "CoverageMap | None" = None,
+    budget_s: float | None = None,
 ) -> SuiteAudit:
     """Compute per-test marginal fault-detection value.
 
     `existing_kills` is the set of fault ids the repository's own suite already
     detects, taken from the census. Faults outside that set are the repo's real
     blind spots, and detecting one of those is what "novel" means here.
+
+    `cache` skips executions whose inputs are byte-identical to a recorded one.
+    It changes runtime only: a miss runs exactly what the uncached path would
+    run, and the verdicts are computed from the same values either way. Note
+    that a cached stability result is measured once per patch and environment,
+    so re-running will not take a second sample; pass a `NullCache` to force
+    fresh execution.
     """
+    started = time.perf_counter()
+    store = cache if cache is not None else NullCache()
+    patch_hash = ResultCache.hash_patch(suite_code)
+    commit = subject_commit or (faults[0].subject_commit if faults else "")
+
     audit = SuiteAudit(suite_name=suite_name, fault_corpus=len(faults))
     audit.existing_suite_gaps = sum(1 for f in faults if f.id not in existing_kills)
 
@@ -216,13 +248,26 @@ def audit_suite(
     clean_done = 0
     for name, source in tests:
         probe = preamble + "\n" + source
-        verdicts = []
-        for _ in range(max(1, stability_repeats)):
-            with runner.extra_tests({AUDIT_PATH: probe}):
-                verdicts.append(runner.run_suite([AUDIT_PATH]).passed)
-            clean_done += 1
+        # Keyed on the individual test's source, not the whole patch, so
+        # editing one test does not discard the other tests' fitness results.
+        probe_key = ResultCache.key(
+            commit, f"clean:{name}", ResultCache.hash_patch(probe), [AUDIT_PATH]
+        )
+        cached = store.get(probe_key)
+        if cached is not None:
+            verdicts = list(cached["verdicts"])
+            clean_done += max(1, stability_repeats)
             if progress:
                 progress("clean/stability checks", clean_done, clean_total)
+        else:
+            verdicts = []
+            for _ in range(max(1, stability_repeats)):
+                with runner.extra_tests({AUDIT_PATH: probe}):
+                    verdicts.append(runner.run_suite([AUDIT_PATH]).passed)
+                clean_done += 1
+                if progress:
+                    progress("clean/stability checks", clean_done, clean_total)
+            store.put(probe_key, {"verdicts": verdicts})
         green = verdicts[0]
         stable = len(set(verdicts)) == 1
         records[name] = TestAudit(name=name, green_on_clean=green, stable=stable)
@@ -241,18 +286,49 @@ def audit_suite(
 
     # ---- kill matrix: one execution per fault ----------------------------
     for index, fault in enumerate(faults, 1):
-        run = runner.run_mutant(
-            fault, selection=[AUDIT_PATH], extra={AUDIT_PATH: suite_code}
+        # Stop on the budget rather than run past it, and record how far we
+        # got. A cached lookup costs nothing, so the budget is only checked
+        # against work that was actually executed.
+        if budget_s is not None and time.perf_counter() - started > budget_s:
+            audit.budget_exhausted = True
+            break
+        audit.faults_evaluated = index
+        # A test that never executes the mutated line cannot detect the fault,
+        # so running it proves nothing. The map is conservative: anything it
+        # cannot positively attribute selects the whole eligible set.
+        if coverage_map is not None:
+            selected = coverage_map.tests_for(fault) & eligible
+        else:
+            selected = eligible
+        if not selected:
+            audit.skipped_by_selection += 1
+            if progress:
+                progress("fault matrix", index, len(faults))
+            continue
+
+        selection = (
+            [AUDIT_PATH] if selected == eligible
+            else sorted(f"{AUDIT_PATH}::{name}" for name in selected)
         )
-        if run.status.value not in ("killed", "survived"):
+        key = ResultCache.key(commit, fault.id, patch_hash, selection)
+        cached = store.get(key)
+        if cached is not None:
+            status, failing = cached["status"], cached["failing_tests"]
+        else:
+            run = runner.run_mutant(
+                fault, selection=selection, extra={AUDIT_PATH: suite_code}
+            )
+            status, failing = run.status.value, list(run.failing_tests)
+            store.put(key, {"status": status, "failing_tests": failing})
+        if progress:
+            progress("fault matrix", index, len(faults))
+        if status not in ("killed", "survived"):
             continue  # invalid/timeout faults are not scoreable evidence
-        detected_by = _failing_test_names(run.failing_tests) & eligible
+        detected_by = _failing_test_names(failing) & selected
         for name in detected_by:
             records[name].detects.append(fault.id)
             if fault.id not in existing_kills:
                 records[name].novel.append(fault.id)
-        if progress:
-            progress("fault matrix", index, len(faults))
 
     # ---- counterfactual: which novel faults has exactly one detector? ----
     novel_detectors: dict[str, list[str]] = {}
@@ -289,6 +365,11 @@ def audit_suite(
             record.note = (
                 "no marginal fault sensitivity under the evaluated fault models"
             )
+            if audit.budget_exhausted:
+                record.note += (
+                    f"; only {audit.faults_evaluated} of {audit.fault_corpus} "
+                    "were evaluated before the time budget ran out"
+                )
 
     audit.tests = [records[n] for n, _ in tests]
     return audit
