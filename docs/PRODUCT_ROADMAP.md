@@ -257,15 +257,17 @@ What is still uncovered, and why it matters differently in each case:
 
 | module | line coverage | note |
 |---|---:|---|
-| `evidence/bundle.py` | 0% | exercised end to end by `scripts/build_bundle.py`, no unit tests |
-| `search/metamorphic.py` | 0% | exercised end to end by `scripts/run_metamorphic.py`, no unit tests |
+| `evidence/bundle.py` | covered | plus `evidence/validate.py`, new, which refuses a bundle that cannot be trusted |
+| `search/metamorphic.py` | covered | soundness gate and no-recorded-value property both asserted |
 | `verification/admission.py` | 45% | the model-facing paths, reachable only with a model running |
 | `evaluation/evaluator.py` | 54% | same |
 | `verification/prober.py` | 61% | the sandbox rejection paths are tested; the evaluation paths need a subject |
 
-The two zeros are the honest concern. Both run in CI through their scripts, so
-they are executed rather than unverified, but neither has a test that would
-localise a regression. Before a 1.0 release:
+The two zeros are closed. Writing their tests found a real defect: `verify`
+read `patch_sha256` out of a bundle's manifest and never compared anything
+against it, so a bundle whose patch had been edited replayed and reported that
+every claim held. Validation now runs before replay and refuses. Before a 1.0
+release:
 
 - reach at least 85 percent branch coverage on generic core modules;
 - add end-to-end tests for every public CLI command;

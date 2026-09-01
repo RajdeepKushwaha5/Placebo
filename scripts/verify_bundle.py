@@ -24,7 +24,8 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from placebo.evaluation.repair import split_tests  # noqa: E402
 from placebo.mutation.engine import enumerate_subject  # noqa: E402
-from placebo.verification.runner import SubjectRunner  # noqa: E402
+from placebo.evidence.validate import render, validate_bundle
+from placebo.verification.runner import SubjectRunner, allocate_workspace  # noqa: E402
 
 PROBE = "tests/test_bundle_verify.py"
 TARGET_FILES = ["semver/version.py"]
@@ -36,12 +37,19 @@ def main() -> int:
     args = parser.parse_args()
 
     bundle = ROOT / args.bundle
-    manifest_path = bundle / "manifest.json"
-    if not manifest_path.exists():
-        print(f"no bundle at {bundle}")
-        return 2
 
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    # Validate before replaying. A bundle whose patch does not match its own
+    # recorded hash is not evidence, and replaying it would report that its
+    # claims hold about a file nobody measured.
+    report = validate_bundle(bundle)
+    if not report.replayable:
+        print(render(report))
+        print("  Refusing to replay. Fix or re-generate the bundle.")
+        return 2
+    for warning in report.warnings:
+        print(f"  WARNING  {warning.code}: {warning.detail}")
+
+    manifest = report.manifest or {}
     tests_evidence = json.loads(
         (bundle / "evidence" / "tests.json").read_text(encoding="utf-8")
     )
@@ -55,7 +63,12 @@ def main() -> int:
     preamble, tests = split_tests(suite)
     by_name = dict(tests)
 
-    runner = SubjectRunner(subject, ROOT / ".placebo-ws" / "verify", timeout_s=60)
+    runner = SubjectRunner(
+        subject,
+        allocate_workspace(ROOT / ".placebo-ws", "verify",
+                           manifest["subject_commit"]),
+        timeout_s=60,
+    )
     runner.prepare()
 
     print("=" * 74)
@@ -100,6 +113,7 @@ def main() -> int:
     if broken:
         print(f"  {broken} BROKEN")
     print("=" * 74)
+    runner.cleanup()
     return 1 if broken else 0
 
 
