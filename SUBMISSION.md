@@ -8,7 +8,7 @@ minutes without a GPU or an API key.
 ```bash
 python -m pip install -r requirements.lock
 python -m pytest tests -q                 # 37 passed
-python scripts/check_consistency.py       # 72/72 checks pass
+python scripts/check_consistency.py       # 77/77 checks pass
 python scripts/verify_bundle.py --bundle artifacts/bundle          # 7/7 hold
 python scripts/verify_bundle.py --bundle artifacts/real-gap-bundle # 3/3 hold
 ```
@@ -21,14 +21,22 @@ to confirm nothing here is asserted rather than measured.
 
 | # | Deliverable | Where |
 |---|---|---|
-| 1 | **Solution code + improvement changelog** | this repository; changelog is [README §4](README.md#4-improvement-changelog) |
-| 2 | **Reproduction guide** | [`docs/REPRODUCTION.md`](docs/REPRODUCTION.md) — two paths, one needs no model |
+| 1 | **Solution code + improvement changelog** | this repository; changelog is [README section 11](README.md#11-improvement-changelog) |
+| 2 | **Reproduction guide** | [`docs/REPRODUCTION.md`](docs/REPRODUCTION.md) ,  two paths, one needs no model |
 | 3 | **Solution video** | submitted separately |
-| 4 | **Agent trajectories** | [`trajectories/`](trajectories/) — 6 rendered walkthroughs + raw JSONL of every model call |
+| 4 | **Agent trajectories** | [`trajectories/`](trajectories/) ,  6 rendered walkthroughs + raw JSONL of every model call |
 
-Required narrative elements, all in the README: intended user and bottleneck
-(§1), why it matters (§1), improvement changelog with evidence per row (§4),
-main failure mode (§5), hot take (§6), what existed before the competition (§7).
+Required narrative elements and where they live:
+
+| element | location |
+|---|---|
+| Intended user and their bottleneck | README section 1 |
+| Why solving it is valuable | README section 1 |
+| Improvement changelog, evidence per row | README section 11 |
+| Main failure mode | README section 12 |
+| Hot take | README section 13 |
+| What existed before the competition | `subject/PROVENANCE.md` and `subjects/inflection/PROVENANCE.md`, one per vendored dependency |
+| Full limitations write-up | `docs/LIMITATIONS.md` |
 
 ## Headline results, and the file that proves each
 
@@ -43,8 +51,9 @@ main failure mode (§5), hot take (§6), what existed before the competition (§
 | Second repository (`inflection`): 85.5% vs semver's 96.2% | `experiments/multirepo_census.json` |
 | Metamorphic oracle: 12 properties sound, detects 1/6 | `experiments/metamorphic.json` |
 | Run-to-run variance: admitted stable, retry recoveries 0–2 | `experiments/variance.json` |
-| Equal-budget control: does scaffolding beat more calls? | `experiments/equal_budget.json` |
+| Equal-budget control: 3/12 on 36 calls vs 7/12 on 23 | `experiments/equal_budget.json` |
 | Repeated headline runs with bootstrap intervals | `experiments/seeds.json` |
+| Run-to-run spread for one stored condition | `experiments/variance.json` |
 | Held-out comparison: baseline 0%, best condition 31% | `experiments/results.json` |
 
 Rendered together: [`artifacts/report.md`](artifacts/report.md) and the
@@ -58,7 +67,7 @@ python scripts/package_submission.py
 
 Writes `placebo-submission.zip` and verifies it before you upload: under the
 size limit, all required deliverables present, no credentials, no workspace or
-cache files. Current archive: **0.36 MB across 177 files**.
+cache files. Current archive: **0.39 MB across 189 files**.
 
 ## The product surface
 
