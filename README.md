@@ -360,14 +360,18 @@ Mutation score is a proxy. To test outside it, defects that genuinely shipped in
 
 Issue `#463` is the interesting one. It removes dead code, so finding no witness is the correct answer, and it independently confirms the equivalent-mutant verdict this project reached from the other direction. Placebo flagged that block unkillable; upstream deleted it in January 2025.
 
-### 3.4 A second repository
+### 3.4 Four repositories, two of them never vendored
 
-| subject | domain | tests | faults | mutation score |
-|---|---|---:|---:|---:|
-| `semver` | version comparison and boundary logic | 329 | 185 | **96.2%** |
-| `inflection` | string transformation | 455 | 76 | **85.5%** |
+| subject | how obtained | tests | mutation score |
+|---|---|---:|---:|
+| `semver` 3.0.4 | vendored, pinned | 329 | **96.2%** |
+| `inflection` 0.5.1 | vendored, pinned | 455 | **85.5%** |
+| `inflection` 0.5.1 upstream | cloned at `b00d4d34` | 467 | **74.2%** |
+| `pathspec` v1.1.1 | cloned at `ecf71a99` | - | **64.3%** |
 
-The scores differ substantially, which is the useful part. The method reports a property of each suite rather than returning a constant.
+The scores differ substantially, which is the useful part: the method reports a property of each suite rather than returning a constant. The bottom two were cloned by [`scripts/run_external_repos.py`](scripts/run_external_repos.py) and described only by a `.placebo.toml`, with no Placebo source edited.
+
+The two `inflection` rows are the same library at the same tag, scored differently because the vendored copy mutates one module while the upstream run mutates the package as its own suite sees it. Both numbers are real; neither is the library's "true" score, which is the point of reporting a property of a suite rather than of a project.
 
 ### 3.5 Oracle strength against detection power
 
@@ -588,7 +592,16 @@ Anything that fails a gate is rejected with a structured code (`CLEAN_HEAD_FAILE
 ```
 placebo/
 ├── src/placebo/
-│   ├── cli.py                     audit / gaps / explain / verify
+│   ├── cli.py                     audit / audit-pr / oracles / gaps / verify
+│   ├── config.py                  the .placebo.toml repository contract
+│   ├── doctor.py                  preflight: can this repository be audited?
+│   ├── sandbox.py                 networkless container, or an explicit host run
+│   ├── cache.py                   content-addressed results, resume after a stop
+│   ├── selection.py               run a fault only against tests that reach it
+│   ├── diff.py                    unified diff parsing, pull-request scoping
+│   ├── oracle.py                  L1 to L4 labels and brittleness warnings
+│   ├── sourcing.py                find oracles the repository already states
+│   ├── sarif.py                   findings as code-scanning annotations
 │   ├── mutation/
 │   │   ├── engine.py              AST fault injection, surgical one-token spans
 │   │   ├── models.py              content-hashed fault identity
@@ -604,9 +617,13 @@ placebo/
 │   │   └── metamorphic.py         level-3 oracle, twelve properties
 │   ├── agents/                    local model client and test author
 │   ├── evaluation/                suite assembly, model-free repair, scoring
-│   └── evidence/bundle.py         replayable evidence bundles
+│   └── evidence/
+│       ├── bundle.py              replayable evidence bundles
+│       └── validate.py            refuse a bundle that cannot be trusted
 │
-├── scripts/                       one entry point per experiment (25 files)
+├── Dockerfile                     the sandbox runner image
+├── action.yml                     GitHub Action for pull-request audits
+├── scripts/                       one entry point per experiment
 ├── tests/                         360 tests guarding the load-bearing parts
 │
 ├── subject/                       vendored semver 3.0.4 (BSD-3), pinned
