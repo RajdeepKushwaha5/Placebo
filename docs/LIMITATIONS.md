@@ -5,7 +5,7 @@ better use of a reviewer's time than a list of strengths.
 
 **Start with section 9** if you only read one: the expected values in every
 generated test are a snapshot of current behavior, not verified correctness.
-**Section 10** names the one control that is implemented but not yet run.
+**Section 10** reports the equal-compute baseline control.
 
 ## 1. Mutation score is a proxy, not ground truth
 
@@ -156,7 +156,7 @@ insufficient for correctness.
 |---|---|---|:--:|
 | 1 | explicit specification, examples, invariants | correctness w.r.t. intent | no |
 | 2 | agreement between independent implementations | correctness by cross-check | no |
-| 3 | metamorphic properties (`parse(str(v)) == v`, `compare(a,b) == -compare(b,a)`) | correctness of relationships, no hardcoded outputs | no |
+| 3 | metamorphic properties (`parse(str(v)) == v`, `compare(a,b) == -compare(b,a)`) | correctness of relationships, no hardcoded outputs | **yes** |
 | 4 | single-reference execution snapshot | consistency only | **yes** |
 
 Placebo's default oracle is **level 4** and is labelled as such rather than

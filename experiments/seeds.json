@@ -1,0 +1,63 @@
+{
+  "bootstrap_samples": 10000,
+  "conditions": {
+    "baseline_A": {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "max": 1.0,
+      "median": 1.0,
+      "min": 1.0,
+      "runs": 1,
+      "values": [
+        1
+      ]
+    }
+  },
+  "faults_per_run": 12,
+  "method": "independent repeated runs; not distinct RNG seeds",
+  "model": "qwen2.5:7b",
+  "per_fault_admission": {
+    "baseline_A": {
+      "0311cef58a002912": [
+        false
+      ],
+      "03fe90d993fa6512": [
+        false
+      ],
+      "05cc88d0e0cba70d": [
+        true
+      ],
+      "0723feea7643f22a": [
+        false
+      ],
+      "085c382c12637d90": [
+        false
+      ],
+      "0a016d6d36518355": [
+        false
+      ],
+      "1486704c2686bc4b": [
+        false
+      ],
+      "1ac3986cca492880": [
+        false
+      ],
+      "1ca242d1ca74bb80": [
+        false
+      ],
+      "1d331d5b9501ed06": [
+        false
+      ],
+      "2efccfe40d947649": [
+        false
+      ],
+      "5c7e1209a4ecd4ba": [
+        false
+      ]
+    }
+  },
+  "repeats_requested": 3,
+  "wall_s": 660.0
+}

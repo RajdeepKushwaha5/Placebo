@@ -37,6 +37,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Callable
 
 from ..evaluation.repair import split_tests
 from ..mutation.models import Mutant
@@ -128,6 +129,7 @@ class SuiteAudit:
     def summary(self) -> dict:
         counts = {v.value: len(self.by_verdict(v)) for v in Verdict}
         covered = {f for t in self.tests for f in t.novel}
+        kept, _preserved = select_minimal_cover(self)
         return {
             "suite": self.suite_name,
             "tests_audited": len(self.tests),
@@ -136,7 +138,8 @@ class SuiteAudit:
             "verdicts": counts,
             "gaps_closed_by_patch": len(covered),
             "review_burden_reduction": (
-                round(len(self.removable) / len(self.tests), 4) if self.tests else 0.0
+                round((len(self.tests) - len(kept)) / len(self.tests), 4)
+                if self.tests else 0.0
             ),
         }
 
@@ -191,6 +194,7 @@ def audit_suite(
     faults: list[Mutant],
     existing_kills: set[str],
     stability_repeats: int = 2,
+    progress: Callable[[str, int, int], None] | None = None,
 ) -> SuiteAudit:
     """Compute per-test marginal fault-detection value.
 
@@ -208,12 +212,17 @@ def audit_suite(
     records: dict[str, TestAudit] = {}
 
     # ---- fitness: green and stable against correct code ------------------
+    clean_total = len(tests) * max(1, stability_repeats)
+    clean_done = 0
     for name, source in tests:
         probe = preamble + "\n" + source
         verdicts = []
         for _ in range(max(1, stability_repeats)):
             with runner.extra_tests({AUDIT_PATH: probe}):
                 verdicts.append(runner.run_suite([AUDIT_PATH]).passed)
+            clean_done += 1
+            if progress:
+                progress("clean/stability checks", clean_done, clean_total)
         green = verdicts[0]
         stable = len(set(verdicts)) == 1
         records[name] = TestAudit(name=name, green_on_clean=green, stable=stable)
@@ -231,7 +240,7 @@ def audit_suite(
         return audit
 
     # ---- kill matrix: one execution per fault ----------------------------
-    for fault in faults:
+    for index, fault in enumerate(faults, 1):
         run = runner.run_mutant(
             fault, selection=[AUDIT_PATH], extra={AUDIT_PATH: suite_code}
         )
@@ -242,6 +251,8 @@ def audit_suite(
             records[name].detects.append(fault.id)
             if fault.id not in existing_kills:
                 records[name].novel.append(fault.id)
+        if progress:
+            progress("fault matrix", index, len(faults))
 
     # ---- counterfactual: which novel faults has exactly one detector? ----
     novel_detectors: dict[str, list[str]] = {}

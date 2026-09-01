@@ -306,6 +306,18 @@ def test_minimization_is_deterministic_and_drops_true_duplicates():
     assert first == second == ["test_b"], "greedy cover should pick the superset test"
 
 
+def test_review_burden_reduction_uses_the_minimized_cover():
+    """Two sibling-redundant tests are not both safely removable."""
+    from placebo.audit.marginal import Verdict
+
+    audit = _audit_with([
+        ("test_a", ["F1"], Verdict.REDUNDANT_WITH_SIBLING),
+        ("test_b", ["F1"], Verdict.REDUNDANT_WITH_SIBLING),
+    ])
+
+    assert audit.summary()["review_burden_reduction"] == 0.5
+
+
 def test_harmful_tests_are_never_credited_or_kept():
     from placebo.audit.marginal import Verdict, select_minimal_cover
 

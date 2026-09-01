@@ -8,7 +8,10 @@ It runs entirely on a local 7B model on a consumer laptop GPU. No API key, no cr
 |---|---|
 | **Repository** | https://github.com/RajdeepKushwaha5/Placebo |
 | **Verify in 3 minutes** | `pytest tests -q` then `python scripts/check_consistency.py` |
-| **Status** | 37 unit tests, 77 consistency checks, 2 evidence bundles replaying clean |
+| **Status** | 38 unit tests, 77 consistency checks, 2 evidence bundles replaying clean |
+
+The honest post-hackathon plan—including the requirements for calling this a
+general product—is in [`docs/PRODUCT_ROADMAP.md`](docs/PRODUCT_ROADMAP.md).
 
 ---
 
@@ -41,9 +44,11 @@ A tech lead or maintainer on a team that has adopted an AI coding assistant.
 
 The repository fills with generated tests. Test count rises. Coverage rises. CI stays green. Nobody can say which of those thousands of assertions would actually catch a regression.
 
-The failure is quiet and specific. When an assistant writes a test, it reads the implementation first, then records what the implementation already does. If the code is correct, the test passes. If the code is wrong, the test records the wrong answer and still passes. Either way it goes green, and either way coverage goes up.
-
-A test written that way cannot fail. A test that cannot fail cannot warn anyone about anything.
+The failure is quiet and specific. An assistant can read the implementation and
+encode its current behavior—including an existing mistake—as the expected
+answer. The result goes green and raises coverage, yet may add little or no new
+regression sensitivity. Implementation-aware tests are not automatically bad;
+the problem is that ordinary CI does not show which ones added protection.
 
 ### Why coverage does not help
 
@@ -90,7 +95,7 @@ $ placebo audit artifacts/suites/as_generated_patch.py --minimize
      11 are red or unstable against correct code
 
     gaps closed by this patch : 3
-    review burden reduction   : 64%
+    review burden reduction   : 94%
 
     minimized patch -> as_generated_patch.minimized.py
     (2 of 33 tests, preserving 3 measured novel faults)
@@ -215,13 +220,13 @@ attempts are not the mechanism.
 
 ```console
 $ python -m pytest tests -q
-37 passed
+38 passed
 
 $ python scripts/check_consistency.py
-72/72 checks pass
+77/77 checks pass
 ```
 
-The 37 unit tests guard the parts that carry claims: mutant identity must be content-derived and stable, the held-out split must not leak, the admission gates must reject tests that cheat, and minimization must never drop a fault.
+The 38 unit tests guard the parts that carry claims: mutant identity must be content-derived and stable, the held-out split must not leak, the admission gates must reject tests that cheat, and minimization must never drop a fault.
 
 `check_consistency.py` is the more unusual one. It re-derives every headline number from the stored artifacts and fails if the writeup drifts from the data. It is what caught a stale report contradicting its own raw results, and it runs in CI so the drift cannot return.
 
@@ -246,8 +251,8 @@ cd Placebo
 python -m pip install -r requirements.lock
 python -m pip install -e .
 
-python -m pytest tests -q             # 37 passed
-python scripts/check_consistency.py   # 72/72 checks pass
+python -m pytest tests -q             # 38 passed
+python scripts/check_consistency.py   # 77/77 checks pass
 ```
 
 ### Reproduce the central claim without a model
@@ -402,7 +407,7 @@ placebo/
 │   └── evidence/bundle.py         replayable evidence bundles
 │
 ├── scripts/                       one entry point per experiment (25 files)
-├── tests/                         37 tests guarding the load-bearing parts
+├── tests/                         38 tests guarding the load-bearing parts
 │
 ├── subject/                       vendored semver 3.0.4 (BSD-3), pinned
 ├── subjects/inflection/           vendored inflection 0.5.1 (MIT), pinned

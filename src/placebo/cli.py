@@ -59,7 +59,14 @@ def cmd_audit(args: argparse.Namespace) -> int:
     runner.prepare()
 
     code = suite_path.read_text(encoding="utf-8")
-    audit = audit_suite(runner, suite_path.stem, code, faults, existing)
+    def show_progress(phase: str, current: int, total: int) -> None:
+        print(f"\r    {phase:24s} {current:>3}/{total:<3}", end="", flush=True)
+
+    print("\n  Running audit (first run is intentionally exhaustive):")
+    audit = audit_suite(
+        runner, suite_path.stem, code, faults, existing, progress=show_progress
+    )
+    print("\r" + " " * 48 + "\r", end="")
     summary = audit.summary()
     counts = summary["verdicts"]
 
@@ -85,6 +92,24 @@ def cmd_audit(args: argparse.Namespace) -> int:
         print(f"\n    minimized patch -> {out.name} "
               f"({len(kept)} of {summary['tests_audited']} tests, "
               f"preserving {len(preserved)} measured novel faults)")
+        if minimized and preserved:
+            preserved_faults = [f for f in faults if f.id in preserved]
+            recheck = audit_suite(
+                runner,
+                f"{suite_path.stem}.minimized",
+                minimized,
+                preserved_faults,
+                existing,
+                stability_repeats=1,
+                progress=show_progress,
+            )
+            print("\r" + " " * 48 + "\r", end="")
+            still_detected = {fault for test in recheck.tests for fault in test.novel}
+            if still_detected != preserved:
+                print("    minimized patch verification: FAILED")
+                print(f"    lost faults: {sorted(preserved - still_detected)}")
+                return 1
+            print("    minimized patch verification: NO LOSS (re-executed)")
     print("\n  Human approval required before merging. Placebo proposes; it does not merge.\n")
     return 0
 

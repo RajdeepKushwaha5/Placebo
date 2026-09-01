@@ -23,7 +23,7 @@
       "existing_suite_gaps_in_corpus": 7,
       "fault_corpus": 185,
       "gaps_closed_by_patch": 3,
-      "review_burden_reduction": 0.6364,
+      "review_burden_reduction": 0.9394,
       "suite": "as_generated_patch",
       "tests_audited": 33,
       "verdicts": {

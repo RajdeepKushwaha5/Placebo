@@ -7,7 +7,7 @@ minutes without a GPU or an API key.
 
 ```bash
 python -m pip install -r requirements.lock
-python -m pytest tests -q                 # 37 passed
+python -m pytest tests -q                 # 38 passed
 python scripts/check_consistency.py       # 77/77 checks pass
 python scripts/verify_bundle.py --bundle artifacts/bundle          # 7/7 hold
 python scripts/verify_bundle.py --bundle artifacts/real-gap-bundle # 3/3 hold
