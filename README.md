@@ -8,7 +8,7 @@ It runs entirely on a local 7B model on a consumer laptop GPU. No API key, no cr
 |---|---|
 | **Repository** | https://github.com/RajdeepKushwaha5/Placebo |
 | **Verify in 3 minutes** | `pytest tests -q` then `python scripts/check_consistency.py` |
-| **Status** | 58 unit tests, 77 consistency checks, 2 evidence bundles replaying clean |
+| **Status** | 65 unit tests, 77 consistency checks, 2 evidence bundles replaying clean |
 
 The honest post-hackathon plan—including the requirements for calling this a
 general product—is in [`docs/PRODUCT_ROADMAP.md`](docs/PRODUCT_ROADMAP.md).
@@ -198,6 +198,15 @@ Three independent repeated runs of one condition, percentile bootstrap over the 
 
 The asymmetry is the finding. The outcome is stable while the mechanism credited for it is not, which is exactly why no strong claim is made for the retry loop.
 
+The headline table compares single runs, so the two ends of it were then repeated three times each on the same 12-fault subset:
+
+| condition | faults admitted of 12 | median | 95% CI |
+|---|---|---:|---|
+| `baseline_A` | 1, 0, 0 | 0.0 | [0.0, 1.0] |
+| `placebo_D` | 6, 7, 7 | 7.0 | [6.0, 7.0] |
+
+The ranges do not overlap. The worst `placebo_D` run still admitted six times what the best `baseline_A` run did, so the gap between the ends is larger than run-to-run noise. This is a subset rather than the 29-fault confirmatory split, three runs give a wide interval, and the two middle conditions were not repeated, so nothing is claimed about the ordering between them. Data in [`experiments/seeds.json`](experiments/seeds.json).
+
 
 ### 3.7 The compute control
 
@@ -226,7 +235,7 @@ $ python scripts/check_consistency.py
 77/77 checks pass
 ```
 
-The 58 unit tests guard the parts that carry claims: mutant identity must be content-derived and stable, the held-out split must not leak, the admission gates must reject tests that cheat, minimization must never drop a fault, and the repository contract must fail with an actionable reason rather than a traceback.
+The 65 unit tests guard the parts that carry claims: mutant identity must be content-derived and stable, the held-out split must not leak, the admission gates must reject tests that cheat, minimization must never drop a fault, and the repository contract must fail with an actionable reason rather than a traceback.
 
 `check_consistency.py` is the more unusual one. It re-derives every headline number from the stored artifacts and fails if the writeup drifts from the data. It is what caught a stale report contradicting its own raw results, and it runs in CI so the drift cannot return.
 
@@ -407,7 +416,7 @@ placebo/
 │   └── evidence/bundle.py         replayable evidence bundles
 │
 ├── scripts/                       one entry point per experiment (25 files)
-├── tests/                         58 tests guarding the load-bearing parts
+├── tests/                         65 tests guarding the load-bearing parts
 │
 ├── subject/                       vendored semver 3.0.4 (BSD-3), pinned
 ├── subjects/inflection/           vendored inflection 0.5.1 (MIT), pinned

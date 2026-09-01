@@ -16,6 +16,8 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -296,6 +298,56 @@ def main() -> int:
             check(c["admitted_min"] <= c["admitted_median"] <= c["admitted_max"],
                   f"variance[{name}]: median lies inside the observed range")
 
+    # -- 6g2. repeated headline runs -----------------------------------------
+    # seeds.json answers the "single runs" limitation, so it has to be held to
+    # the same standard as everything else: the summary statistics must follow
+    # from the recorded values, and the per-fault log must agree with the
+    # totals rather than being written independently of them.
+    seeds = load(ROOT / "experiments" / "seeds.json")
+    if seeds:
+        per_fault = seeds.get("per_fault_admission", {})
+        for name, c in seeds["conditions"].items():
+            values = c["values"]
+            check(len(values) == c["runs"],
+                  f"seeds[{name}]: recorded values match the run count",
+                  f"{len(values)} values, {c['runs']} runs")
+            check(c["min"] == min(values) and c["max"] == max(values),
+                  f"seeds[{name}]: min and max follow from the values")
+            lo, hi = c["ci95"]
+            check(lo <= c["median"] <= hi,
+                  f"seeds[{name}]: median lies inside its bootstrap interval")
+            check(all(0 <= v <= seeds["faults_per_run"] for v in values),
+                  f"seeds[{name}]: no run admitted more faults than it was given",
+                  f"cap {seeds['faults_per_run']}")
+
+            # The per-fault log is the evidence behind each total. Recomputing
+            # the totals from it catches a summary that drifted from its data.
+            log = per_fault.get(name, {})
+            if log:
+                recomputed = [
+                    sum(1 for f in log.values() if f[i]) for i in range(len(values))
+                ]
+                check(recomputed == values,
+                      f"seeds[{name}]: totals recompute from the per-fault log",
+                      f"{recomputed} == {values}")
+                check(all(len(f) == c["runs"] for f in log.values()),
+                      f"seeds[{name}]: every fault was evaluated in every run")
+
+            # The README prints these runs verbatim, so they are a claim.
+            if f"`{name}`" in readme:
+                check(", ".join(str(v) for v in values) in readme,
+                      f"seeds[{name}]: README lists the observed runs",
+                      ", ".join(str(v) for v in values))
+
+        # The separation between the two ends is the point of the repeat, so
+        # assert it from the data rather than trusting the prose.
+        ends = seeds["conditions"]
+        if "baseline_A" in ends and "placebo_D" in ends:
+            check(min(ends["placebo_D"]["values"]) > max(ends["baseline_A"]["values"]),
+                  "seeds: the two conditions' observed ranges do not overlap",
+                  f"placebo_D min {min(ends['placebo_D']['values'])} > "
+                  f"baseline_A max {max(ends['baseline_A']['values'])}")
+
     # -- 6h. reviewer study is honestly labelled -----------------------------
     study_key = ROOT / "artifacts" / "review-study" / "key.json"
     if study_key.exists():
@@ -344,6 +396,25 @@ def main() -> int:
         and secret.search(p.read_text(encoding="utf-8", errors="ignore"))
     ]
     check(not leaked, "no credentials in the submission", ", ".join(leaked[:3]))
+
+    # -- 8. the README's own test count -------------------------------------
+    # This one drifted once: tests were added and the README kept quoting the
+    # old total. Asking pytest to collect is the only count that cannot be
+    # wrong, since parametrized cases expand at collection time and a static
+    # scan of "def test_" would undercount them.
+    collected = subprocess.run(
+        [sys.executable, "-m", "pytest", "tests", "-q", "--collect-only"],
+        cwd=ROOT, capture_output=True, text=True,
+    )
+    counted = sum(
+        int(m.group(1))
+        for m in re.finditer(r"^tests/\S+\.py: (\d+)$", collected.stdout, re.M)
+    )
+    if counted:
+        quoted = re.findall(r"(\d+)\s+(?:unit\s+)?tests\b", readme)
+        check(str(counted) in quoted,
+              "README quotes the real unit test count",
+              f"{counted} collected, README says {', '.join(sorted(set(quoted))) or 'nothing'}")
 
     # -- report -------------------------------------------------------------
     width = 74

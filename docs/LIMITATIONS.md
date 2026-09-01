@@ -76,8 +76,26 @@ produced different outputs during development.
   fingerprints, and every admission verdict (those are pytest runs).
 - **Not deterministic:** model outputs, and therefore per-condition scores.
 
-Reported condition numbers are **single runs**. Repeating with several seeds and
-reporting medians is the obvious next step and was not done for time.
+The headline table in the README reports **single runs**. Three conditions have
+since been repeated three times each:
+
+| condition | runs | measure | median | range | source |
+|---|---:|---|---:|---|---|
+| `baseline_A` | 3 | faults admitted of 12 | 0 | 0-1 | `experiments/seeds.json` |
+| `placebo_D` | 3 | faults admitted of 12 | 7 | 6-7 | `experiments/seeds.json` |
+| `placebo_B` | 3 | tests kept | 5 | 5-5 | `experiments/variance.json` |
+
+The two extremes were repeated on the same 12-fault subset, so they are directly
+comparable, and their ranges do not overlap: the *worst* `placebo_D` run still
+admitted six times what the *best* `baseline_A` run did. That rules out a single
+lucky run as the explanation for the gap between them. It does not make the
+comparison precise. Three runs over twelve faults is a small sample, the
+bootstrap intervals are correspondingly wide, and the subset is not the 29-fault
+confirmatory split the headline percentages are computed on.
+
+`mutant_aware_B1` and `placebo_C` remain single runs. Nothing here establishes
+the ordering *between* the middle conditions, only that the two ends are
+separated by more than run-to-run noise.
 
 ## 5. One subject, one language
 

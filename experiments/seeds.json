@@ -19,14 +19,16 @@
     "placebo_D": {
       "ci95": [
         6.0,
-        6.0
+        7.0
       ],
-      "max": 6.0,
-      "median": 6.0,
+      "max": 7.0,
+      "median": 7.0,
       "min": 6.0,
-      "runs": 1,
+      "runs": 3,
       "values": [
-        6
+        6,
+        7,
+        7
       ]
     }
   },
@@ -98,43 +100,67 @@
     },
     "placebo_D": {
       "0311cef58a002912": [
+        true,
+        true,
         true
       ],
       "03fe90d993fa6512": [
+        true,
+        true,
         true
       ],
       "05cc88d0e0cba70d": [
+        true,
+        true,
         true
       ],
       "0723feea7643f22a": [
+        true,
+        true,
         true
       ],
       "085c382c12637d90": [
-        false
+        false,
+        true,
+        true
       ],
       "0a016d6d36518355": [
+        false,
+        false,
         false
       ],
       "1486704c2686bc4b": [
+        false,
+        false,
         false
       ],
       "1ac3986cca492880": [
+        false,
+        false,
         false
       ],
       "1ca242d1ca74bb80": [
+        false,
+        false,
         false
       ],
       "1d331d5b9501ed06": [
+        false,
+        false,
         false
       ],
       "2efccfe40d947649": [
+        true,
+        true,
         true
       ],
       "5c7e1209a4ecd4ba": [
+        true,
+        true,
         true
       ]
     }
   },
   "repeats_requested": 3,
-  "wall_s": 2598.7
+  "wall_s": 4030.2
 }
