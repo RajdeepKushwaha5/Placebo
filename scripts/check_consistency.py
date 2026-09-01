@@ -416,6 +416,14 @@ def main() -> int:
               "README quotes the real unit test count",
               f"{counted} collected, README says {', '.join(sorted(set(quoted))) or 'nothing'}")
 
+    # -- 9. the README's own check count -------------------------------------
+    # Self-referential on purpose, and stable: this is the last check appended,
+    # so the total it compares against includes itself.
+    total_checks = len(checks) + 1
+    check(f"{total_checks}/{total_checks} checks pass" in readme,
+          "README quotes the real consistency check count",
+          f"{total_checks} checks")
+
     # -- report -------------------------------------------------------------
     width = 74
     print("=" * width)
