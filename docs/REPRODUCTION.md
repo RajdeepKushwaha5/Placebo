@@ -42,7 +42,7 @@ Placebo's own engine imports only the standard library.
 python -m pytest tests
 ```
 
-Expected: **80 passed** in a few seconds. These cover mutant-identity stability,
+Expected: **101 passed** in a few seconds. These cover mutant-identity stability,
 held-out split disjointness, static admission gates, suite assembly, and the
 malformed-candidate regression found during the final audit.
 
