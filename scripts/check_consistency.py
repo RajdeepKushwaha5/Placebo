@@ -424,11 +424,20 @@ def main() -> int:
             path = ROOT / name
             if not path.is_file():
                 continue
-            shown = re.findall(r"(\d+) passed", path.read_text(encoding="utf-8"))
+            doc = path.read_text(encoding="utf-8")
+            shown = re.findall(r"(\d+) passed", doc)
             if shown:
                 check(all(int(v) == counted for v in shown),
                       f"{name} shows the real pytest result",
                       f"{counted} collected, shows {', '.join(sorted(set(shown)))}")
+
+                # pyproject already sets addopts = "-q". A second -q on the
+                # command line is double-quiet, which suppresses the summary
+                # line entirely, so the doc would promise "N passed" from a
+                # command that prints no such line.
+                check(not re.search(r"pytest[^\n#]*\s-q\b", doc),
+                      f"{name} does not double-apply pytest -q",
+                      "addopts already sets it; a second -q hides the summary")
 
     # -- 9. the README's own check count -------------------------------------
     # Self-referential on purpose, and stable: this is the last check appended,

@@ -39,7 +39,7 @@ Placebo's own engine imports only the standard library.
 ### Verify the install
 
 ```bash
-python -m pytest tests -q
+python -m pytest tests
 ```
 
 Expected: **80 passed** in a few seconds. These cover mutant-identity stability,
@@ -95,7 +95,7 @@ span, replacement), so enumeration order cannot change them. Re-running, or
 running on another machine, produces identical ids. Verify with:
 
 ```bash
-python -m pytest tests -q -k "deterministic or unique or content_derived"
+python -m pytest tests -k "deterministic or unique or content_derived"
 ```
 
 ---
