@@ -1,0 +1,62 @@
+{
+  "attempted": 3,
+  "supported": 1,
+  "repositories": [
+    {
+      "repository": "inflection-upstream",
+      "layout": "flat package",
+      "url": "https://github.com/jpvanhal/inflection.git",
+      "commit": "b00d4d348b32ef5823221b20ee4cbd1d2d924462",
+      "supported": false,
+      "note": "doctor refused: Fix the FAIL lines above, then run doctor again. | ==========================================================================",
+      "steps": {
+        "doctor": {
+          "exit": 1,
+          "seconds": 0.2,
+          "supported": false
+        }
+      }
+    },
+    {
+      "repository": "pathspec",
+      "layout": "flat package, larger module set",
+      "url": "https://github.com/cpburnz/python-pathspec.git",
+      "commit": "ecf71a99ca739479d450b9830f43416ea0c519c7",
+      "supported": true,
+      "note": "",
+      "steps": {
+        "doctor": {
+          "exit": 0,
+          "seconds": 0.2,
+          "supported": true
+        },
+        "oracles": {
+          "exit": 0,
+          "seconds": 0.2,
+          "sourced": 0
+        },
+        "census": {
+          "exit": 0,
+          "seconds": 22.7,
+          "score": "64.3%",
+          "undetected": "5"
+        }
+      }
+    },
+    {
+      "repository": "toml-sort",
+      "layout": "src layout",
+      "url": "https://github.com/pappasam/toml-sort.git",
+      "commit": "c1655661b1d0af6fc0f7c0992c1a8a2c6b315b69",
+      "supported": false,
+      "note": "doctor refused: Fix the FAIL lines above, then run doctor again. | ==========================================================================",
+      "steps": {
+        "doctor": {
+          "exit": 1,
+          "seconds": 0.2,
+          "supported": false
+        }
+      }
+    }
+  ]
+}

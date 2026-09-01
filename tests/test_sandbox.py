@@ -86,6 +86,7 @@ def test_the_root_filesystem_is_read_only(executor, tmp_path):
 
 
 def test_the_subject_is_mounted_read_only(executor, tmp_path):
+    (tmp_path / "subject").mkdir(exist_ok=True)
     argv = executor.build_argv(["python", "-c", "pass"], tmp_path, {}, 60)
     mounts = [argv[i + 1] for i, a in enumerate(argv) if a == "--mount"]
     subject = [m for m in mounts if "dst=/subject" in m]
@@ -93,7 +94,19 @@ def test_the_subject_is_mounted_read_only(executor, tmp_path):
     assert "readonly" in subject[0]
 
 
+def test_a_subject_root_that_does_not_exist_is_not_mounted(tmp_path):
+    """Docker rejects a bind whose source is missing with "invalid mount
+    config for type", which names the wrong problem entirely. Docker Desktop
+    creates the directory instead, so this only ever fails on Linux."""
+    ex = DockerExecutor(subject_root=tmp_path / "absent")
+    argv = ex.build_argv(["python", "-c", "pass"], tmp_path, {}, 60)
+    mounts = [argv[i + 1] for i, a in enumerate(argv) if a == "--mount"]
+    assert not any("dst=/subject" in m for m in mounts)
+    assert any("dst=/work" in m for m in mounts), "the workspace still mounts"
+
+
 def test_the_workspace_is_the_only_writable_mount(executor, tmp_path):
+    (tmp_path / "subject").mkdir(exist_ok=True)
     argv = executor.build_argv(["python", "-c", "pass"], tmp_path, {}, 60)
     mounts = [argv[i + 1] for i, a in enumerate(argv) if a == "--mount"]
     writable = [m for m in mounts if "readonly" not in m]
@@ -249,6 +262,7 @@ def test_the_subject_source_cannot_be_written(executor, tmp_path):
 
 @needs_docker
 def test_the_host_filesystem_is_not_reachable(executor, tmp_path):
+    (tmp_path / "subject").mkdir(exist_ok=True)
     result = run_in_container(executor, tmp_path / "ws", (
         "from pathlib import Path\n"
         "roots = sorted(x.name for x in Path('/').iterdir())\n"
@@ -262,7 +276,6 @@ def test_the_host_filesystem_is_not_reachable(executor, tmp_path):
     ))
     assert "CARRIED []" in result.stdout, "something from the host is mounted"
     assert "work" in result.stdout, "the workspace mount is missing"
-    assert "subject" in result.stdout, "the read-only subject mount is missing"
 
 
 @needs_docker

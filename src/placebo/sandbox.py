@@ -233,7 +233,12 @@ class DockerExecutor:
             "--mount", f"type=bind,src={workspace},dst=/work",
         ]
 
-        if self.subject_root is not None:
+        # Only mount a subject that is actually there. Docker rejects a bind
+        # whose source does not exist with "invalid mount config for type",
+        # which says nothing about the real problem. Docker Desktop on Windows
+        # creates the directory instead, so this fails only on Linux, which is
+        # exactly where CI runs.
+        if self.subject_root is not None and Path(self.subject_root).is_dir():
             command += ["--mount",
                         f"type=bind,src={self.subject_root},dst=/subject,readonly"]
 

@@ -34,3 +34,4 @@ artifacts/census_all*.json
 artifacts/census_clie2e*.json
 artifacts/survivor_triage_clie2e*.json
 *.log
+.placebo-external/
