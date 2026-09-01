@@ -23,3 +23,13 @@ artifacts/*.log
 build/
 dist/
 *.sarif
+
+# Fault maps produced by the layout and end-to-end tests. They are named
+# after throwaway fixture repositories and must never be committed.
+artifacts/census_lay*.json
+artifacts/census_doc*.json
+artifacts/census_cen*.json
+artifacts/census_aud*.json
+artifacts/census_all*.json
+artifacts/census_clie2e*.json
+artifacts/survivor_triage_clie2e*.json
