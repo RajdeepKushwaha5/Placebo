@@ -469,6 +469,12 @@ def _audit_and_report(args, config, existing, faults, name, label, code,
               f"preserving {len(preserved)} measured novel faults)")
         if minimized and preserved:
             preserved_faults = [f for f in faults if f.id in preserved]
+            # The re-audit is real execution and was the only part of the
+            # command that never reused a result, so a warm run still paid for
+            # it every time. The minimized patch is deterministic given the
+            # same input, so its hash is stable and it caches like anything
+            # else. This does not weaken the check: a cache hit is a recorded
+            # execution of exactly this patch against exactly this fault.
             recheck = audit_suite(
                 runner,
                 f"{name}.minimized",
@@ -477,6 +483,8 @@ def _audit_and_report(args, config, existing, faults, name, label, code,
                 existing,
                 stability_repeats=1,
                 progress=show_progress,
+                cache=store,
+                subject_commit=commit,
             )
             print("\r" + " " * 48 + "\r", end="")
             still_detected = {fault for test in recheck.tests for fault in test.novel}
