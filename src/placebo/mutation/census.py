@@ -91,6 +91,7 @@ def run_census(
     workers: int = 4,
     timeout_s: int = 300,
     progress: bool = True,
+    source_roots: tuple[str, ...] = (),
 ) -> CensusResult:
     """Run the subject suite against every mutant, in parallel."""
     subject_root = Path(subject_root)
@@ -102,7 +103,8 @@ def run_census(
     runners: list[SubjectRunner] = []
     for i in range(workers):
         runner = SubjectRunner(
-            subject_root, workspace_root / f"w{i}", timeout_s=timeout_s
+            subject_root, workspace_root / f"w{i}", timeout_s=timeout_s,
+            source_roots=source_roots,
         )
         runner.prepare()
         runners.append(runner)

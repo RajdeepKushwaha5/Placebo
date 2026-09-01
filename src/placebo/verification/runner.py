@@ -77,12 +77,38 @@ class SubjectRunner:
         workspace: Path,
         test_dir: str = "tests",
         timeout_s: int = 300,
+        source_roots: tuple[str, ...] = (),
     ) -> None:
         self.subject_root = Path(subject_root).resolve()
         self.workspace = Path(workspace).resolve()
         self.test_dir = test_dir
         self.timeout_s = timeout_s
+        self.source_roots = tuple(source_roots)
         self._originals: dict[str, str] = {}
+
+    def import_paths(self) -> list[str]:
+        """Directories that must be importable for the subject to load.
+
+        A flat layout keeps its package at the repository root, so the root is
+        the import path. A `src/` layout keeps it one level down, and without
+        `src` on the path the package cannot be imported at all.
+
+        The two are told apart by looking for `__init__.py`: a source root that
+        is itself a package is imported from its parent, while one that merely
+        contains packages is imported directly.
+        """
+        paths = [str(self.workspace)]
+        for root in self.source_roots:
+            candidate = self.workspace / root
+            if not candidate.is_dir():
+                continue
+            importable = (
+                candidate.parent if (candidate / "__init__.py").is_file()
+                else candidate
+            )
+            if str(importable) not in paths:
+                paths.append(str(importable))
+        return paths
 
     # -- workspace ---------------------------------------------------------
 
@@ -181,7 +207,7 @@ class SubjectRunner:
             *(extra_args or []),
         ]
         env = dict(os.environ)
-        env["PYTHONPATH"] = str(self.workspace)
+        env["PYTHONPATH"] = os.pathsep.join(self.import_paths())
         env["PYTHONDONTWRITEBYTECODE"] = "1"
         env["PYTHONHASHSEED"] = "0"
 

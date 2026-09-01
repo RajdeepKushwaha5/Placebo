@@ -20,11 +20,63 @@ already has:
   one behavior-preserving refactor, and three repeated model runs; and
 - a prepared but unrun blinded reviewer study.
 
-The core weakness is now product truth: `placebo audit` looks generic, but the
-CLI, oracle DSL, counterexample domains, evidence builder, and subject layout are
-still hardcoded around the vendored semver repository. The second repository
-shows that the mutation engine transfers; it does not show that the full audit
-workflow transfers.
+The core weakness was product truth: `placebo audit` looked generic while the
+CLI, oracle DSL, counterexample domains, evidence builder and subject layout
+were hardcoded around the vendored semver repository.
+
+## Status
+
+Written against the exit criteria below rather than against effort spent.
+
+| item | state |
+|---|---|
+| 1.1 repository adapter, `doctor`, `census`, `audit-pr`, `verify` | **done** |
+| 1.1 three layouts audited without editing source | **done** |
+| 1.2 cache, coverage selection, changed-file scope, time budget | **done** |
+| 1.2 parallel audit workers, checkpoint/resume beyond the cache | not started |
+| 1.3 containerised execution | not started |
+| 2 oracle-level labels and brittleness policy | **done** |
+| 2 automatic L1 to L3 candidate sources | not started |
+| 3 fifty historical bugs across eight to ten projects | **blocked** |
+| 4 blinded reviewer study | **blocked** |
+| 5 SARIF output and a GitHub Action | **done** |
+| 5 generic HTML report, decision decay tracking | not started |
+
+Two are blocked on things that cannot be supplied by writing code. Phase 3 wants
+a current frontier model with repository context as a baseline, and this project
+runs a 7B model locally with no API access. Phase 4 wants twelve experienced
+engineers. Both remain honestly unclaimed rather than approximated.
+
+### What the measured exit criteria came back as
+
+**1.1, layout independence.** `doctor`, `census` and `audit` run on flat,
+`src/` and nested-subpackage repositories with only `.placebo.toml` differing.
+Building this found a real defect: `PYTHONPATH` was set to the workspace root
+alone, so a `src/` layout could not import its own package and every fault came
+back INVALID. Placebo would have printed a confident census for a repository it
+had never successfully executed. Covered by `tests/test_layouts.py`.
+
+**1.2, speed.** On the public 33-test, 185-fault audit:
+
+| run | wall time | suite executions |
+|---|---:|---:|
+| cold, empty cache | 8m 46s | 218 |
+| re-run, nothing changed | 9.8s | 0, all reused |
+
+Coverage-based selection avoids 53 percent of test executions on this patch and
+skips 25 faults no test in it can reach.
+
+Every one produces identical verdicts, test for test, which is the criterion
+that matters: these may change runtime and never an answer. The under-ten-seconds
+target for an unchanged rerun is met. The under-two-minutes target for a small
+pull request is met by scope rather than by raw speed, since `audit-pr` narrows
+the corpus to the lines a diff touches.
+
+**2, oracle labels.** Every test carries L1 to L4 and its brittleness warnings.
+Run against this project's own generated patch, all 33 tests come back L4
+snapshot, which is the honest reading of tests whose expected values were taken
+by executing the implementation. The remaining half of Phase 2, automatically
+*sourcing* stronger oracles, is not started.
 
 ## Phase 1: make the command honest and useful
 
@@ -67,9 +119,10 @@ a monorepo/subpackage layout.
 
 ### 2. Make PR audits fast enough to use
 
-The measured public 33-test/185-fault audit took about twelve minutes on the
+The measured public 33-test/185-fault audit took about nine minutes on the
 development machine and was previously silent until completion. Progress is now
-streamed, but speed still blocks adoption.
+streamed, and the work below has since brought an unchanged rerun to under ten
+seconds. What remains unaddressed is the cold run on a large repository.
 
 Build:
 

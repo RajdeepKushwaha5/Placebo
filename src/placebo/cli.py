@@ -146,7 +146,8 @@ def cmd_census(args: argparse.Namespace) -> int:
     try:
         census = run_census(config.root, ROOT / ".placebo-ws" / f"census-{config.name}",
                             faults, workers=args.workers,
-                            timeout_s=config.timeout_seconds * 5)
+                            timeout_s=config.timeout_seconds * 5,
+                            source_roots=config.source_roots)
     except RuntimeError as exc:
         # The runner refuses to score faults when the clean suite is red.
         print(f"  {exc}".splitlines()[0])
@@ -228,6 +229,7 @@ def _audit_and_report(args, config, existing, faults, name, label, code,
     runner = SubjectRunner(
         config.root, ROOT / ".placebo-ws" / f"cli-{config.name}",
         timeout_s=config.timeout_seconds,
+        source_roots=config.source_roots,
     )
     runner.prepare()
 
@@ -345,6 +347,22 @@ def _audit_and_report(args, config, existing, faults, name, label, code,
                 print(f"    lost faults: {sorted(preserved - still_detected)}")
                 return 1
             print("    minimized patch verification: NO LOSS (re-executed)")
+
+    if args.sarif:
+        from .sarif import build as build_sarif
+
+        document = build_sarif(
+            audit, code, label,
+            oracles=oracles,
+            include_snapshot_notes=args.sarif_oracle_notes,
+        )
+        out_path = Path(args.sarif)
+        if not out_path.is_absolute():
+            out_path = Path.cwd() / out_path
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(json.dumps(document, indent=2), encoding="utf-8")
+        findings = len(document["runs"][0]["results"])
+        print(f"\n    SARIF -> {out_path.name} ({findings} finding(s))")
 
     stats = store.stats()
     if stats.lookups:
@@ -598,6 +616,10 @@ def build_parser() -> argparse.ArgumentParser:
                          help="skip coverage-based selection and audit exhaustively")
     p_audit.add_argument("--budget", type=float, default=0,
                          help="stop after N seconds and report partial evidence")
+    p_audit.add_argument("--sarif", metavar="PATH",
+                         help="write findings as SARIF for code-scanning annotations")
+    p_audit.add_argument("--sarif-oracle-notes", action="store_true",
+                         help="also annotate every snapshot-oracle test in the SARIF output")
     p_audit.add_argument("--minimize", action="store_true",
                          help="also write the smallest patch that loses no detection")
     p_audit.set_defaults(func=cmd_audit)
@@ -614,6 +636,10 @@ def build_parser() -> argparse.ArgumentParser:
                       help="skip coverage-based selection and audit exhaustively")
     p_pr.add_argument("--budget", type=float, default=0,
                       help="stop after N seconds and report partial evidence")
+    p_pr.add_argument("--sarif", metavar="PATH",
+                      help="write findings as SARIF for code-scanning annotations")
+    p_pr.add_argument("--sarif-oracle-notes", action="store_true",
+                      help="also annotate every snapshot-oracle test in the SARIF output")
     p_pr.add_argument("--minimize", action="store_true",
                       help="also write the smallest patch that loses no detection")
     p_pr.set_defaults(func=cmd_audit_pr)

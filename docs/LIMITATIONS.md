@@ -145,6 +145,13 @@ prediction eliminated `CLEAN_HEAD_FAILED` by construction.
   expressions. The workspace is disposable, but this is still not a hardened
   OS/container boundary; production use against untrusted model providers
   should add a networkless container and resource limits.
+- **Two runs against the same repository collide.** Execution workspaces are
+  named after the repository, and preparing one deletes and recopies it, so a
+  second concurrent run pulls the subject out from under the first. It surfaces
+  as a `FileNotFoundError` on a subject file, which looks like a corrupted
+  checkout rather than what it is. Run one audit at a time per repository. The
+  result cache is content-addressed and unaffected, so the second run loses time
+  rather than correctness.
 
 ## 9. The oracle problem: what an "expected value" actually means
 

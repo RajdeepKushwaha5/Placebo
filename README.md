@@ -8,7 +8,7 @@ It runs entirely on a local 7B model on a consumer laptop GPU. No API key, no cr
 |---|---|
 | **Repository** | https://github.com/RajdeepKushwaha5/Placebo |
 | **Verify** | `pytest tests -m "not slow"` (1 min) then `python scripts/check_consistency.py` (2 s) |
-| **Status** | 212 unit tests, 102 consistency checks, 2 evidence bundles replaying clean |
+| **Status** | 240 unit tests, 102 consistency checks, 2 evidence bundles replaying clean |
 
 The honest post-hackathon plan, including the requirements for calling this a
 general product, is in [`docs/PRODUCT_ROADMAP.md`](docs/PRODUCT_ROADMAP.md).
@@ -105,9 +105,94 @@ $ placebo audit artifacts/suites/as_generated_patch.py --minimize
 
 One test out of thirty-three is the sole reason a fault would be caught. The patch shrinks from 33 tests to 2 while still detecting the same three faults, and the reduced patch is re-audited by execution rather than assumed to be equivalent.
 
+### Auditing a pull request
+
+`audit` answers a question about a repository. `audit-pr` answers one about a
+diff, which is what a reviewer is actually deciding. Here it audits a diff that
+touches `bump_minor` and its own test:
+
+```console
+$ placebo audit-pr pr.diff
+
+  pr.diff: 1 changed test(s) across 1 file(s)
+    tests/test_bump.py: test_should_bump_minor
+
+  1 tests in pr.diff, audited against 3 fault models
+  scope: 3 of 185 faults, limited to source lines this diff touched
+
+    REDUNDANT_WITH_EXISTING  test_should_bump_minor
+
+      0 add unique fault detection the existing suite lacks
+      1 only re-detect what the repo already detects
+
+    gaps closed by this patch : 0
+```
+
+The tests come from the diff and the fault corpus is narrowed to the lines the
+diff touched, 185 down to 3 here. That scope is printed with the verdicts,
+because "redundant against 3 faults from one function" is a different statement
+from "redundant against the full corpus".
+
+`--sarif` writes findings in the format GitHub code scanning reads, so the audit
+lands as annotations beside the changed lines. Only a test that is red or
+unstable against correct code is an error; redundancy is a note, because it is a
+review signal rather than a defect. Tests that add unique detection are not
+annotated at all, since a tool that reports good news teaches people to skim it.
+[`action.yml`](action.yml) wires this into a workflow.
+
+### Speed
+
+An audit runs the candidate suite once per fault, which is the honest way to
+measure detection and also why the first run is slow. Two things make repeat
+runs practical, and neither may change an answer:
+
+| run | wall time | suite executions |
+|---|---:|---:|
+| first run, empty cache | 8m 46s | 218 |
+| re-run, nothing changed | **9.8s** | 0, all reused |
+
+Results are cached against the subject commit, fault id, patch hash and test
+selection, with an environment fingerprint that invalidates everything when the
+interpreter, pytest, Placebo or the subject source moves.
+
+Coverage-based selection cuts the same work along a second axis: a fault runs
+only against tests whose execution reaches the mutated line. On this patch that
+avoids **53 percent of test executions** and skips **25 faults** outright, since
+no test in the patch can reach them. It refuses to narrow whenever the evidence
+is not positive, so import-time lines, unseen lines and any failure to
+instrument all fall back to the full suite.
+
+Every one of these runs produces identical verdicts, test for test, against the
+exhaustive run. That is the property that matters: they may change runtime and
+never an answer. `--budget N` stops after N seconds and reports how much of the
+corpus it evaluated, repeating that on every UNPROVEN verdict, so a partial run
+cannot read as a finding.
+
+### How strong is each test's oracle
+
+Placebo takes expected values by executing the current implementation, which
+makes its tests sound regression detectors and says nothing about correctness.
+Rather than leave that in the limitations, every test is labelled:
+
+```console
+    oracle strength:
+       33 L4 snapshot
+      33 test(s) record current behaviour rather than verified correctness.
+      18 test(s) carry 75 brittleness warning(s):
+         75 representation
+```
+
+L1 cites a specification, L2 agrees with another implementation, L3 asserts a
+metamorphic relation, L4 records what the code currently does. Promotion above L4
+requires positive structural evidence, so the label understates rather than
+overstates. Every test in this project's own generated patch is L4, which is the
+honest reading of how they were made.
+
 ### Other commands
 
 ```console
+$ placebo doctor <repo>            # can Placebo audit this repository?
+$ placebo census <repo>            # build the fault map
 $ placebo gaps                     # what the existing suite fails to detect
 $ placebo explain test_placebo_01  # why does this generated test exist?
 $ placebo verify --bundle artifacts/bundle   # re-execute every recorded claim
@@ -229,13 +314,13 @@ attempts are not the mechanism.
 
 ```console
 $ python -m pytest tests
-212 passed
+240 passed
 
 $ python scripts/check_consistency.py
 102/102 checks pass
 ```
 
-The 212 unit tests guard the parts that carry claims: mutant identity must be content-derived and stable, the held-out split must not leak, the admission gates must reject tests that cheat, minimization must never drop a fault, and the repository contract must fail with an actionable reason rather than a traceback. The counterexample search is covered there too: its candidate pool must stay deterministic and put relevant probes ahead of merely short ones, and a synthesized test must assert an observed error message rather than an exception type alone. Both of those are regression tests for mistakes that were made and measured, not hypotheticals.
+The 240 unit tests guard the parts that carry claims: mutant identity must be content-derived and stable, the held-out split must not leak, the admission gates must reject tests that cheat, minimization must never drop a fault, and the repository contract must fail with an actionable reason rather than a traceback. The counterexample search is covered there too: its candidate pool must stay deterministic and put relevant probes ahead of merely short ones, and a synthesized test must assert an observed error message rather than an exception type alone. Both of those are regression tests for mistakes that were made and measured, not hypotheticals.
 
 `check_consistency.py` is the more unusual one. It re-derives every headline number from the stored artifacts and fails if the writeup drifts from the data. It is what caught a stale report contradicting its own raw results, and it runs in CI so the drift cannot return.
 
@@ -260,7 +345,7 @@ cd Placebo
 python -m pip install -r requirements.lock
 python -m pip install -e .
 
-python -m pytest tests             # 212 passed
+python -m pytest tests             # 240 passed
 python scripts/check_consistency.py   # 102/102 checks pass
 ```
 
@@ -416,7 +501,7 @@ placebo/
 │   └── evidence/bundle.py         replayable evidence bundles
 │
 ├── scripts/                       one entry point per experiment (25 files)
-├── tests/                         212 tests guarding the load-bearing parts
+├── tests/                         240 tests guarding the load-bearing parts
 │
 ├── subject/                       vendored semver 3.0.4 (BSD-3), pinned
 ├── subjects/inflection/           vendored inflection 0.5.1 (MIT), pinned

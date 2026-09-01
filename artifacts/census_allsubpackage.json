@@ -1,0 +1,126 @@
+{
+  "1e3f62fe87c07f87": {
+    "detail": "",
+    "duration_s": 2.137,
+    "failing_tests": [],
+    "mutant_id": "1e3f62fe87c07f87",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "33af76ace27ec3fc": {
+    "detail": "",
+    "duration_s": 2.542,
+    "failing_tests": [],
+    "mutant_id": "33af76ace27ec3fc",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "3e1df4ee7d683fe1": {
+    "detail": "",
+    "duration_s": 1.774,
+    "failing_tests": [],
+    "mutant_id": "3e1df4ee7d683fe1",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "4336e8162fcc11e2": {
+    "detail": "",
+    "duration_s": 2.153,
+    "failing_tests": [],
+    "mutant_id": "4336e8162fcc11e2",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "4adee99ff929aa62": {
+    "detail": "",
+    "duration_s": 2.592,
+    "failing_tests": [
+      "tests\\test_ops.py::test_clamp_below"
+    ],
+    "mutant_id": "4adee99ff929aa62",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "662142767439453b": {
+    "detail": "",
+    "duration_s": 1.92,
+    "failing_tests": [],
+    "mutant_id": "662142767439453b",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "7e04cb9de9e187c2": {
+    "detail": "",
+    "duration_s": 1.92,
+    "failing_tests": [],
+    "mutant_id": "7e04cb9de9e187c2",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "90fcb3771cbf659d": {
+    "detail": "",
+    "duration_s": 1.954,
+    "failing_tests": [],
+    "mutant_id": "90fcb3771cbf659d",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "97fb6804c60621e1": {
+    "detail": "",
+    "duration_s": 1.923,
+    "failing_tests": [],
+    "mutant_id": "97fb6804c60621e1",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "a3a0ea9aa0ecf923": {
+    "detail": "",
+    "duration_s": 2.115,
+    "failing_tests": [],
+    "mutant_id": "a3a0ea9aa0ecf923",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "a7ad641f73d40196": {
+    "detail": "",
+    "duration_s": 1.967,
+    "failing_tests": [],
+    "mutant_id": "a7ad641f73d40196",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "c67604ddf01d1dda": {
+    "detail": "",
+    "duration_s": 1.961,
+    "failing_tests": [],
+    "mutant_id": "c67604ddf01d1dda",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "d7c60cea9e0c1a8b": {
+    "detail": "",
+    "duration_s": 1.927,
+    "failing_tests": [],
+    "mutant_id": "d7c60cea9e0c1a8b",
+    "returncode": 0,
+    "status": "survived"
+  },
+  "f92fec2fdabdf8df": {
+    "detail": "",
+    "duration_s": 1.975,
+    "failing_tests": [
+      "tests\\test_ops.py::test_clamp_inside"
+    ],
+    "mutant_id": "f92fec2fdabdf8df",
+    "returncode": 1,
+    "status": "killed"
+  },
+  "fbfb07a773d7b510": {
+    "detail": "",
+    "duration_s": 2.132,
+    "failing_tests": [],
+    "mutant_id": "fbfb07a773d7b510",
+    "returncode": 0,
+    "status": "survived"
+  }
+}

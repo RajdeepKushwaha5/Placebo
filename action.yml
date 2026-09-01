@@ -1,0 +1,136 @@
+name: Placebo test audit
+description: >-
+  Audit the tests a pull request adds or changes, and report which of them
+  actually add fault detection the repository does not already have.
+author: Placebo
+
+branding:
+  icon: filter
+  color: purple
+
+inputs:
+  repo:
+    description: Directory holding the .placebo.toml contract.
+    required: false
+    default: "."
+  diff:
+    description: >-
+      Unified diff to audit. Defaults to the pull request's own diff, computed
+      against the base ref.
+    required: false
+    default: ""
+  budget:
+    description: >-
+      Seconds to spend before returning partial evidence. A partial audit
+      reports how much of the fault corpus it evaluated.
+    required: false
+    default: "600"
+  sarif:
+    description: Where to write SARIF findings.
+    required: false
+    default: placebo.sarif
+  fail-on-unfit:
+    description: >-
+      Fail the job when a changed test is red or unstable against correct code.
+      Redundancy never fails the build: it is a review signal, not a defect.
+    required: false
+    default: "false"
+
+outputs:
+  sarif:
+    description: Path to the SARIF file that was written.
+    value: ${{ steps.audit.outputs.sarif }}
+  findings:
+    description: Number of findings reported.
+    value: ${{ steps.audit.outputs.findings }}
+
+runs:
+  using: composite
+  steps:
+    - name: Compute the pull request diff
+      id: diff
+      shell: bash
+      run: |
+        set -euo pipefail
+        if [ -n "${{ inputs.diff }}" ]; then
+          echo "path=${{ inputs.diff }}" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+        base="${{ github.event.pull_request.base.sha }}"
+        head="${{ github.event.pull_request.head.sha }}"
+        if [ -z "$base" ] || [ -z "$head" ]; then
+          echo "Not a pull request and no diff supplied; nothing to audit." >&2
+          echo "path=" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+        git diff --unified=0 "$base" "$head" > placebo-pr.diff
+        echo "path=placebo-pr.diff" >> "$GITHUB_OUTPUT"
+
+    - name: Restore the fault map
+      # The census is the expensive part and depends only on the subject, so it
+      # is cached on the commit of the code under test rather than recomputed
+      # for every pull request.
+      uses: actions/cache@v4
+      with:
+        path: |
+          artifacts/census*.json
+          .placebo-cache
+        key: placebo-${{ runner.os }}-${{ hashFiles('**/*.py') }}
+        restore-keys: placebo-${{ runner.os }}-
+
+    - name: Audit the changed tests
+      id: audit
+      shell: bash
+      run: |
+        set -euo pipefail
+        if [ -z "${{ steps.diff.outputs.path }}" ]; then
+          echo "No diff to audit."
+          echo "findings=0" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+        python -m placebo.cli audit-pr "${{ steps.diff.outputs.path }}" \
+          --repo "${{ inputs.repo }}" \
+          --budget "${{ inputs.budget }}" \
+          --sarif "${{ inputs.sarif }}" | tee placebo-audit.txt
+
+        echo "sarif=${{ inputs.sarif }}" >> "$GITHUB_OUTPUT"
+        if [ -f "${{ inputs.sarif }}" ]; then
+          count=$(python -c "import json,sys; print(len(json.load(open(sys.argv[1]))['runs'][0]['results']))" "${{ inputs.sarif }}")
+        else
+          count=0
+        fi
+        echo "findings=$count" >> "$GITHUB_OUTPUT"
+
+    - name: Summarise on the job page
+      if: always()
+      shell: bash
+      run: |
+        {
+          echo "## Placebo test audit"
+          echo
+          echo '```'
+          cat placebo-audit.txt 2>/dev/null || echo "No audit output."
+          echo '```'
+          echo
+          echo "Placebo proposes; it does not merge. Every verdict comes from"
+          echo "executing the suite against injected faults."
+        } >> "$GITHUB_STEP_SUMMARY"
+
+    - name: Upload SARIF
+      if: always() && hashFiles(inputs.sarif) != ''
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: ${{ inputs.sarif }}
+        category: placebo
+
+    - name: Fail on an unfit test
+      if: inputs.fail-on-unfit == 'true'
+      shell: bash
+      run: |
+        set -euo pipefail
+        if [ ! -f "${{ inputs.sarif }}" ]; then exit 0; fi
+        errors=$(python -c "import json,sys; d=json.load(open(sys.argv[1])); print(sum(1 for r in d['runs'][0]['results'] if r['level']=='error'))" "${{ inputs.sarif }}")
+        if [ "$errors" -gt 0 ]; then
+          echo "::error::$errors changed test(s) are red or unstable against correct code."
+          exit 1
+        fi

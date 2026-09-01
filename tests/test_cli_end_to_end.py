@@ -17,6 +17,7 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import os
 import sys
 import textwrap
 from pathlib import Path
@@ -26,7 +27,8 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-SUBJECT_NAME = "clie2e"
+# Per-process so concurrent runs cannot share a workspace or census path.
+SUBJECT_NAME = f"clie2e{os.getpid()}"
 
 OPS = textwrap.dedent("""\
     def add(a, b):
