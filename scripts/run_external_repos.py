@@ -32,6 +32,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+
+from placebo.verification.runner import SubjectRunner  # noqa: E402
 WORKDIR = ROOT / ".placebo-external"
 REPORT = ROOT / "experiments" / "external_repos.json"
 
@@ -55,14 +58,14 @@ TARGETS = [
         name="inflection-upstream",
         url="https://github.com/jpvanhal/inflection.git",
         commit="b00d4d348b32ef5823221b20ee4cbd1d2d924462",  # tag 0.5.1
-        layout="flat package",
+        layout="flat package, suite at the repository root",
         contract="""\
 version = 1
 name = "inflection-upstream"
 language = "python"
 test_command = ["python", "-m", "pytest", "-q"]
 source_roots = ["inflection"]
-test_roots = ["tests"]
+test_roots = ["."]
 mutation_targets = ["inflection/__init__.py"]
 import_names = ["inflection"]
 timeout_seconds = 60
@@ -89,15 +92,15 @@ timeout_seconds = 90
         name="toml-sort",
         url="https://github.com/pappasam/toml-sort.git",
         commit="c1655661b1d0af6fc0f7c0992c1a8a2c6b315b69",  # tag v0.9.0
-        layout="src layout",
+        layout="flat package, subpackage target",
         contract="""\
 version = 1
 name = "toml-sort"
 language = "python"
 test_command = ["python", "-m", "pytest", "-q"]
-source_roots = ["src"]
+source_roots = ["toml_sort"]
 test_roots = ["tests"]
-mutation_targets = ["src/toml_sort/tomlsort.py"]
+mutation_targets = ["toml_sort/tomlsort.py"]
 import_names = ["toml_sort"]
 timeout_seconds = 90
 """,
@@ -137,7 +140,12 @@ def run(argv: list[str], cwd: Path | None = None, timeout: int = 1800):
 def clone(target: Target, into: Path) -> tuple[bool, str, str]:
     """Clone at a pinned commit. Returns (ok, commit, note)."""
     if into.exists():
-        shutil.rmtree(into, ignore_errors=True)
+        # git objects are read-only, and rmtree(ignore_errors=True) fails
+        # silently on them, leaving a directory git then refuses to clone into.
+        # SubjectRunner already solved this.
+        SubjectRunner._force_remove(into)
+        if into.exists():
+            return False, "", f"could not clear {into.name} before cloning"
     proc, _ = run(["git", "clone", "--quiet", target.url, str(into)], timeout=900)
     if proc.returncode != 0:
         return False, "", f"clone failed: {proc.stderr.strip()[:160]}"

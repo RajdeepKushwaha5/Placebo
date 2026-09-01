@@ -35,3 +35,9 @@ artifacts/census_clie2e*.json
 artifacts/survivor_triage_clie2e*.json
 *.log
 .placebo-external/
+
+# External repository clones and their fault maps are reproducible from
+# scripts/run_external_repos.py, so they are not committed.
+artifacts/census_pathspec.json
+artifacts/census_inflection-upstream.json
+artifacts/census_toml-sort.json

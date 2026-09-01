@@ -8,7 +8,7 @@ It runs entirely on a local 7B model on a consumer laptop GPU. No API key, no cr
 |---|---|
 | **Repository** | https://github.com/RajdeepKushwaha5/Placebo |
 | **Verify** | `pytest tests -m "not slow"` (1 min) then `python scripts/check_consistency.py` (2 s) |
-| **Status** | 359 unit tests, 102 consistency checks, 2 evidence bundles replaying clean |
+| **Status** | 360 unit tests, 102 consistency checks, 2 evidence bundles replaying clean |
 
 The honest post-hackathon plan, including the requirements for calling this a
 general product, is in [`docs/PRODUCT_ROADMAP.md`](docs/PRODUCT_ROADMAP.md).
@@ -264,6 +264,35 @@ L2 differential oracles need a second implementation or a previous release to
 compare against. That is a packaging problem rather than a parsing one, and
 approximating it would repeat the mistake this whole section exists to avoid.
 
+### On repositories nobody wrote it for
+
+Fixture tests prove the three layouts are handled, which isolates the variable
+and does not answer whether this survives contact with real code. So the whole
+workflow is run against pinned public repositories, described only by a
+`.placebo.toml`, with no Placebo source edited:
+
+```bash
+python scripts/run_external_repos.py
+```
+
+| repository | pinned at | doctor | oracles sourced | mutation score |
+|---|---|---|---:|---:|
+| `inflection` 0.5.1 | `b00d4d34` | supported | 39 | 74.2% (8 undetected) |
+| `pathspec` v1.1.1 | `ecf71a99` | supported | 0 | 64.3% (5 undetected) |
+| `toml-sort` v0.9.0 | `c1655661` | supported | 0 | refused |
+
+**Two of three completed, and the third is reported rather than dropped.**
+`toml-sort`'s own suite needs `tomlkit` installed, which Placebo does not do.
+Its baseline is therefore red, and a red baseline makes every downstream
+verdict meaningless, so the census refuses instead of producing numbers. That
+is the tool behaving correctly on a repository it cannot yet handle.
+
+Building this found a real defect. `test_roots` from the contract was never
+passed to the runner, which used its own `tests` default, so any repository
+keeping its suite elsewhere could not be censused at all. `inflection` 0.5.1
+keeps 467 tests in a single file at the repository root. The fixture tests
+could not have caught that: they all happened to use `tests/`.
+
 ### Other commands
 
 ```console
@@ -391,13 +420,13 @@ attempts are not the mechanism.
 
 ```console
 $ python -m pytest tests
-359 passed
+360 passed
 
 $ python scripts/check_consistency.py
 102/102 checks pass
 ```
 
-The 359 unit tests guard the parts that carry claims: mutant identity must be content-derived and stable, the held-out split must not leak, the admission gates must reject tests that cheat, minimization must never drop a fault, and the repository contract must fail with an actionable reason rather than a traceback. The counterexample search is covered there too: its candidate pool must stay deterministic and put relevant probes ahead of merely short ones, and a synthesized test must assert an observed error message rather than an exception type alone. Both of those are regression tests for mistakes that were made and measured, not hypotheticals.
+The 360 unit tests guard the parts that carry claims: mutant identity must be content-derived and stable, the held-out split must not leak, the admission gates must reject tests that cheat, minimization must never drop a fault, and the repository contract must fail with an actionable reason rather than a traceback. The counterexample search is covered there too: its candidate pool must stay deterministic and put relevant probes ahead of merely short ones, and a synthesized test must assert an observed error message rather than an exception type alone. Both of those are regression tests for mistakes that were made and measured, not hypotheticals.
 
 `check_consistency.py` is the more unusual one. It re-derives every headline number from the stored artifacts and fails if the writeup drifts from the data. It is what caught a stale report contradicting its own raw results, and it runs in CI so the drift cannot return.
 
@@ -422,7 +451,7 @@ cd Placebo
 python -m pip install -r requirements.lock
 python -m pip install -e .
 
-python -m pytest tests             # 359 passed
+python -m pytest tests             # 360 passed
 python scripts/check_consistency.py   # 102/102 checks pass
 ```
 
@@ -578,7 +607,7 @@ placebo/
 │   └── evidence/bundle.py         replayable evidence bundles
 │
 ├── scripts/                       one entry point per experiment (25 files)
-├── tests/                         359 tests guarding the load-bearing parts
+├── tests/                         360 tests guarding the load-bearing parts
 │
 ├── subject/                       vendored semver 3.0.4 (BSD-3), pinned
 ├── subjects/inflection/           vendored inflection 0.5.1 (MIT), pinned

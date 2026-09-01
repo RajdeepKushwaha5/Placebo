@@ -1,19 +1,30 @@
 {
   "attempted": 3,
-  "supported": 1,
+  "supported": 2,
   "repositories": [
     {
       "repository": "inflection-upstream",
-      "layout": "flat package",
+      "layout": "flat package, suite at the repository root",
       "url": "https://github.com/jpvanhal/inflection.git",
       "commit": "b00d4d348b32ef5823221b20ee4cbd1d2d924462",
-      "supported": false,
-      "note": "doctor refused: Fix the FAIL lines above, then run doctor again. | ==========================================================================",
+      "supported": true,
+      "note": "",
       "steps": {
         "doctor": {
-          "exit": 1,
+          "exit": 0,
           "seconds": 0.2,
-          "supported": false
+          "supported": true
+        },
+        "oracles": {
+          "exit": 0,
+          "seconds": 0.2,
+          "sourced": 39
+        },
+        "census": {
+          "exit": 0,
+          "seconds": 50.6,
+          "score": "74.2%",
+          "undetected": "8"
         }
       }
     },
@@ -27,7 +38,7 @@
       "steps": {
         "doctor": {
           "exit": 0,
-          "seconds": 0.2,
+          "seconds": 0.3,
           "supported": true
         },
         "oracles": {
@@ -37,7 +48,7 @@
         },
         "census": {
           "exit": 0,
-          "seconds": 22.7,
+          "seconds": 26.1,
           "score": "64.3%",
           "undetected": "5"
         }
@@ -45,16 +56,27 @@
     },
     {
       "repository": "toml-sort",
-      "layout": "src layout",
+      "layout": "flat package, subpackage target",
       "url": "https://github.com/pappasam/toml-sort.git",
       "commit": "c1655661b1d0af6fc0f7c0992c1a8a2c6b315b69",
       "supported": false,
-      "note": "doctor refused: Fix the FAIL lines above, then run doctor again. | ==========================================================================",
+      "note": "census failed: Subject baseline suite is not green; refusing to run a census. | A red suite makes every verdict meaningless. Fix it, then retry.",
       "steps": {
         "doctor": {
-          "exit": 1,
+          "exit": 0,
           "seconds": 0.2,
-          "supported": false
+          "supported": true
+        },
+        "oracles": {
+          "exit": 0,
+          "seconds": 0.1,
+          "sourced": 0
+        },
+        "census": {
+          "exit": 2,
+          "seconds": 3.9,
+          "score": "",
+          "undetected": ""
         }
       }
     }

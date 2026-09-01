@@ -160,6 +160,22 @@ prediction eliminated `CLEAN_HEAD_FAILED` by construction.
   caches stay valid, and cleanup removes only the owning run. Directories left
   by a crashed run are swept after a day.
 
+## 8b. A subject's own dependencies are not installed
+
+Placebo runs a repository's suite; it does not set that repository up. If the
+suite needs a package that is not present, the baseline is red, and a red
+baseline makes every verdict meaningless, so the census refuses.
+
+That is what happens to `toml-sort` in `scripts/run_external_repos.py`: its
+tests need `tomlkit`. Two of the three pinned external repositories complete the
+workflow and the third is reported with the reason rather than dropped, because
+"worked on the ones we picked" is a much weaker claim than "here is what
+happened on all of them".
+
+Installing a subject's dependencies is a packaging problem, and doing it
+automatically inside a networkless container is a harder one. It is not
+attempted.
+
 ## 9. The oracle problem: what an "expected value" actually means
 
 This is the sharpest limitation in the project and the one most likely to matter

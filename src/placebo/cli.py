@@ -186,7 +186,8 @@ def cmd_census(args: argparse.Namespace) -> int:
                                                config.commit or "working-tree"),
                             faults, workers=args.workers,
                             timeout_s=config.timeout_seconds * 5,
-                            source_roots=config.source_roots)
+                            source_roots=config.source_roots,
+                            test_dir=(config.test_roots or ("tests",))[0])
     except RuntimeError as exc:
         # The runner refuses to score faults when the clean suite is red.
         print(f"  {exc}".splitlines()[0])
@@ -297,6 +298,7 @@ def _audit_and_report(args, config, existing, faults, name, label, code,
                            config.commit or "working-tree"),
         timeout_s=config.timeout_seconds,
         source_roots=config.source_roots,
+        test_dir=(config.test_roots or ("tests",))[0],
         executor=executor,
     )
     runner.prepare()
@@ -382,6 +384,7 @@ def _audit_and_report(args, config, existing, faults, name, label, code,
                                config.commit or "working-tree"),
             timeout_s=config.timeout_seconds,
             source_roots=config.source_roots,
+            test_dir=(config.test_roots or ("tests",))[0],
             executor=runner.executor,
         )
         extra.prepare()
